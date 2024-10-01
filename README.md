@@ -2,12 +2,13 @@
 
 ## Team Members
 - [Jens Meersschaert] - [jens.meersschaert@student.hogent.be] - [JensM04]
-- [Neal De Bot] - [neal.debot@student.hogent.be] - [GITHUB USERNAME]
+- [Neal Debot] - [neal.debot@student.hogent.be] - [NealDeBot]
 - [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [GITHUB USERNAME]
 - [Niek Termote] - [niek.termote@student.hogent.be] - [GITHUB USERNAME]
 - [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [GITHUB USERNAME]
 - [Eliott Hauteclair] - [eliott.hauteclair@student.hogent.be] - [eliottha]
-- [Jonas Dewever] - [jonas.dewever@student.hogent.be] - [GITHUB USERNAME]
+- [Jonas De Wever] - [jonas.dewever@student.hogent.be] - [jdewever]
+
 
 ## Technologies & Packages Used
 - [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) - Frontend
