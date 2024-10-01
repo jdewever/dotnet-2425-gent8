@@ -3,8 +3,8 @@
 ## Team Members
 - [Jens Meersschaert] - [jens.meersschaert@student.hogent.be] - [JensM04]
 - [Neal Debot] - [neal.debot@student.hogent.be] - [NealDeBot]
-- [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [GITHUB USERNAME]
-- [Niek Termote] - [niek.termote@student.hogent.be] - [GITHUB USERNAME]
+- [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [mathisse2004]
+- [Niek Termote] - [niek.termote@student.hogent.be] - [NiekTermote]
 - [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [GITHUB USERNAME]
 - [Eliott Hauteclair] - [eliott.hauteclair@student.hogent.be] - [eliottha]
 - [Jonas De Wever] - [jonas.dewever@student.hogent.be] - [jdewever]
