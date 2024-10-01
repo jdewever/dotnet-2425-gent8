@@ -1,7 +1,13 @@
-# Rise - [GROUPNAME]
+# Rise - [GENT8]
 
 ## Team Members
-- [MEMBER1_NAME] - [MEMBER1_EMAIL] - [MEMBER1_GITHUB_USERNAME]
+- [Jens Meersschaert] - [jens.meersschaert@student.hogent.be] - [JensM04]
+- [Neal De Bot] - [neal.debot@student.hogent.be] - [GITHUB USERNAME]
+- [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [GITHUB USERNAME]
+- [Niek Termote] - [niek.termote@student.hogent.be] - [GITHUB USERNAME]
+- [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [GITHUB USERNAME]
+- [Eliott Hauteclair] - [eliott.hauteclair@student.hogent.be] - [GITHUB USERNAME]
+- [Jonas Dewever] - [jonas.dewever@student.hogent.be] - [GITHUB USERNAME]
 
 ## Technologies & Packages Used
 - [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) - Frontend
