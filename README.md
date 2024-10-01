@@ -5,7 +5,7 @@
 - [Neal Debot] - [neal.debot@student.hogent.be] - [NealDeBot]
 - [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [mathisse2004]
 - [Niek Termote] - [niek.termote@student.hogent.be] - [NiekTermote]
-- [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [GITHUB USERNAME]
+- [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [BrechtVanderhoydonck]
 - [Eliott Hauteclair] - [eliott.hauteclair@student.hogent.be] - [eliottha]
 - [Jonas De Wever] - [jonas.dewever@student.hogent.be] - [jdewever]
 
