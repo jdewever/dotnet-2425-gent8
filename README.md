@@ -6,7 +6,7 @@
 - [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [GITHUB USERNAME]
 - [Niek Termote] - [niek.termote@student.hogent.be] - [GITHUB USERNAME]
 - [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [GITHUB USERNAME]
-- [Eliott Hauteclair] - [eliott.hauteclair@student.hogent.be] - [GITHUB USERNAME]
+- [Eliott Hauteclair] - [eliott.hauteclair@student.hogent.be] - [eliottha]
 - [Jonas Dewever] - [jonas.dewever@student.hogent.be] - [GITHUB USERNAME]
 
 ## Technologies & Packages Used
