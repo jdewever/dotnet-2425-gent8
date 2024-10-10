@@ -27,7 +27,8 @@ public class Seeder
     private void SeedProducts()
     {
         var products = Enumerable.Range(1, 20)
-                                 .Select(i => new Product { Name = $"Product {i}", Description = $"Description {i}" })
+                                 .Select(i => new Product { Name = $"Product {i}", Description = $"Description {i}",
+                                     QuantityInStock = i, QuantityOnOrder = i, ClassRoomCode = $"ClassRoomCode {i}" })
                                  .ToList();
 
         dbContext.Products.AddRange(products);
