@@ -2,10 +2,6 @@
 
 <PageTitle>Products</PageTitle>
 
-<h1>Products</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
-
 @if (products == null)
 {
     <p><em>Loading...</em></p>
@@ -15,16 +11,20 @@ else
     <table class="table">
     <thead>
         <tr>
-            <th>Id</th>
+            <th>Code</th>
             <th>Name</th>
+            <th>Quantity in stock</th>
+            <th>Quantity on order</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var product in products)
             {
                 <tr>
-                    <td>@product.Id</td>
+                    <td>@product.Barcode</td>
                     <td>@product.Name</td>
+                    <td>@product.QuantityInStock</td>
+                    <td>@product.QuantityOnOrder</td>
                 </tr>
             }
         </tbody>
