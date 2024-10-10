@@ -8,5 +8,13 @@ public class Product : Entity
         get => name;
         set => name = Guard.Against.NullOrWhiteSpace(value);
     }
+
+    private string description = default!;
+
+    public required string Description
+    {
+        get => description;
+        set => description = Guard.Against.NullOrWhiteSpace(value);
+    }
 }
 
