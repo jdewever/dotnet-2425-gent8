@@ -12,7 +12,7 @@ public class ProductService : IProductService
         this.httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetProductsAsync()
+    public async Task<IEnumerable<ProductDto>> GetAllProducts()
     {
         var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDto>>("product");
         return products!;

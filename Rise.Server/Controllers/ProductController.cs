@@ -17,7 +17,7 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<ProductDto>> Get()
     {
-        var products = await productService.GetProductsAsync();
+        var products = await productService.GetAllProducts();
         return products;
     }
 }
