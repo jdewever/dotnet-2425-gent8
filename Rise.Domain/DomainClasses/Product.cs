@@ -1,4 +1,6 @@
-﻿namespace Rise.Domain.Products;
+﻿using Rise.Domain.DomainClasses;
+
+namespace Rise.Domain.Products;
 public class Product : Entity
 {
     private string name = default!;
@@ -7,17 +9,18 @@ public class Product : Entity
     private int quantityOnOrder = default!;
     private string classRoomCode = default!;
     private string barcode = default!;
+    public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 
     public Product() { } 
 
     public Product(string name, string description, int quantityInStock, int quantityOnOrder, string classRoomCode, string barcode)
     {
-        Name = name;
-        Description = description;
-        QuantityInStock = quantityInStock;
-        QuantityOnOrder = quantityOnOrder;
-        ClassRoomCode = classRoomCode;
-        Barcode = barcode;
+        this.name = name;
+        this.description = description;
+        this.quantityInStock = quantityInStock;
+        this.quantityOnOrder = quantityOnOrder;
+        this.classRoomCode = classRoomCode;
+        this.barcode = barcode;
     }
 
     public required string Name
