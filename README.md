@@ -45,3 +45,20 @@ And then update the database using the following command:
 ```
 dotnet ef database update --startup-project Rise.Server --project Rise.Persistence
 ```
+
+## Tailwind CSS
+
+We added Tailwind as styling framework for our Blazor client. This is done with postcss and tailwind. The compiled tailwind css is included in the Rise.Client project at `wwwroot/css/app.min.css`.
+
+If you use new tailwind classes, you need to recompile the css or in development, watch the Pages folder for changes and recompile the css.
+In the Rise.Client folder, run the following command:
+```
+npm install
+npm run watch
+```
+
+To compile the css for production, run the following command:
+```
+npm install
+npm run build
+```
