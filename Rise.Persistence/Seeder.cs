@@ -1,4 +1,5 @@
-﻿using Rise.Domain.Products;
+﻿using Rise.Domain.DomainClasses;
+using Rise.Domain.Products;
 
 namespace Rise.Persistence;
 
@@ -17,11 +18,13 @@ public class Seeder
             return;
 
         SeedProducts();
+        SeedCategories();
+        SeedProductCategories();
     }
 
     private bool HasAlreadyBeenSeeded()
     {
-        return dbContext.Products.Any();
+        return dbContext.Products.Any() || dbContext.Categories.Any() || dbContext.ProductCategories.Any();
     }
 
     private void SeedProducts()
@@ -123,4 +126,42 @@ public class Seeder
         dbContext.Products.AddRange(products);
         dbContext.SaveChanges();
     }
+
+    private void SeedCategories()
+    {
+        var categories = new List<Category>
+        {
+            new Category { Name = "Medical Devices" },
+            new Category { Name = "Therapy Tools" },
+            new Category { Name = "Wellness Supplies" },
+            new Category { Name = "Monitoring Equipment" },
+            new Category { Name = "Sanitary Products" },
+            new Category { Name = "Surgical Supplies" },
+            new Category { Name = "First Aid" } 
+        };
+
+        dbContext.Categories.AddRange(categories);
+        dbContext.SaveChanges();
+    }
+
+    private void SeedProductCategories()
+    {
+        var productCategories = new List<ProductCategory>
+        {
+            new ProductCategory { ProductId = 1, CategoryId = 4 }, 
+            new ProductCategory { ProductId = 2, CategoryId = 2 },
+            new ProductCategory { ProductId = 3, CategoryId = 4 }, 
+            new ProductCategory { ProductId = 4, CategoryId = 5 },
+            new ProductCategory { ProductId = 5, CategoryId = 1 }, 
+            new ProductCategory { ProductId = 6, CategoryId = 6 }, 
+            new ProductCategory { ProductId = 7, CategoryId = 6 }, 
+            new ProductCategory { ProductId = 8, CategoryId = 5 },
+            new ProductCategory { ProductId = 9, CategoryId = 7 }, 
+            new ProductCategory { ProductId = 10, CategoryId = 7 } 
+        };
+
+        dbContext.ProductCategories.AddRange(productCategories);
+        dbContext.SaveChanges();
+    }
+
 }
