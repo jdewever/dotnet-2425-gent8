@@ -20,4 +20,7 @@
     <ProjectReference Include="..\Rise.Shared\Rise.Shared.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="npm run build" />
+  </Target>
 </Project>
