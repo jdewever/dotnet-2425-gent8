@@ -48,6 +48,10 @@ dotnet ef database update --startup-project Rise.Server --project Rise.Persisten
 
 ## Tailwind CSS
 
+> **Use `dotnet watch --no-hot-reload` to directly update CSS while coding, no need ot run `npm run watch` in a separate terminal**
+> 
+> This is a little slower because it disabled hot reload, but it's a lot faster and easier to get updated styling. On first use, you need to run `npm install` in the Rise.Client folder.
+
 We added Tailwind as styling framework for our Blazor client. This is done with postcss and tailwind. The compiled tailwind css is included in the Rise.Client project at `wwwroot/css/app.min.css`.
 
 If you use new tailwind classes, you need to recompile the css or in development, watch the Pages folder for changes and recompile the css.
