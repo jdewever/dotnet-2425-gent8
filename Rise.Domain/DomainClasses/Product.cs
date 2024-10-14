@@ -1,6 +1,4 @@
-﻿using Rise.Domain.DomainClasses;
-
-namespace Rise.Domain.Products;
+﻿namespace Rise.Domain.DomainClasses;
 public class Product : Entity
 {
     private string name = default!;
@@ -9,7 +7,8 @@ public class Product : Entity
     private int quantityOnOrder = default!;
     private string classRoomCode = default!;
     private string barcode = default!;
-    public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
+    private List<Category> categories = default!;
+    // public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 
     public Product() { } 
 
@@ -57,6 +56,12 @@ public class Product : Entity
     {
         get => barcode;
         set => barcode = Guard.Against.NullOrWhiteSpace(value);
+    }
+
+    public List<Category> Categories
+    {
+        get => categories;
+        set => categories = Guard.Against.Null(value, nameof(Categories));
     }
 }
 

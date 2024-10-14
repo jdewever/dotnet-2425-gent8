@@ -1,16 +1,9 @@
-﻿using Rise.Domain.DomainClasses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Rise.Domain.Products
+﻿namespace Rise.Domain.DomainClasses
 {
     public class Category : Entity
     {
         private string name = default!;
-        public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
+        private List<Product> products = default!;
 
         public Category() { }
 
@@ -23,6 +16,12 @@ namespace Rise.Domain.Products
         {
             get => name;
             set => name = Guard.Against.NullOrWhiteSpace(value);
+        }
+
+        public List<Product> Products
+        {
+            get => products;
+            set => products = Guard.Against.Null(value, nameof(Products));
         }
 
     }

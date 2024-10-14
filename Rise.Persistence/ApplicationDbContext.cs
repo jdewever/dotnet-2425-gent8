@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
-using Rise.Domain.Products;
 
 
 namespace Rise.Persistence;
@@ -10,7 +9,6 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
-    public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
@@ -30,19 +28,6 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<ProductCategory>()
-            .HasKey(pc => new { pc.ProductId, pc.CategoryId });
-
-        modelBuilder.Entity<ProductCategory>()
-            .HasOne(pc => pc.Product)
-            .WithMany(p => p.ProductCategories)
-            .HasForeignKey(pc => pc.ProductId);
-
-        modelBuilder.Entity<ProductCategory>()
-            .HasOne(pc => pc.Category)
-            .WithMany(c => c.ProductCategories)
-            .HasForeignKey(pc => pc.CategoryId);
 
         // Applying all types of IEntityTypeConfiguration in the Persistence project.
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);

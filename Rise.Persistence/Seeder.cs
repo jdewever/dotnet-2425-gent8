@@ -1,5 +1,4 @@
 ﻿using Rise.Domain.DomainClasses;
-using Rise.Domain.Products;
 
 namespace Rise.Persistence;
 
@@ -17,17 +16,15 @@ public class Seeder
         if (HasAlreadyBeenSeeded())
             return;
 
-        SeedProducts();
-        SeedCategories();
-        SeedProductCategories();
+        SeedProductsAndCategories();
     }
 
     private bool HasAlreadyBeenSeeded()
     {
-        return dbContext.Products.Any() || dbContext.Categories.Any() || dbContext.ProductCategories.Any();
+        return dbContext.Products.Any() || dbContext.Categories.Any();
     }
 
-    private void SeedProducts()
+    private void SeedProductsAndCategories()
     {
         var products = new List<Product>
         {
@@ -122,13 +119,6 @@ public class Seeder
                 ClassRoomCode = "F102",
             }
         };
-
-        dbContext.Products.AddRange(products);
-        dbContext.SaveChanges();
-    }
-
-    private void SeedCategories()
-    {
         var categories = new List<Category>
         {
             new Category { Name = "Medical Devices" },
@@ -139,29 +129,31 @@ public class Seeder
             new Category { Name = "Surgical Supplies" },
             new Category { Name = "First Aid" } 
         };
-
         dbContext.Categories.AddRange(categories);
+        dbContext.Products.AddRange(products);
+        
+        //relation between product and categories
+        products[0].Categories = [categories[3]];
+        products[1].Categories = [categories[1]];
+        products[2].Categories = [categories[3]];
+        products[3].Categories = [categories[4]];
+        products[4].Categories = [categories[0]];
+        products[5].Categories = [categories[5]];
+        products[6].Categories = [categories[5]];
+        products[7].Categories = [categories[4]];
+        products[8].Categories = [categories[6]];
+        products[9].Categories = [categories[6]];
+        
+        //relation between category and products
+        categories[0].Products = [products[4]];
+        categories[1].Products = [products[1]];
+        categories[3].Products = [products[2], products[0]];
+        categories[4].Products = [products[3], products[7]];
+        categories[5].Products = [products[5], products[6]];
+        categories[6].Products = [products[8], products[9]];
+        
+        dbContext.Categories.AddRange(categories);
+        dbContext.Products.AddRange(products);
         dbContext.SaveChanges();
     }
-
-    private void SeedProductCategories()
-    {
-        var productCategories = new List<ProductCategory>
-        {
-            new ProductCategory { ProductId = 1, CategoryId = 4 }, 
-            new ProductCategory { ProductId = 2, CategoryId = 2 },
-            new ProductCategory { ProductId = 3, CategoryId = 4 }, 
-            new ProductCategory { ProductId = 4, CategoryId = 5 },
-            new ProductCategory { ProductId = 5, CategoryId = 1 }, 
-            new ProductCategory { ProductId = 6, CategoryId = 6 }, 
-            new ProductCategory { ProductId = 7, CategoryId = 6 }, 
-            new ProductCategory { ProductId = 8, CategoryId = 5 },
-            new ProductCategory { ProductId = 9, CategoryId = 7 }, 
-            new ProductCategory { ProductId = 10, CategoryId = 7 } 
-        };
-
-        dbContext.ProductCategories.AddRange(productCategories);
-        dbContext.SaveChanges();
-    }
-
 }
