@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Products;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Rise.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductService productService;
