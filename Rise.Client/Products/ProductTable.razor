@@ -1,70 +1,109 @@
 ﻿@using Rise.Shared.Products
 @using Microsoft.AspNetCore.Components
 
-<div class="overflow-x-auto rounded-lg">
-    <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden">
-        <thead class="bg-gray-200">
-            <tr>
-                @if (ShowBarcode)
-                {
-                    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Code</th>
-                }
-                @if (ShowName)
-                {
-                    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Naam</th>
-                }
-                @if (ShowInStock)
-                {
-                    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">In Stock</th>
-                }
-                @if (ShowOnOrder)
-                {
-                    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Op Bestelling</th>
-                }
-                @if (ShowClassRoomCode)
-                {
-                    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Lokaal</th>
-                }
-                @if (ShowActions)
-                {
-                    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider"></th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Products)
-            {
-                <tr class="hover:bg-gray-100">
+<div class="overflow-x-auto">
+    <div class="hidden md:block min-w-full">
+        <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden w-full">
+            <thead class="bg-gray-200">
+                <tr>
                     @if (ShowBarcode)
                     {
-                        <td class="px-10 py-2 border-b border-gray-200">@product.Barcode</td>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Code</th>
                     }
                     @if (ShowName)
                     {
-                        <td class="px-10 py-2 border-b border-gray-200">@product.Name</td>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Naam</th>
                     }
                     @if (ShowInStock)
                     {
-                        <td class="px-10 py-2 border-b border-gray-200">@product.QuantityInStock</td>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">In Stock</th>
                     }
                     @if (ShowOnOrder)
                     {
-                        <td class="px-10 py-2 border-b border-gray-200">@product.QuantityOnOrder</td>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Op Bestelling</th>
                     }
                     @if (ShowClassRoomCode)
                     {
-                        <td class="px-10 py-2 border-b border-gray-200">@product.ClassRoomCode</td>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">Lokaal</th>
                     }
                     @if (ShowActions)
                     {
-                        <td class="px-10 py-2 border-b border-gray-200">
-                            <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">Uitlenen</button>
-                        </td>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider"></th>
                     }
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var product in Products)
+                {
+                    <tr class="hover:bg-gray-100">
+                        @if (ShowBarcode)
+                        {
+                            <td class="px-10 py-2 border-b border-gray-200">@product.Barcode</td>
+                        }
+                        @if (ShowName)
+                        {
+                            <td class="px-10 py-2 border-b border-gray-200">@product.Name</td>
+                        }
+                        @if (ShowInStock)
+                        {
+                            <td class="px-10 py-2 border-b border-gray-200">@product.QuantityInStock</td>
+                        }
+                        @if (ShowOnOrder)
+                        {
+                            <td class="px-10 py-2 border-b border-gray-200">@product.QuantityOnOrder</td>
+                        }
+                        @if (ShowClassRoomCode)
+                        {
+                            <td class="px-10 py-2 border-b border-gray-200">@product.ClassRoomCode</td>
+                        }
+                        @if (ShowActions)
+                        {
+                            <td class="px-10 py-2 border-b border-gray-200">
+                                <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">Uitlenen</button>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="lg:hidden">
+        @foreach (var product in Products)
+        {
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full sm:max-w-md mx-auto relative">
+                @if (ShowBarcode)
+                {
+                    <p class="text-xs text-gray-400 font-light mb-2">@product.Barcode</p>
+                }
+                @if (ShowName)
+                {
+                    <p class="text-sm text-gray-500"><strong>Naam:</strong> @product.Name</p>
+                }
+                @if (ShowInStock)
+                {
+                    <p class="text-sm text-gray-500"><strong>In Stock:</strong> @product.QuantityInStock</p>
+                }
+                @if (ShowOnOrder)
+                {
+                    <p class="text-sm text-gray-500"><strong>Op Bestelling:</strong> @product.QuantityOnOrder</p>
+                }
+                @if (ShowClassRoomCode)
+                {
+                    <p class="text-sm text-gray-500"><strong>Lokaal:</strong> @product.ClassRoomCode</p>
+                }
+
+                @if (ShowActions)
+                {
+                    <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300 absolute bottom-4 right-4">
+                        Uitlenen
+                    </button>
+                }
+            </div>
+        }
+    </div>
+
+
 </div>
 
 @code {
