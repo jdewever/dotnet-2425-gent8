@@ -12,6 +12,8 @@
 
 ## Technologies & Packages Used
 - [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) - Frontend
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [Node.js](https://nodejs.org/en/) - Required for Tailwind to compile
 - [ASP.NET 8](https://dotnet.microsoft.com/en-us/apps/aspnet) - Backend
 - [Entity Framework 8](https://learn.microsoft.com/en-us/ef/) - Database Access
 - [EntityFrameworkCore Triggered](https://github.com/koenbeuk/EntityFrameworkCore.Triggered) - Database Triggers
@@ -25,9 +27,10 @@
 ## Installation Instructions
 1. Clone the repository
 2. Open the `Rise.sln` file in Visual Studio or Visual Studio Code
-3. Run the project using the `Rise.Server` project as the startup project
-4. The project should open in your default browser on port 5001.
-5. Initially the database will not exist, so you will need to run the migrations to create the database.
+3. Run `npm install` in the `Rise.Client` folder
+4. Run the project using the `Rise.Server` project as the startup project
+5. The project should open in your default browser on port 5001.
+6. Initially the database will not exist, so you will need to run the migrations to create the database.
 
 ## Creation of the database
 To create the database, run the following command in the main folder `Rise`
