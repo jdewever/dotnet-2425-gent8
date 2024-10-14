@@ -1509,16 +1509,20 @@ video {
   margin-bottom:0.5rem
 }
 
+.mb-8{
+  margin-bottom:2rem
+}
+
 .me-2{
   margin-inline-end:0.5rem
 }
 
-.table{
-  display:table
+.flex{
+  display:flex
 }
 
-.min-w-full{
-  min-width:100%
+.table{
+  display:table
 }
 
 .table-auto{
@@ -1527,6 +1531,14 @@ video {
 
 .border-collapse{
   border-collapse:collapse
+}
+
+.justify-center{
+  justify-content:center
+}
+
+.overflow-hidden{
+  overflow:hidden
 }
 
 .overflow-x-auto{
@@ -1564,6 +1576,11 @@ video {
   background-color:rgb(229 231 235 / var(--tw-bg-opacity))
 }
 
+.px-10{
+  padding-left:2.5rem;
+  padding-right:2.5rem
+}
+
 .px-2{
   padding-left:0.5rem;
   padding-right:0.5rem
@@ -1584,11 +1601,6 @@ video {
   padding-right:1.25rem
 }
 
-.px-6{
-  padding-left:1.5rem;
-  padding-right:1.5rem
-}
-
 .py-1{
   padding-top:0.25rem;
   padding-bottom:0.25rem
@@ -1602,11 +1614,6 @@ video {
 .py-2\.5{
   padding-top:0.625rem;
   padding-bottom:0.625rem
-}
-
-.py-3{
-  padding-top:0.75rem;
-  padding-bottom:0.75rem
 }
 
 .ps-3{
