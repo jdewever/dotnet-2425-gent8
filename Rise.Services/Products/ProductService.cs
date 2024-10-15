@@ -33,7 +33,8 @@ public class ProductService : IProductService
         return products;
     }
 
-    private List<CategoryDTO> CategoryEntityToDto(List<Category> categories)
+    //todo: needs to be in its own class?
+    private static List<CategoryDTO> CategoryEntityToDto(List<Category> categories)
     {
         var categoriesDto = new List<CategoryDTO>();
         categories.ForEach(category =>
