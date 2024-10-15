@@ -13,4 +13,6 @@ public class ProductDto
     public required int QuantityOnOrder { get; set; }
 
     public required string ClassRoomCode { get; set; }
+    
+    public required List<CategoryDTO>? Categories { get; set; }
 }
