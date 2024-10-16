@@ -2,12 +2,37 @@
 
 @if (Item == null)
 {
-    <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">@Label</th>
+    <th class="px-4 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">
+        @Label
+    </th>
 }
 else
 {
-    var property = typeof(ProductDto).GetProperty(Name);
-    <td class="px-10 py-2 border-b border-gray-200">@property.GetValue(Item).ToString()</td>
+    var property = string.IsNullOrEmpty(Name) ? null : typeof(ProductDto).GetProperty(Name);
+
+    <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700">
+        @if (property != null)
+        {
+            @property?.GetValue(Item)?.ToString()
+       }
+        else
+        {
+            @ChildContent
+        }
+    </td>
+
+    <div class="lg:hidden mb-2">
+        <p class="text-sm text-gray-500">
+            <strong>@Label:</strong> @if (property != null)
+            {
+                @property?.GetValue(Item)?.ToString()
+            }
+            else
+            {
+                @ChildContent
+            }
+        </p>
+    </div>
 }
 
 @code {
