@@ -1,0 +1,70 @@
+@using Rise.Shared.Products
+@using Microsoft.AspNetCore.Components
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+    @foreach (var product in Products)
+    {
+        <ProductView BarCode="@product.Barcode" ImageUrl="/images/testafbeelding.png" QuantityInStock="@product.QuantityInStock" OnClick="@(() => HandleCardClick(product))"/>
+    }
+    <div IsVisible="isModalVisible" IsVisibleChanged="@( (bool val) => isModalVisible = val )">
+        @if (selectedProduct != null)
+        {
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+                <div class="fixed inset-0 bg-black opacity-50" @onclick="CloseModal"></div>
+
+                <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-xs sm:max-w-md mx-auto relative">
+                    <button class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700" @onclick="CloseModal" aria-label="Close modal">
+                        &#x2715;
+                    </button>
+
+                    <div class="text-center mb-2 sm:mb-4">
+                        <p class="text-xs sm:text-sm text-gray-400">@selectedProduct.Barcode</p>
+                    </div>
+
+                    <div class="text-center">
+                        <img src="images/testafbeelding.png" alt="@selectedProduct.Name" class="w-32 h-32 sm:w-48 sm:h-48 mx-auto mb-2 sm:mb-4" />
+                    </div>
+
+                    <div class="text-center mb-2 sm:mb-4">
+                        <h2 class="text-lg sm:text-xl font-semibold text-gray-800">@selectedProduct.Name</h2>
+                    </div>
+
+                    <div class="text-center mb-2 sm:mb-4">
+                        <p class="text-base sm:text-lg"><strong>In Stock:</strong> <span class="text-green-600">@selectedProduct.QuantityInStock</span></p>
+                        <p class="text-xs sm:text-sm text-gray-500"><strong>On Order:</strong> @selectedProduct.QuantityOnOrder</p>
+                        <p class="text-xs sm:text-sm text-gray-500"><strong>ClassRoom:</strong> @selectedProduct.ClassRoomCode</p>
+                    </div>
+
+                    <div class="bg-gray-100 p-3 sm:p-4 rounded-md mb-2 sm:mb-4">
+                        <p class="text-xs sm:text-sm text-gray-600">@selectedProduct.Description</p>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="bg-gray-200 text-gray-700 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full hover:bg-gray-300 cursor-not-allowed" disabled>
+                            Uitlenen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+  
+    [Parameter] public required IEnumerable<ProductDto> Products { get; set; }
+    private bool isModalVisible = false;
+    private ProductDto? selectedProduct;
+
+    private void HandleCardClick(ProductDto product)
+    {
+        selectedProduct = product;
+        isModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
+        selectedProduct = null;
+    }
+}
