@@ -2090,10 +2090,6 @@ h1:focus {
   .sm\:min-h-full{
     min-height:100%
   }
-
-  .sm\:max-w-md{
-    max-width:28rem
-  }
 }
 
 @media (min-width: 768px){

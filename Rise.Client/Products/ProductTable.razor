@@ -1,7 +1,7 @@
 ﻿@using Rise.Shared.Products
 @using Microsoft.AspNetCore.Components
 
-<div class="overflow-x-auto">
+<div class="overflow-x-auto w-full">
     <div class="hidden md:block min-w-full">
         <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden w-full">
             <thead class="bg-gray-200">
@@ -68,10 +68,10 @@
         </table>
     </div>
 
-    <div class="lg:hidden">
+    <div class="lg:hidden w-full">
         @foreach (var product in Products)
         {
-            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full sm:max-w-md mx-auto relative">
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative">
                 @if (ShowBarcode)
                 {
                     <p class="text-xs text-gray-400 font-light mb-2">@product.Barcode</p>
