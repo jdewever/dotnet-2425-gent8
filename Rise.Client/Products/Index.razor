@@ -10,14 +10,39 @@
 else
 {
     <div class="flex justify-center mb-8">
-        <ProductTable Products="products" />
+        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2"/>
     </div>
-    <div class="flex justify-center mb-8">
-        <ProductTable2 Products="products"/>
-    </div>
+    @if (table)
+    {
+        <div class="flex justify-center mb-8">
+            <ProductTable Products="products" />
+        </div>
+    }
+    @if (table2)
+    {
+        <div class="flex justify-center mb-8">
+            <ProductTable2 Products="products"/>
+        </div>
+    }
 
    // VOORBEELD: hiermee kan je de tabel hergebruiken met bepaalde kollomen die je niet wilt displayen
    // <ProductTable Products="products" ShowInStock="false" ShowOnOrder="false" ShowClassRoomCode="false" />
+}
+@code {
+    private Boolean table = false;
+    private Boolean table2 = true;
+
+    private void showTable()
+    {
+        table = true;
+        table2 = false;
+    }
+
+    private void showTable2()
+    {
+        table = false;
+        table2 = true;
+    }
 }
 
 
