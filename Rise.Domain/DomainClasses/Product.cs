@@ -1,4 +1,5 @@
-﻿namespace Rise.Domain.DomainClasses;
+namespace Rise.Domain.DomainClasses
+{
 public class Product : Entity
 {
     private string name = default!;
@@ -65,3 +66,4 @@ public class Product : Entity
     }
 }
 
+}
