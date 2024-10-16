@@ -1532,8 +1532,8 @@ video {
   margin-inline-end:0.5rem
 }
 
-.ml-12{
-  margin-left:3rem
+.ml-8{
+  margin-left:2rem
 }
 
 .mr-4{
@@ -1575,6 +1575,10 @@ video {
 
 .h-\[calc\(100vh-20rem\)\]{
   height:calc(100vh - 20rem)
+}
+
+.h-auto{
+  height:auto
 }
 
 .h-full{
@@ -1670,10 +1674,6 @@ video {
   text-align:right
 }
 
-.text-start{
-  text-align:start
-}
-
 .text-base{
   font-size:1rem;
   line-height:1.5rem
@@ -1690,10 +1690,6 @@ video {
 
 .font-normal{
   font-weight:400
-}
-
-.leading-tight{
-  line-height:1.25
 }
 
 .text-gray-700{
@@ -1718,15 +1714,8 @@ video {
   box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
 }
 
-.outline-none{
-  outline:2px solid transparent;
-  outline-offset:2px
-}
-
-.transition-all{
-  transition-property:all;
-  transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration:150ms
+.filter{
+  filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
 }
 
 html,
@@ -1742,14 +1731,6 @@ h1:focus {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
-}
-
-.btn:focus,
-.btn:active:focus,
-.btn-link.nav-link:focus,
-.form-control:focus,
-.form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -1835,14 +1816,6 @@ h1:focus {
   background-color:rgb(30 64 175 / var(--tw-bg-opacity))
 }
 
-.hover\:bg-opacity-80:hover{
-  --tw-bg-opacity:0.8
-}
-
-.focus\:bg-opacity-80:focus{
-  --tw-bg-opacity:0.8
-}
-
 .focus\:outline-none:focus{
   outline:2px solid transparent;
   outline-offset:2px
@@ -1857,10 +1830,6 @@ h1:focus {
 .focus\:ring-blue-300:focus{
   --tw-ring-opacity:1;
   --tw-ring-color:rgb(147 197 253 / var(--tw-ring-opacity))
-}
-
-.active\:bg-opacity-80:active{
-  --tw-bg-opacity:0.8
 }
 
 @media (min-width: 640px){

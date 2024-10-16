@@ -12,60 +12,25 @@
     <div class="@NavMenuCssClass flex flex-col space-between h-full">
         <nav class="flex min-w-[240px] flex-col gap-1 p-2 text-base font-normal text-blue-gray-700 flex-grow">
             @* to be filtered for admins *@
-            <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
-                <div class="grid mr-4 place-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m7.875 14.25 1.214 1.942a2.25 2.25 0 0 0 1.908 1.058h2.006c.776 0 1.497-.4 1.908-1.058l1.214-1.942M2.41 9h4.636a2.25 2.25 0 0 1 1.872 1.002l.164.246a2.25 2.25 0 0 0 1.872 1.002h2.092a2.25 2.25 0 0 0 1.872-1.002l.164-.246A2.25 2.25 0 0 1 16.954 9h4.636M2.41 9a2.25 2.25 0 0 0-.16.832V12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 12V9.832c0-.287-.055-.57-.16-.832M2.41 9a2.25 2.25 0 0 1 .382-.632l3.285-3.832a2.25 2.25 0 0 1 1.708-.786h8.43c.657 0 1.281.287 1.709.786l3.284 3.832c.163.19.291.404.382.632M4.5 20.25h15A2.25 2.25 0 0 0 21.75 18v-2.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125V18a2.25 2.25 0 0 0 2.25 2.25Z" />
-                    </svg>
-                </div>
-                Dashboard
-            </NavLink>
+            @foreach (var item in NavItems.Where(i => i.IsVisible)) {
+                <NavLink class="nav-item" href="@item.Href" Match="NavLinkMatch.All">
+                    <div class="grid mr-4 place-items-center">
+                        <img src="/images/icons/@(item.Icon).svg" alt="@item.Label" class="w-6 h-auto" />
+                    </div>
+                    @item.Label
+                </NavLink>
 
-            <NavLink class="nav-item" href="counter">
-                <div class="grid mr-4 place-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
-                    </svg>
-                </div>
-                Voorraadbeheer
-            </NavLink>
-
-            <div class="ml-12 flex flex-col gap-1 relative">
-                <div role="button"
-                    class="w-full p-2 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
-                    Uitlenen
-                </div>
-                <div role="button"
-                    class="w-full p-2 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
-                    Reserveren
-                </div>
-            </div>
-
-            <NavLink class="nav-item" href="scan">
-                <div class="grid mr-4 place-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                    </svg>
-                </div>
-                Scannen
-            </NavLink>
-
-            <NavLink class="nav-item" href="reservations">
-                <div class="grid mr-4 place-items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                    </svg>
-                </div>
-                Reserveringen
-            </NavLink>
+                    @foreach (var child in item.Children) {
+                        <NavLink class="nav-item" href="@child.Href">
+                            <div class="grid mr-4 place-items-center ml-8">
+                                @if (child.Icon != null) {
+                                    <img src="/images/icons/@(child.Icon).svg" alt="@child.Label" class="w-6 h-auto" />
+                                }
+                            </div>
+                            @child.Label
+                        </NavLink>
+                    }
+            }
         </nav>
 
         <div class="mt-auto">
@@ -88,9 +53,28 @@
 
     private string? NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-[calc(100vh-20rem)] min-h-full";
     private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
+    private List<NavItem> NavItems => new() {
+        new NavItem { Label = "Dashboard", Href = "", Icon = "dashboard" },
+        new NavItem { Label = "Voorraadbeheer", Href = "counter", Icon = "inventory",
+            Children = new[] {
+                new NavItem { Label = "Uitlenen", Href = "lend" },
+                new NavItem { Label = "Reserveren", Href = "reserve" },
+            },
+        },
+        new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
+        new NavItem { Label = "Reserveringen", Href = "reservations", Icon = "reservation" },
+    };
 
-    private void ToggleNavMenu()
-    {
+    private void ToggleNavMenu() {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    // only used here, but maybe better in Persistence once linked to users?
+    private class NavItem {
+        public required string Label { get; set; }
+        public required string Href { get; set; }
+        public string? Icon { get; set; }
+        public NavItem[] Children { get; set; } = Array.Empty<NavItem>();
+        public bool IsVisible { get; set; } = true; // to filter for admins/inventory role
     }
 }
