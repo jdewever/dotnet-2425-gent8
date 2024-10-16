@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Rise.Domain.Products;
+using Rise.Domain.DomainClasses;
 
 namespace Rise.Persistence.Products;
 
