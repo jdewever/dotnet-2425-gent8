@@ -2,7 +2,7 @@
 
 ## Team Members
 - [Jens Meersschaert] - [jens.meersschaert@student.hogent.be] - [JensM04]
-- [Neal Debot] - [neal.debot@student.hogent.be] - [NealDeBot]
+- [Neal Debot] - [neal.debot@student.hogent.be] - [NealDebot]
 - [Mathisse Snauwaert] - [mathisse.snauwaert@student.hogent.be] - [mathisse2004]
 - [Niek Termote] - [niek.termote@student.hogent.be] - [NiekTermote]
 - [Brecht Vanderhoydonck] - [brecht.vanderhoydonck@student.hogent.be] - [BrechtVanderhoydonck]

@@ -11,7 +11,7 @@ public partial class Index
 
     protected override async Task OnInitializedAsync()
     {
-        products = await ProductService.GetProductsAsync();
+        products = await ProductService.GetAllProducts();
     }
 }
 

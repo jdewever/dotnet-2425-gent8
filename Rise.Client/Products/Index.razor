@@ -1,10 +1,7 @@
 ﻿@page "/products"
+@using Rise.Shared.Products
 
 <PageTitle>Products</PageTitle>
-
-<h1>Products</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
 
 @if (products == null)
 {
@@ -12,21 +9,12 @@
 }
 else
 {
-    <table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in products)
-            {
-                <tr>
-                    <td>@product.Id</td>
-                    <td>@product.Name</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="flex justify-center mb-8">
+        <ProductTable Products="products" />
+    </div>
+
+   // VOORBEELD: hiermee kan je de tabel hergebruiken met bepaalde kollomen die je niet wilt displayen
+   // <ProductTable Products="products" ShowInStock="false" ShowOnOrder="false" ShowClassRoomCode="false" />
 }
+
+

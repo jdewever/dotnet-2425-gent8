@@ -1,4 +1,4 @@
-﻿using Rise.Domain.Products;
+﻿using Rise.Domain.DomainClasses;
 using Shouldly;
 
 namespace Rise.Domain.Tests.Products;
