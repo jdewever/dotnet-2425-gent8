@@ -1,6 +1,9 @@
 @layout LoginLayout
 @page "/"
 @inject NavigationManager Navigation
+@page "/login"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.ComponentModel.DataAnnotations
 
 <div class="flex h-screen">
     <!-- Left Panel (hidden on smaller screens) -->
@@ -16,20 +19,18 @@
                 <img src="/images/logoHogentLogin.jpg" alt="HoGent Logo" class="w-64 max-w-full h-auto">
             </div>
 
-            <!-- Form -->
-            <EditForm Model="@loginModel" OnValidSubmit="HandleLogin" class="space-y-6">
-                <!-- Email Input -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <InputText id="email" @bind-Value="loginModel.Email"
-                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-gray-500 focus:border-gray-500" />
+        <div class="form-container">
+            <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <InputText id="email" @bind-Value="loginModel.Email" class="form-control" />
+                    <ValidationMessage For="@(() => loginModel.Email)" />
                 </div>
 
-                <!-- Password Input -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord</label>
-                    <InputText id="password" @bind-Value="loginModel.Password" type="password"
-                        class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-gray-500 focus:border-gray-500" />
+                <div class="form-group">
+                    <label for="password">Wachtwoord</label>
+                    <InputText id="password" @bind-Value="loginModel.Password" type="password" class="form-control" />
+                    <ValidationMessage For="@(() => loginModel.Password)" />
                 </div>
 
                 <!-- Login Button and Forgot Password Link -->
@@ -45,22 +46,33 @@
                         class="text-sm text-gray-500 hover:text-gray-700 transition ml-4">Wachtwoord vergeten?</a>
                 </div>
             </EditForm>
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">
+                    @errorMessage
+                </div>
+            }
         </div>
     </div>
 </div>
 
 @code {
     private LoginModel loginModel = new LoginModel();
+    private string errorMessage;
 
-    private void HandleLogin()
+    private async Task HandleLogin()
     {
+
         // Moet nog code komen
         Navigation.NavigateTo("/index");
     }
 
     public class LoginModel
     {
-        public string Email { get; set; } = String.Empty;
-        public string Password { get; set; } = String.Empty;
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string Email { get; set; }
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; }
     }
 }
