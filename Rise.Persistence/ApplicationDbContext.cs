@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 
-
 namespace Rise.Persistence;
 
 /// <inheritdoc />

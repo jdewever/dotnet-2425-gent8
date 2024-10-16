@@ -1,39 +1,80 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Rise</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+﻿<div
+    class="@NavHeight relative flex w-full md:max-w-[20rem] flex-col bg-white p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5">
+    <div class="p-4 mb-2 flex justify-between items-center">
+        <img src="images/logo.png" alt="Rise" class="w-auto h-8" />
+        <button class="md:hidden" @onclick="ToggleNavMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+            </svg>
         </button>
     </div>
-</div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+    <div class="@NavMenuCssClass flex flex-col space-between h-full">
+        <nav class="flex min-w-[240px] flex-col gap-1 p-2 text-base font-normal text-blue-gray-700 flex-grow">
+            @* to be filtered for admins *@
+            @foreach (var item in NavItems.Where(i => i.IsVisible)) {
+                <NavLink class="nav-item" href="@item.Href" Match="NavLinkMatch.All">
+                    <div class="grid mr-4 place-items-center">
+                        <img src="/images/icons/@(item.Icon).svg" alt="@item.Label" class="w-6 h-auto" />
+                    </div>
+                    @item.Label
+                </NavLink>
+
+                    @foreach (var child in item.Children) {
+                        <NavLink class="nav-item" href="@child.Href">
+                            <div class="grid mr-4 place-items-center ml-8">
+                                @if (child.Icon != null) {
+                                    <img src="/images/icons/@(child.Icon).svg" alt="@child.Label" class="w-6 h-auto" />
+                                }
+                            </div>
+                            @child.Label
+                        </NavLink>
+                    }
+            }
+        </nav>
+
+        <div class="mt-auto">
+            <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
+                <div class="grid mr-4 place-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red"
+                        class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+                    </svg>
+                </div>
+                Log Out
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="products">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Products
-            </NavLink>
-        </div>
-    </nav>
+    </div>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string? NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-[calc(100vh-20rem)] min-h-full";
+    private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
+    private List<NavItem> NavItems => new() {
+        new NavItem { Label = "Dashboard", Href = "index", Icon = "dashboard" },
+        new NavItem { Label = "Voorraadbeheer", Href = "products", Icon = "inventory",
+            Children = new[] {
+                new NavItem { Label = "Uitlenen", Href = "products" },
+                new NavItem { Label = "Reserveren", Href = "reserve" },
+            },
+        },
+        new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
+        new NavItem { Label = "Reserveringen", Href = "reservations", Icon = "reservation" },
+    };
 
-    private void ToggleNavMenu()
-    {
+    private void ToggleNavMenu() {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    // only used here, but maybe better in Persistence once linked to users?
+    private class NavItem {
+        public required string Label { get; set; }
+        public required string Href { get; set; }
+        public string? Icon { get; set; }
+        public NavItem[] Children { get; set; } = Array.Empty<NavItem>();
+        public bool IsVisible { get; set; } = true; // to filter for admins/inventory role
     }
 }

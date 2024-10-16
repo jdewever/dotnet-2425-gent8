@@ -1,7 +1,7 @@
-﻿@using Rise.Shared.Products
+@using Rise.Shared.Products
 @using Microsoft.AspNetCore.Components
 
-<div class="overflow-x-auto">
+<div class="overflow-x-auto w-full">
     <div class="hidden md:block min-w-full">
         <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden w-full">
             <thead class="bg-gray-200">
@@ -28,14 +28,14 @@
                     }
                     @if (ShowActions)
                     {
-                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider"></th>
+                        <th class="px-10 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider" @onclick:stopPropagation></th>
                     }
                 </tr>
             </thead>
             <tbody>
                 @foreach (var product in Products)
                 {
-                    <tr class="hover:bg-gray-100">
+                    <tr class="hover:bg-gray-100" @onclick="() => ShowModal(product)">
                         @if (ShowBarcode)
                         {
                             <td class="px-10 py-2 border-b border-gray-200">@product.Barcode</td>
@@ -59,7 +59,7 @@
                         @if (ShowActions)
                         {
                             <td class="px-10 py-2 border-b border-gray-200">
-                                <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">Uitlenen</button>
+                                <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300" disabled>Uitlenen</button>
                             </td>
                         }
                     </tr>
@@ -68,10 +68,10 @@
         </table>
     </div>
 
-    <div class="lg:hidden">
+    <div class="lg:hidden w-full">
         @foreach (var product in Products)
         {
-            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full sm:max-w-md mx-auto relative">
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative">
                 @if (ShowBarcode)
                 {
                     <p class="text-xs text-gray-400 font-light mb-2">@product.Barcode</p>
@@ -95,7 +95,7 @@
 
                 @if (ShowActions)
                 {
-                    <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300 absolute bottom-4 right-4">
+                    <button class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300 absolute bottom-4 right-4" disabled>
                         Uitlenen
                     </button>
                 }
@@ -103,7 +103,48 @@
         }
     </div>
 
+    <div IsVisible="isModalVisible" IsVisibleChanged="@( (bool val) => isModalVisible = val )">
+        @if (selectedProduct != null)
+        {
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+                <div class="fixed inset-0 bg-black opacity-50" @onclick="CloseModal"></div>
 
+                <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 w-full max-w-xs sm:max-w-md mx-auto relative">
+                    <button class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700" @onclick="CloseModal" aria-label="Close modal">
+                        &#x2715;
+                    </button>
+
+                    <div class="text-center mb-2 sm:mb-4">
+                        <p class="text-xs sm:text-sm text-gray-400">@selectedProduct.Barcode</p>
+                    </div>
+
+                    <div class="text-center">
+                        <img src="images/testafbeelding.png" alt="@selectedProduct.Name" class="w-32 h-32 sm:w-48 sm:h-48 mx-auto mb-2 sm:mb-4" />
+                    </div>
+
+                    <div class="text-center mb-2 sm:mb-4">
+                        <h2 class="text-lg sm:text-xl font-semibold text-gray-800">@selectedProduct.Name</h2>
+                    </div>
+
+                    <div class="text-center mb-2 sm:mb-4">
+                        <p class="text-base sm:text-lg"><strong>In Stock:</strong> <span class="text-green-600">@selectedProduct.QuantityInStock</span></p>
+                        <p class="text-xs sm:text-sm text-gray-500"><strong>On Order:</strong> @selectedProduct.QuantityOnOrder</p>
+                        <p class="text-xs sm:text-sm text-gray-500"><strong>ClassRoom:</strong> @selectedProduct.ClassRoomCode</p>
+                    </div>
+
+                    <div class="bg-gray-100 p-3 sm:p-4 rounded-md mb-2 sm:mb-4">
+                        <p class="text-xs sm:text-sm text-gray-600">@selectedProduct.Description</p>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="bg-gray-200 text-gray-700 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full hover:bg-gray-300 cursor-not-allowed" disabled>
+                            Uitlenen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 @code {
@@ -116,4 +157,19 @@
     [Parameter] public bool ShowOnOrder { get; set; } = true;
     [Parameter] public bool ShowClassRoomCode { get; set; } = true;
     [Parameter] public bool ShowActions { get; set; } = true;
+
+    private bool isModalVisible = false;
+    private ProductDto? selectedProduct;
+
+    private void ShowModal(ProductDto product)
+    {
+        selectedProduct = product;
+        isModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
+        selectedProduct = null;
+    }
 }
