@@ -54,10 +54,10 @@
     private string? NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-[calc(100vh-20rem)] min-h-full";
     private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
     private List<NavItem> NavItems => new() {
-        new NavItem { Label = "Dashboard", Href = "", Icon = "dashboard" },
+        new NavItem { Label = "Dashboard", Href = "index", Icon = "dashboard" },
         new NavItem { Label = "Voorraadbeheer", Href = "counter", Icon = "inventory",
             Children = new[] {
-                new NavItem { Label = "Uitlenen", Href = "lend" },
+                new NavItem { Label = "Uitlenen", Href = "products" },
                 new NavItem { Label = "Reserveren", Href = "reserve" },
             },
         },
