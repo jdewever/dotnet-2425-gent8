@@ -16,6 +16,7 @@ builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", clien
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
        .CreateClient("360zorg"));
 
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOidcAuthentication(options =>
 {
        builder.Configuration.Bind("Auth0", options.ProviderOptions);
