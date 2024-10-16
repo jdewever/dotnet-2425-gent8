@@ -34,7 +34,7 @@
         </nav>
 
         <div class="mt-auto">
-            <NavLink class="nav-item" href="logout">
+            <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
                 <div class="grid mr-4 place-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red"
                         class="size-6">
@@ -55,7 +55,7 @@
     private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
     private List<NavItem> NavItems => new() {
         new NavItem { Label = "Dashboard", Href = "index", Icon = "dashboard" },
-        new NavItem { Label = "Voorraadbeheer", Href = "counter", Icon = "inventory",
+        new NavItem { Label = "Voorraadbeheer", Href = "products", Icon = "inventory",
             Children = new[] {
                 new NavItem { Label = "Uitlenen", Href = "products" },
                 new NavItem { Label = "Reserveren", Href = "reserve" },
