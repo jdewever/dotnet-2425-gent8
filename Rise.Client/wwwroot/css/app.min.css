@@ -1534,16 +1534,8 @@ video {
   margin-bottom:1rem
 }
 
-.mb-8{
-  margin-bottom:2rem
-}
-
 .me-2{
   margin-inline-end:0.5rem
-}
-
-.flex{
-  display:flex
 }
 
 .table{
@@ -1568,10 +1560,6 @@ video {
 
 .border-collapse{
   border-collapse:collapse
-}
-
-.justify-center{
-  justify-content:center
 }
 
 .overflow-hidden{
@@ -1668,6 +1656,10 @@ video {
 
 .text-left{
   text-align:left
+}
+
+.text-center{
+  text-align:center
 }
 
 .text-sm{

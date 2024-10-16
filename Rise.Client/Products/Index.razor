@@ -4,17 +4,21 @@
 <PageTitle>Products</PageTitle>
 
 @if (products == null)
-{
-    <p><em>Loading...</em></p>
+{   
+    <p class="text-gray-500 text-center"><em>Loading...</em></p>
 }
 else
 {
-    <div class="flex justify-center mb-8">
-        <ProductTable Products="products" />
+    <div class="overflow-x-auto w-full">
+        <Table Items="products">
+            <Columns>
+                <Column Name="Barcode" Label="Code" />
+                <Column Name="Name" Label="Naam" />
+                <Column Name="Description" Label="Beschrijving" />
+                <Column Name="QuantityInStock" Label="In Stock" />
+                <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                <Column Name="ClassRoomCode" Label="Lokaal" />
+            </Columns>
+        </Table>
     </div>
-
-   // VOORBEELD: hiermee kan je de tabel hergebruiken met bepaalde kollomen die je niet wilt displayen
-   // <ProductTable Products="products" ShowInStock="false" ShowOnOrder="false" ShowClassRoomCode="false" />
 }
-
-
