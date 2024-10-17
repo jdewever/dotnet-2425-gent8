@@ -1,5 +1,6 @@
 @using Rise.Shared.Products
 @using Microsoft.AspNetCore.Components
+@inherits ProductModal
 
 <div class="overflow-x-auto w-full">
     <div class="hidden md:block min-w-full">
@@ -119,18 +120,4 @@
     [Parameter] public bool ShowClassRoomCode { get; set; } = true;
     [Parameter] public bool ShowActions { get; set; } = true;
 
-    private bool isModalVisible = false;
-    private ProductDto? selectedProduct;
-
-    private void ShowModal(ProductDto product)
-    {
-        selectedProduct = product;
-        isModalVisible = true;
-    }
-
-    private void CloseModal()
-    {
-        isModalVisible = false;
-        selectedProduct = null;
-    }
 }

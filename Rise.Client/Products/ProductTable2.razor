@@ -1,5 +1,6 @@
 @using Rise.Shared.Products
 @using Microsoft.AspNetCore.Components
+@inherits ProductModal
 
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
     @foreach (var product in Products)
@@ -15,18 +16,5 @@
 @code {
   
     [Parameter] public required IEnumerable<ProductDto> Products { get; set; }
-    private bool isModalVisible = false;
-    private ProductDto? selectedProduct;
-
-    private void ShowModal(ProductDto product)
-    {
-        selectedProduct = product;
-        isModalVisible = true;
-    }
-
-    private void CloseModal()
-    {
-        isModalVisible = false;
-        selectedProduct = null;
-    }
+    
 }
