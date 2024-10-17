@@ -10,20 +10,10 @@ else
 {
     var property = string.IsNullOrEmpty(Name) ? null : typeof(ProductDto).GetProperty(Name);
 
-    <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700">
-        @if (property != null)
-        {
-            @property?.GetValue(Item)?.ToString()
-       }
-        else
-        {
-            @ChildContent
-        }
-    </td>
-
-    <div class="lg:hidden mb-2">
-        <p class="text-sm text-gray-500">
-            <strong>@Label:</strong> @if (property != null)
+    @if (Name != "Barcode")
+    {
+        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
+            @if (property != null)
             {
                 @property?.GetValue(Item)?.ToString()
             }
@@ -31,20 +21,43 @@ else
             {
                 @ChildContent
             }
-        </p>
-    </div>
+        </td>
+    }
+    else if (Name == "Barcode")
+    {
+        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 lg:table-cell hidden">
+            @property?.GetValue(Item)?.ToString()
+        </td>
+    }
+
+    @if (Name != "Barcode")
+    {
+        <div class="lg:hidden mb-2 relative">
+            <p class="text-sm text-gray-500 mb-2">
+                <strong>@Label@(Label != "" ? ":" : "")</strong> @property?.GetValue(Item)?.ToString()
+            </p>
+
+            @if (ChildContent != null)
+            {
+                <div class="absolute bottom-4 right-4">
+                    @ChildContent
+                </div>
+            }
+        </div>
+    }
+    else if (Name == "Barcode")
+    {
+        <div class="lg:hidden mb-2">
+            <p class="text-xs text-gray-400">
+                @property?.GetValue(Item)?.ToString()
+            </p>
+        </div>
+    }
 }
 
 @code {
-    [Parameter]
-    public string Name { get; set; }
-
-    [Parameter]
-    public string Label { get; set; }
-
-    [CascadingParameter]
-    public ProductDto Item { get; set; }
-
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string Name { get; set; }
+    [Parameter] public string Label { get; set; }
+    [CascadingParameter] public ProductDto Item { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿@using Rise.Shared.Products
 
 <div class="overflow-x-auto w-full">
-    <div class="hidden md:block min-w-full">
+    <div class="hidden lg:block min-w-full">
         <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden w-full min-w-full">
             <thead class="bg-gray-200">
                 <tr>
@@ -35,6 +35,5 @@
 
 @code {
     [Parameter] public required IEnumerable<ProductDto> Items { get; set; }
-
     [Parameter] public RenderFragment? Columns { get; set; }
 }
