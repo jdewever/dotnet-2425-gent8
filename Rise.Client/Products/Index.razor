@@ -10,12 +10,17 @@
 else
 {
     <div>
-        <select>
-            @foreach (var category in categories)
-            {
-                <option>@category.Name</option>
-            }
-        </select>
+        <BlazoredTypeahead SearchMethod="SearchCategory"
+                           @bind-Values="_selectedCategoriesList"
+                           EnableDropDown="true"
+                           placeholder="Zoeken via categorie ...">
+            <SelectedTemplate Context="category">
+                @category.Name
+            </SelectedTemplate>
+            <ResultTemplate Context="category">
+                @category.Name
+            </ResultTemplate>
+        </BlazoredTypeahead>
     </div>
     <div class="flex justify-center mb-8">
         <ProductTable Products="products" />
