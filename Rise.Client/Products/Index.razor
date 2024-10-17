@@ -3,12 +3,20 @@
 
 <PageTitle>Products</PageTitle>
 
-@if (products == null)
+@if (products == null || categories == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
+    <div>
+        <select>
+            @foreach (var category in categories)
+            {
+                <option>@category.Name</option>
+            }
+        </select>
+    </div>
     <div class="flex justify-center mb-8">
         <ProductTable Products="products" />
     </div>
