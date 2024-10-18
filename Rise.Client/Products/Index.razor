@@ -4,30 +4,57 @@
 <PageTitle>Products</PageTitle>
 
 @if (products == null)
-{   
-    <p class="text-gray-500 text-center"><em>Loading...</em></p>
+{
+    <p><em>Loading...</em></p>
 }
 else
 {
-    <div class="overflow-x-auto w-full">
-        <Table Items="products">
-            <Columns>
-                <Column Name="Barcode" Label="Code" />
-                <Column Name="Name" Label="Naam" />
-                <Column Name="Description" Label="Beschrijving" />
-                <Column Name="QuantityInStock" Label="In Stock" />
-                <Column Name="QuantityOnOrder" Label="In Bestelling" />
-                <Column Name="ClassRoomCode" Label="Lokaal" />
-                <Column Label="">
-                    <button name="uitlenenBtn"class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
-                        Uitlenen
-                    </button>
-                </Column>
-            </Columns>
-        </Table>
+    <div class="flex justify-center mb-8">
+        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2"/>
     </div>
+    @if (table)
+    {
+        <div class="overflow-x-auto w-full">
+            <Table Items="products">
+                <Columns>
+                    <Column Name="Barcode" Label="Code" />
+                    <Column Name="Name" Label="Naam" />
+                    <Column Name="Description" Label="Beschrijving" />
+                    <Column Name="QuantityInStock" Label="In Stock" />
+                    <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                    <Column Name="ClassRoomCode" Label="Lokaal" />
+                    <Column Label="">
+                        <button name="uitlenenBtn" class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
+                            Uitlenen
+                        </button>
+                    </Column>
+                </Columns>
+            </Table>
+        </div>
+    }
+    @if (table2)
+    {
+        <div class="flex justify-center mb-8">
+            <ProductTable2 Products="products"/>
+        </div>
+    }
+
 }
 @code {
     private Boolean table = false;
     private Boolean table2 = true;
+
+    private void showTable()
+    {
+        table = true;
+        table2 = false;
+    }
+
+    private void showTable2()
+    {
+        table = false;
+        table2 = true;
+    }
 }
+
+
