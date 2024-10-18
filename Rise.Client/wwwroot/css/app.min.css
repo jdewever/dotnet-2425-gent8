@@ -1577,10 +1577,6 @@ video {
   margin-inline-end:0.5rem
 }
 
-.ml-4{
-  margin-left:1rem
-}
-
 .ml-8{
   margin-left:2rem
 }
@@ -1589,20 +1585,8 @@ video {
   margin-right:1rem
 }
 
-.mt-1{
-  margin-top:0.25rem
-}
-
-.mt-6{
-  margin-top:1.5rem
-}
-
 .mt-auto{
   margin-top:auto
-}
-
-.block{
-  display:block
 }
 
 .flex{
@@ -1663,10 +1647,6 @@ video {
   height:100%
 }
 
-.h-screen{
-  height:100vh
-}
-
 .min-h-full{
   min-height:100%
 }
@@ -1682,6 +1662,7 @@ video {
 .w-16{
   width:4rem
 }
+
 
 .w-32{
   width:8rem
@@ -1699,10 +1680,6 @@ video {
   width:1.5rem
 }
 
-.w-64{
-  width:16rem
-}
-
 .w-auto{
   width:auto
 }
@@ -1717,14 +1694,6 @@ video {
 
 .min-w-full{
   min-width:100%
-}
-
-.max-w-full{
-  max-width:100%
-}
-
-.max-w-md{
-  max-width:28rem
 }
 
 .max-w-xs{
@@ -1799,6 +1768,7 @@ video {
   margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))
 }
 
+
 .overflow-hidden{
   overflow:hidden
 }
@@ -1830,11 +1800,6 @@ video {
 .border-gray-200{
   --tw-border-opacity:1;
   border-color:rgb(229 231 235 / var(--tw-border-opacity))
-}
-
-.border-gray-300{
-  --tw-border-opacity:1;
-  border-color:rgb(209 213 219 / var(--tw-border-opacity))
 }
 
 .bg-black{
@@ -1943,11 +1908,6 @@ video {
   padding-bottom:0.625rem
 }
 
-.py-3{
-  padding-top:0.75rem;
-  padding-bottom:0.75rem
-}
-
 .text-left{
   text-align:left
 }
@@ -1963,11 +1923,6 @@ video {
 .text-3xl{
   font-size:1.875rem;
   line-height:2.25rem
-}
-
-.text-5xl{
-  font-size:3rem;
-  line-height:1
 }
 
 .text-base{
@@ -2237,14 +2192,10 @@ h1:focus {
   background-color:rgb(55 65 81 / var(--tw-bg-opacity))
 }
 
+
 .hover\:text-gray-700:hover{
   --tw-text-opacity:1;
   color:rgb(55 65 81 / var(--tw-text-opacity))
-}
-
-.focus\:border-gray-500:focus{
-  --tw-border-opacity:1;
-  border-color:rgb(107 114 128 / var(--tw-border-opacity))
 }
 
 .focus\:outline-none:focus{
@@ -2373,16 +2324,8 @@ h1:focus {
 }
 
 @media (min-width: 1024px){
-  .lg\:flex{
-    display:flex
-  }
-
   .lg\:hidden{
     display:none
-  }
-
-  .lg\:w-1\/2{
-    width:50%
   }
 
   .lg\:grid-cols-7{

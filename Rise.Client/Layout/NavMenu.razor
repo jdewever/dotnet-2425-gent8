@@ -1,4 +1,7 @@
-﻿<div
+﻿@inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+<div
     class="@NavHeight relative flex w-full md:max-w-[20rem] flex-col bg-white p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5">
     <div class="p-4 mb-2 flex justify-between items-center">
         <img src="images/logo.png" alt="Rise" class="w-auto h-8" />
@@ -34,7 +37,7 @@
         </nav>
 
         <div class="mt-auto">
-            <NavLink class="nav-item" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-item" href="" Match="NavLinkMatch.All" @onclick="BeginLogOut">
                 <div class="grid mr-4 place-items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="red"
                         class="size-6">
@@ -54,7 +57,7 @@
     private string? NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-[calc(100vh-20rem)] min-h-full";
     private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
     private List<NavItem> NavItems => new() {
-        new NavItem { Label = "Dashboard", Href = "index", Icon = "dashboard" },
+        new NavItem { Label = "Dashboard", Href = "", Icon = "dashboard" },
         new NavItem { Label = "Voorraadbeheer", Href = "products", Icon = "inventory",
             Children = new[] {
                 new NavItem { Label = "Uitlenen", Href = "products" },
@@ -67,6 +70,10 @@
 
     private void ToggleNavMenu() {
         collapseNavMenu = !collapseNavMenu;
+    }
+    public void BeginLogOut()
+    {
+        Navigation.NavigateToLogout("authentication/logout");
     }
 
     // only used here, but maybe better in Persistence once linked to users?
