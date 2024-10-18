@@ -17,11 +17,15 @@ else
         <div class="overflow-x-auto w-full">
             <Table Items="products">
                 <Columns>
-                    <Column Name="Barcode" Label="Code" />
+                    <AuthorizeView Roles="Administrator">
+                        <Column Name="Barcode" Label="Code" />
+                    </AuthorizeView>
                     <Column Name="Name" Label="Naam" />
                     <Column Name="Description" Label="Beschrijving" />
                     <Column Name="QuantityInStock" Label="In Stock" />
-                    <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                    <AuthorizeView Roles="Administrator">
+                            <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                    </AuthorizeView>
                     <Column Name="ClassRoomCode" Label="Lokaal" />
                     <Column Label="">
                         <button name="uitlenenBtn" class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
