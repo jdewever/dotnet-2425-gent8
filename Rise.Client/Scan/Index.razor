@@ -1,0 +1,65 @@
+@page "/scan"
+@attribute [Authorize]
+@using Rise.Client.Products
+@using Rise.Shared.Products
+
+<PageTitle>Scannen</PageTitle>
+
+
+<div class="flex flex-col custom:flex-row w-full items-center space-x-4">
+    <!-- Left Column-->
+    <div class="flex flex-col items-center w-1/2">
+        <!-- In Stock-->
+        <div class="w-1/2 flex justify-between mb-4">
+            <label class="text-gray-500">In stock</label>
+            <label class="text-gray-500">/</label>
+        </div>
+        
+        <div class="flex flex-col items-center w-full bg-gray-100 rounded-lg p-8 mb-4" style="height: 60vh;">
+            <span class="text-gray-500 text-xl">Product ingeven ...</span>
+        </div>
+
+        <!-- Barcode Input -->
+        <div class="w-full flex flex-col items-center space-y-2 mb-4">
+            <label class="text-gray-500">Barcode</label>
+            <div class="relative w-1/2">
+                <input class="w-full border border-gray-300 rounded-lg p-2 pr-10" type="text" placeholder="12345" />
+                <svg class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+            </div>
+        </div>
+
+
+        <!-- Quantity Selector -->
+        <div class="flex items-center space-x-4">
+            <button class="text-3xl font-bold text-gray-600">-</button>
+            <span class="text-xl">0</span>
+            <button class="text-3xl font-bold text-gray-600">+</button>
+        </div>
+
+        <!-- Add Button -->
+        <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Voeg toe</button>
+    </div>
+
+    <!-- Right Column -->
+    <div class="flex flex-col w-1/2 items-center p-6">
+    <div class="w-full" style="height: 70vh;">
+      <Table Items="products">
+          <Columns>
+            <Column Name="Amount" Label="Aantal" />   
+            <Column Name="Name" Label="Naam" />
+        </Columns>
+      </Table>
+    </div>
+      
+      <div class="flex justify-between space-x-4 mt-4">
+          <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan uit</button>
+          <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
+      </div>
+    </div>
+</div>
+
+@code {
+    private List<ProductDto> products = new List<ProductDto>();
+}
