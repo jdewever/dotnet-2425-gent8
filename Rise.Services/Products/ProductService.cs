@@ -14,7 +14,7 @@ public class ProductService : IProductService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllProducts()
+    public async Task<IEnumerable<ProductDto>> GetAllProducts(ProductRequest.Index request)
     {
         IQueryable<ProductDto> query = dbContext.Products.Select(x => new ProductDto
         {

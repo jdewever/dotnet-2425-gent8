@@ -25,7 +25,7 @@ public class IndexWithMockExampleShould : TestContext
                          .Select(i => new ProductDto { Id = i, Name = $"Product {i}",Barcode = $"Barcode {i}",Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i,Categories = null});
 
         var productServiceMock = Substitute.For<IProductService>();
-        productServiceMock.GetAllProducts().Returns(Task.FromResult(products));
+        productServiceMock.GetAllProducts(null).Returns(Task.FromResult(products));
 
         Services.AddScoped(provider => productServiceMock);
 

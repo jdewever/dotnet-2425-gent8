@@ -24,6 +24,7 @@ else
                 @category.Name
             </ResultTemplate>
         </BlazoredTypeahead>
+        <button @onclick="OnParametersSetAsync" class="border-gray-300">Filter</button>
     </div>
     <div class="flex justify-center mb-8">
         <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2"/>
@@ -75,6 +76,12 @@ else
         table = false;
         table2 = true;
     }
+
+    private async void Callback(CategoryDTO obj)
+    {
+        await OnParametersSetAsync();
+    }
+
 }
 
 

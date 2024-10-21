@@ -8,15 +8,21 @@ public partial class Index
 {
     private IEnumerable<ProductDto>? products;
     private IEnumerable<CategoryDTO>? categories;
-    private IList<CategoryDTO>? _selectedCategoriesList;
+    private IList<CategoryDTO> _selectedCategoriesList = [];
 
     [Inject] public required IProductService ProductService { get; set; }
     [Inject] public required ICategoryService CategoryService { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
+        List<int> temp = [];
+        temp.AddRange(_selectedCategoriesList.Select(category => category.Id));
+        ProductRequest.Index request = new()
+        {
+            CategoryIds = temp.ToArray(),
+        };
         categories = await CategoryService.GetAllCategories();
-        products = await ProductService.GetAllProducts();
+        products = await ProductService.GetAllProducts(request);
     }
 
     private async Task<IEnumerable<CategoryDTO>> SearchCategory(string searchTerm)
