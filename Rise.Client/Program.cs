@@ -13,7 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
         .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
