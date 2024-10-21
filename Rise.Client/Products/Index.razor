@@ -1,5 +1,8 @@
-﻿@page "/products"
+@page "/products"
+@attribute [Authorize]
 @using Rise.Shared.Products
+
+
 
 <PageTitle>Products</PageTitle>
 
@@ -23,14 +26,55 @@ else
         </BlazoredTypeahead>
     </div>
     <div class="flex justify-center mb-8">
-        <ProductTable Products="products" />
+        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2"/>
     </div>
-    <div class="flex justify-center mb-8">
-        <ProductTable2 Products="products"/>
-    </div>
+    @if (table)
+    {
+        <div class="overflow-x-auto w-full">
+            <Table Items="products">
+                <Columns>
+                    <AuthorizeView Roles="Administrator, Inventory Manager">
+                        <Column Name="Barcode" Label="Code" />
+                    </AuthorizeView>
+                    <Column Name="Name" Label="Naam" />
+                    <Column Name="Description" Label="Beschrijving" />
+                    <Column Name="QuantityInStock" Label="In Stock" />
+                    <AuthorizeView Roles="Administrator, Inventory Manager">
+                            <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                    </AuthorizeView>
+                    <Column Name="ClassRoomCode" Label="Lokaal" />
+                    <Column Label="">
+                        <button name="uitlenenBtn" class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
+                            Uitlenen
+                        </button>
+                    </Column>
+                </Columns>
+            </Table>
+        </div>
+    }
+    @if (table2)
+    {
+        <div class="flex justify-center mb-8">
+            <ProductTable2 Products="products"/>
+        </div>
+    }
 
-   // VOORBEELD: hiermee kan je de tabel hergebruiken met bepaalde kollomen die je niet wilt displayen
-   // <ProductTable Products="products" ShowInStock="false" ShowOnOrder="false" ShowClassRoomCode="false" />
+}
+@code {
+    private Boolean table = false;
+    private Boolean table2 = true;
+
+    private void showTable()
+    {
+        table = true;
+        table2 = false;
+    }
+
+    private void showTable2()
+    {
+        table = false;
+        table2 = true;
+    }
 }
 
 

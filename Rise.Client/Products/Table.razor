@@ -1,0 +1,45 @@
+﻿@using Rise.Shared.Products
+@inherits ProductModal
+
+<div class="overflow-x-auto w-full">
+    <div class="hidden lg:block min-w-full">
+        <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden w-full min-w-full">
+            <thead class="bg-gray-200">
+                <tr>
+                    @Columns
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Items)
+                {
+                    <CascadingValue Value="product">
+                        <tr class="hover:bg-gray-100" @onclick="() => ShowModal(product)">
+                            @Columns
+                        </tr>
+                    </CascadingValue>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="lg:hidden w-full">
+        @foreach (var product in Items)
+        {
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative" @onclick="() => ShowModal(product)">
+                <CascadingValue Value="product">
+                    @Columns
+                </CascadingValue>
+            </div>
+        }
+    </div>
+</div>
+
+@if (isModalVisible && selectedProduct != null)
+{
+    <ProductDetailModal SelectedProduct="@selectedProduct" OnClick="CloseModal" />
+}
+
+@code {
+    [Parameter] public required IEnumerable<ProductDto> Items { get; set; }
+    [Parameter] public RenderFragment? Columns { get; set; }
+}
