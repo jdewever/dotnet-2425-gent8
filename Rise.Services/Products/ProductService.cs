@@ -27,7 +27,11 @@ public class ProductService : IProductService
             ClassRoomCode = x.ClassRoomCode,
             Categories = CategoryEntityToDto(x.Categories)
         });
-
+        //todo: moet herwerkt worden!
+        if (request.CategoryIds != null && request.CategoryIds.Count != 0)
+        {
+            return query.AsEnumerable().Where(p => p.Categories!.Any(c => request.CategoryIds.Contains(c.Id)));
+        }
         var products = await query.ToListAsync();
 
         return products;
