@@ -1,7 +1,7 @@
 ﻿using Rise.Shared.Products;
 using Xunit.Abstractions;
 using Shouldly;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Rise.Client.Products;
 
@@ -11,17 +11,17 @@ namespace Rise.Client.Products;
 /// </summary>
 public class IndexShould : TestContext
 {
-    public IndexShould(ITestOutputHelper outputHelper)
-    {
-        Services.AddXunitLogger(outputHelper);
+	public IndexShould(ITestOutputHelper outputHelper)
+	{
+		Services.AddXunitLogger(outputHelper);
 		Services.AddScoped<IProductService, FakeProductService>();
 		Services.AddScoped<ICategoryService, FakeCategoryService>();
-    }
+	}
 
-    [Fact]
+	[Fact]
 	public void ShowsProducts()
 	{
 		var cut = RenderComponent<Index>();
-		cut.FindAll("table tbody tr").Count.ShouldBe(5);
+		cut.FindAll("div").Where(div => div.ClassList.Contains("product")).Count().ShouldBe(5);
 	}
 }
