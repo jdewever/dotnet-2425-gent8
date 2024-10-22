@@ -24,4 +24,10 @@ public class ProductService : IProductService
         var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDto>>($"{url}{request.AsQueryString()}");
         return products!;
     }
+
+    public async Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null)
+    {
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDto>>($"product/search?searchTerm={searchTerm}");
+        return products!;
+    }
 }
