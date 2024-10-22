@@ -33,6 +33,30 @@ public class ProductService : IProductService
         return products;
     }
 
+    public async Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null)
+    {
+        IQueryable<ProductDto> query = dbContext.Products
+            .Where(x => string.IsNullOrEmpty(searchTerm) ||
+                        x.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                        x.Barcode.ToLower().Contains(searchTerm.ToLower()))
+            .Select(x => new ProductDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Barcode = x.Barcode,
+                QuantityInStock = x.QuantityInStock,
+                QuantityOnOrder = x.QuantityOnOrder,
+                ClassRoomCode = x.ClassRoomCode,
+                Categories = CategoryEntityToDto(x.Categories)
+            });
+
+        var products = await query.ToListAsync();
+
+        return products;
+    }
+
+
     //todo: needs to be in its own class?
     private static List<CategoryDTO> CategoryEntityToDto(List<Category> categories)
     {

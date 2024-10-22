@@ -22,4 +22,10 @@ public class ProductController : ControllerBase
         var products = await productService.GetAllProducts();
         return products;
     }
+
+    [HttpGet("search")]
+    public async Task<IEnumerable<ProductDto>> GetSearchedProducts([FromQuery] string? searchTerm = null)
+    {
+        return await productService.GetSearchedProducts(searchTerm);
+    }
 }
