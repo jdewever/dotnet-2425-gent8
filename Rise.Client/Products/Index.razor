@@ -6,14 +6,14 @@
 
 <PageTitle>Products</PageTitle>
 
-@if (products == null)
+@if (products == null || categories == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
     <div class="flex justify-center mb-8">
-        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2"/>
+        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2" Categories="categories" SelectedCategoriesIds="_selectedCategories"/>
         <input type="text" placeholder="zoektermen" @oninput="OnSearchInput" class="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
@@ -64,6 +64,12 @@ else
         table = false;
         table2 = true;
     }
+
+    private async void Callback(CategoryDTO obj)
+    {
+        await OnParametersSetAsync();
+    }
+
 }
 
 

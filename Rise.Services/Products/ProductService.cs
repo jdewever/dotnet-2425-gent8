@@ -14,19 +14,43 @@ public class ProductService : IProductService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllProducts()
+    public async Task<IEnumerable<ProductDto>> GetAllProducts(ProductRequest.Index request)
     {
-        IQueryable<ProductDto> query = dbContext.Products.Select(x => new ProductDto
+        IQueryable<ProductDto> query;
+        
+        if (request.CategoryIds != null && request.CategoryIds.Count != 0)
         {
-            Id = x.Id,
-            Name = x.Name,
-            Description = x.Description,
-            Barcode = x.Barcode,
-            QuantityInStock = x.QuantityInStock,
-            QuantityOnOrder = x.QuantityOnOrder,
-            ClassRoomCode = x.ClassRoomCode,
-            Categories = CategoryEntityToDto(x.Categories)
-        });
+            IQueryable<ProductDto> temp = 
+                from p in dbContext.Products
+                from c in p.Categories
+                where request.CategoryIds.Contains(c.Id)
+                select new ProductDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Barcode = p.Barcode,
+                    QuantityInStock = p.QuantityInStock,
+                    QuantityOnOrder = p.QuantityOnOrder,
+                    ClassRoomCode = p.ClassRoomCode,
+                    Categories = CategoryEntityToDto(p.Categories)
+                };
+            query = temp;
+        }
+        else
+        {
+            query = dbContext.Products.Select(x => new ProductDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Barcode = x.Barcode,
+                QuantityInStock = x.QuantityInStock,
+                QuantityOnOrder = x.QuantityOnOrder,
+                ClassRoomCode = x.ClassRoomCode,
+                Categories = CategoryEntityToDto(x.Categories)
+            });
+        }
 
         var products = await query.ToListAsync();
 
@@ -63,7 +87,7 @@ public class ProductService : IProductService
         var categoriesDto = new List<CategoryDTO>();
         categories.ForEach(category =>
         {
-            CategoryDTO dto =new CategoryDTO
+            CategoryDTO dto = new CategoryDTO
             {
                 Id = category.Id,
                 Name = category.Name,

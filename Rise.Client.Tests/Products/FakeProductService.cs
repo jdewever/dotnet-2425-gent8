@@ -7,12 +7,19 @@ namespace Rise.Client.Products;
 
 public class FakeProductService : IProductService
 {
-    public Task<IEnumerable<ProductDto>> GetProductsAsync()
+    public Task<IEnumerable<ProductDto>> GetAllProducts(ProductRequest.Index request)
     {
         var products = Enumerable.Range(1, 5)
-                                 .Select(i => new ProductDto { Id = i, Name = $"Product {i}" });
+                                 .Select(i => new ProductDto { Id = i, Name = $"Product {i}",Barcode = $"Barcode {i}",Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i,Categories = null});
 
         return Task.FromResult(products);
+    }
+
+    public Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null)
+    {
+        var products = GetAllProducts(new ProductRequest.Index()).Result;
+        var term = searchTerm?.ToLower() ?? string.Empty;
+        return Task.FromResult(products.Where(p => p.Name.ToLower().Contains(term) || p.Barcode.ToLower().Contains(term)));
     }
 }
 

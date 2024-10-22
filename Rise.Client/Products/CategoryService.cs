@@ -1,11 +1,19 @@
-﻿using Rise.Shared.Products;
+﻿using System.Net.Http.Json;
+using Rise.Shared.Products;
 
 namespace Rise.Client.Products;
 
 public class CategoryService : ICategoryService
 {
-    public Task<IEnumerable<CategoryDTO>> GetAllCategories()
+    private readonly HttpClient _httpClient;
+
+    public CategoryService(HttpClient httpClient)
     {
-        return null;
+        _httpClient = httpClient;
+    }
+    public async Task<IEnumerable<CategoryDTO>> GetAllCategories()
+    {
+        var result = await _httpClient.GetFromJsonAsync<IEnumerable<CategoryDTO>>("category");
+        return result!;
     }
 }
