@@ -13,6 +13,8 @@
 ## Technologies & Packages Used
 - [Blazor](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor) - Frontend
 - [Tailwind CSS](https://tailwindcss.com) - Styling
+- [Blazored.Typeahead](https://blazored.github.io/Modal/)
+- [Blazored.Modal](https://blazored.github.io/Modal/)
 - [Node.js](https://nodejs.org/en/) - Required for Tailwind to compile
 - [ASP.NET 8](https://dotnet.microsoft.com/en-us/apps/aspnet) - Backend
 - [Entity Framework 8](https://learn.microsoft.com/en-us/ef/) - Database Access
