@@ -1,19 +1,22 @@
-<div>
-    <BlazoredTypeahead SearchMethod="SearchCategory"
-                       ConvertMethod="ConvertMethod"
-                       @bind-Values="SelectedCategoriesIds"
-                       EnableDropDown="true"
-                       placeholder="Zoeken via categorie ...">
-        <SelectedTemplate Context="categoryId">
-            @{
-            var selectedCategory = GetCategory(categoryId);
-            <text>@selectedCategory.Name</text>
-            }
-        </SelectedTemplate>
-        <ResultTemplate Context="category">
-            @category.Name
-        </ResultTemplate>
-    </BlazoredTypeahead>
-    <button @onclick="Filter" class="border-gray-300">Filter</button>
+<div class="flex flex-col items-center">
+    <div class="w-full">
+        <label>Categoriën</label>
+        <BlazoredTypeahead SearchMethod="SearchCategory"
+                           ConvertMethod="ConvertMethod"
+                           @bind-Values="SelectedCategoriesIds"
+                           EnableDropDown="true"
+                           placeholder="Zoeken via categorie ...">
+            <SelectedTemplate Context="categoryId">
+                @{
+                var selectedCategory = GetCategory(categoryId);
+                <text>@selectedCategory.Name</text>
+                }
+            </SelectedTemplate>
+            <ResultTemplate Context="category">
+                @category.Name
+            </ResultTemplate>
+        </BlazoredTypeahead>
+    </div>
+    <button @onclick="Filter" class="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md mt-2">Filter</button>
 </div>
 
