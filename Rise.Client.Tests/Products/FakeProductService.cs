@@ -14,5 +14,12 @@ public class FakeProductService : IProductService
 
         return Task.FromResult(products);
     }
+
+    public Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null)
+    {
+        var products = GetAllProducts(new ProductRequest.Index()).Result;
+        var term = searchTerm?.ToLower() ?? string.Empty;
+        return Task.FromResult(products.Where(p => p.Name.ToLower().Contains(term) || p.Barcode.ToLower().Contains(term)));
+    }
 }
 

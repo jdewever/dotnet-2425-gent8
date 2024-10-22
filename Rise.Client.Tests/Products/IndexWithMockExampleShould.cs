@@ -34,8 +34,8 @@ public class IndexWithMockExampleShould : TestContext
         categoryServiceMock.GetAllCategories()
             .Returns(Task.FromResult(categories));
 
-        Services.AddScoped<IProductService>(_ => productServiceMock);
-        Services.AddScoped<ICategoryService>(_ => categoryServiceMock);
+        Services.AddScoped(_ => productServiceMock);
+        Services.AddScoped(_ => categoryServiceMock);
 
         var cut = RenderComponent<Index>();
 
