@@ -5,6 +5,7 @@ using Rise.Client;
 using Client.Auth;
 using Rise.Shared.Products;
 using Rise.Client.Products;
+using Blazored.Modal;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -27,5 +28,6 @@ builder.Services.AddOidcAuthentication(options =>
        options.ProviderOptions.PostLogoutRedirectUri = builder.HostEnvironment.BaseAddress;
        options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]!);
 }).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>();
+builder.Services.AddBlazoredModal();
 
 await builder.Build().RunAsync();
