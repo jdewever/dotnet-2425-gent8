@@ -12,22 +12,8 @@
 }
 else
 {
-    <div>
-        <BlazoredTypeahead SearchMethod="SearchCategory"
-                           @bind-Values="_selectedCategoriesList"
-                           EnableDropDown="true"
-                           placeholder="Zoeken via categorie ...">
-            <SelectedTemplate Context="category">
-                @category.Name
-            </SelectedTemplate>
-            <ResultTemplate Context="category">
-                @category.Name
-            </ResultTemplate>
-        </BlazoredTypeahead>
-        <button @onclick="OnParametersSetAsync" class="border-gray-300">Filter</button>
-    </div>
     <div class="flex justify-center mb-8">
-        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2"/>
+        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2" Categories="categories" SelectedCategoriesIds="_selectedCategories"/>
     </div>
     @if (table)
     {

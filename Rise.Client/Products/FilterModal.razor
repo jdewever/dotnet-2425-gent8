@@ -1,5 +1,19 @@
-<h3>FilterModal</h3>
+<div>
+    <BlazoredTypeahead SearchMethod="SearchCategory"
+                       ConvertMethod="ConvertMethod"
+                       @bind-Values="SelectedCategoriesIds"
+                       EnableDropDown="true"
+                       placeholder="Zoeken via categorie ...">
+        <SelectedTemplate Context="categoryId">
+            @{
+            var selectedCategory = GetCategory(categoryId);
+            <text>@selectedCategory.Name</text>
+            }
+        </SelectedTemplate>
+        <ResultTemplate Context="category">
+            @category.Name
+        </ResultTemplate>
+    </BlazoredTypeahead>
+    <button @onclick="Filter" class="border-gray-300">Filter</button>
+</div>
 
-@code {
-    
-}
