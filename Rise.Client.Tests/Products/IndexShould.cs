@@ -15,6 +15,7 @@ public class IndexShould : TestContext
     {
         Services.AddXunitLogger(outputHelper);
 		Services.AddScoped<IProductService, FakeProductService>();
+		Services.AddScoped<ICategoryService, FakeCategoryService>();
     }
 
     [Fact]

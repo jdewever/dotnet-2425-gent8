@@ -23,11 +23,17 @@ public class IndexWithMockExampleShould : TestContext
     {
         var products = Enumerable.Range(1, 5)
                          .Select(i => new ProductDto { Id = i, Name = $"Product {i}",Barcode = $"Barcode {i}",Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i,Categories = null});
-
+        var categories = Enumerable.Range(1, 5)
+            .Select(i => new CategoryDTO { Id = i, Name = $"Category {i}"});
+        
         var productServiceMock = Substitute.For<IProductService>();
-        productServiceMock.GetAllProducts(null).Returns(Task.FromResult(products));
+        productServiceMock.GetAllProducts(new ProductRequest.Index()).Returns(Task.FromResult(products));
+        
+        var categoryServiceMock = Substitute.For<ICategoryService>();
+        categoryServiceMock.GetAllCategories().Returns(Task.FromResult(categories));
 
         Services.AddScoped(provider => productServiceMock);
+        Services.AddScoped(provider => categoryServiceMock);
 
         var cut = RenderComponent<Index>();
         cut.FindAll("table tbody tr").Count.ShouldBe(5);
