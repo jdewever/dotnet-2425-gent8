@@ -33,7 +33,7 @@ public class ProductService : IProductService
 
     public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
     {
-        var product = await httpClient.GetFromJsonAsync<ProductDTO>($"api/products/barcode?barcode={barcode}");
+        var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/barcode?barcode={barcode}");
         return product!;
     }
 }
