@@ -21,7 +21,7 @@ public class ProductService : IProductService
         url += $"{request.AsQueryString()}";
         if (categories != null)
             url = categories.Select(i => i).Aggregate(url, (current, value) => current + $"&CategoryIds={value}");
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"{url}{request.AsQueryString()}");
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"{url}");
         return products!;
     }
 
