@@ -17,14 +17,14 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ProductDto>> Get([FromQuery] ProductRequest.Index request)
+    public async Task<IEnumerable<ProductDTO>> Get([FromQuery] ProductRequest.Index request)
     {
         var products = await productService.GetAllProducts(request);
         return products;
     }
 
     [HttpGet("search")]
-    public async Task<IEnumerable<ProductDto>> GetSearchedProducts([FromQuery] string? searchTerm = null)
+    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts([FromQuery] string? searchTerm = null)
     {
         return await productService.GetSearchedProducts(searchTerm);
     }

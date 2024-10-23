@@ -1,6 +1,6 @@
 ﻿namespace Rise.Shared.Products;
 
-public class ProductDto
+public class ProductDTO
 {
     public required int Id { get; set; }
     public required string Name { get; set; }

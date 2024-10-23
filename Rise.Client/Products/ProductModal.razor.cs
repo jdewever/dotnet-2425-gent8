@@ -4,9 +4,9 @@ using Rise.Shared.Products;
 public class ProductModal : ComponentBase
 {
     protected bool isModalVisible = false;
-    protected ProductDto? selectedProduct;
+    protected ProductDTO? selectedProduct;
 
-    protected void ShowModal(ProductDto product)
+    protected void ShowModal(ProductDTO product)
     {
         selectedProduct = product;
         isModalVisible = true;

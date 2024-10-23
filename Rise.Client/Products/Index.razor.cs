@@ -6,7 +6,7 @@ namespace Rise.Client.Products;
 
 public partial class Index
 {
-    private IEnumerable<ProductDto>? products;
+    private IEnumerable<ProductDTO>? products;
     private IEnumerable<CategoryDTO>? categories;
     private IList<int>? _selectedCategories;
     private string? searchTerm;
