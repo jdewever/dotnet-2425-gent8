@@ -28,4 +28,10 @@ public class ProductController : ControllerBase
     {
         return await productService.GetSearchedProducts(searchTerm);
     }
+
+    [HttpGet("location")]
+    public async Task<IEnumerable<string>> GetLocations()
+    {
+        return await productService.GetAllLocations();
+    }
 }

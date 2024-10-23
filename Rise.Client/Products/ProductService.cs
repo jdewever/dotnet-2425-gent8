@@ -21,7 +21,7 @@ public class ProductService : IProductService
         url += $"{request.AsQueryString()}";
         if (categories != null)
             url = categories.Select(i => i).Aggregate(url, (current, value) => current + $"&CategoryIds={value}");
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"{url}{request.AsQueryString()}");
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"{url}");
         return products!;
     }
 
@@ -29,5 +29,11 @@ public class ProductService : IProductService
     {
         var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/search?searchTerm={searchTerm}");
         return products!;
+    }
+
+    public async Task<IEnumerable<string>> GetAllLocations()
+    {
+        var locations = await httpClient.GetFromJsonAsync<IEnumerable<string>>($"product/location");
+        return locations!;
     }
 }

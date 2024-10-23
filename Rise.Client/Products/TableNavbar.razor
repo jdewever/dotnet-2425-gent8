@@ -31,12 +31,16 @@
     [CascadingParameter] public IModalService Modal { get; set; } = default!;
     [Parameter] public IList<int>? SelectedCategoriesIds { get; set; }
     [Parameter] public IEnumerable<CategoryDTO>? Categories { get; set; }
+    [Parameter] public string? Location { get; set; }
+    [Parameter] public IEnumerable<string>? Locations { get; set; }
 
     private void ShowModal()
     {
         var parameters = new ModalParameters()
             .Add(nameof(FilterModal.Categories), Categories)
-            .Add(nameof(FilterModal.SelectedCategoriesIds), SelectedCategoriesIds);
+            .Add(nameof(FilterModal.SelectedCategoriesIds), SelectedCategoriesIds)
+            .Add(nameof(FilterModal.Location), Location)
+            .Add(nameof(FilterModal.Locations), Locations);
         Modal.Show<FilterModal>("Filters", parameters);
     }
 }
