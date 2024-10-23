@@ -33,13 +33,13 @@
 
     <!-- Quantity Selector -->
     <div class="flex items-center space-x-4">
-        <button class="text-3xl font-bold text-gray-600">-</button>
-        <span class="text-xl">0</span>
-        <button class="text-3xl font-bold text-gray-600">+</button>
+        <button class="text-3xl font-bold text-gray-600 @(Quantity > 0 ? "visible opacity-100" : "invisible opacity-0")" @onclick="subtractQuantity">-</button>
+        <span class="text-xl">@Quantity</span>
+        <button class="text-3xl font-bold text-gray-600 @(Quantity < Product?.QuantityInStock ? "visible opacity-100" : "invisible opacity-0")" @onclick="addQuantity">+</button>
     </div>
 
     <!-- Add Button -->
-    <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Voeg toe</button>
+    <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg" @onclick="OnAddProduct">Voeg toe</button>
     
           
     
@@ -47,4 +47,23 @@
 
 @code {
     [Parameter] public ProductDTO Product { get; set; }
+    [Parameter] public EventCallback<(ProductDTO, int)> AddProduct { get; set; }
+
+    private int Quantity = 0;
+
+    private void addQuantity()
+    {
+        Quantity++;
+    }
+
+    private void subtractQuantity()
+    {
+        Quantity--;
+    }
+
+    private void OnAddProduct()
+    {
+        AddProduct.InvokeAsync((Product, Quantity));
+        Quantity = 0;
+    }
 }
