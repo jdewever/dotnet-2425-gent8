@@ -39,14 +39,16 @@
             <input type="number" min="0" value="@MaxInStock" @onchange="@MaxInStockChanged" class="border border-gray-300 rounded-lg focus:border-blue-500 block p-2.5 w-full"/>
         </div>
     </div>
-    <div class="w-full mt-2">
-        <label>Aantal besteld</label>
-        <div class="flex justify-between items-center">
-            <input type="number" min="0" value="@MinOnOrder" @onchange="@MinOnOrderChanged" class="border border-gray-300 rounded-lg focus:border-blue-500 block p-2.5 w-full"/>
-            <text class="mx-2">tot</text>
-            <input type="number" min="0" value="@MaxOnOrder" @onchange="@MaxOnOrderChanged" class="border border-gray-300 rounded-lg focus:border-blue-500 block p-2.5 w-full"/>
+    <AuthorizeView Roles="Administrator, Inventory Manager">
+        <div class="w-full mt-2">
+            <label>Aantal besteld</label>
+            <div class="flex justify-between items-center">
+                <input type="number" min="0" value="@MinOnOrder" @onchange="@MinOnOrderChanged" class="border border-gray-300 rounded-lg focus:border-blue-500 block p-2.5 w-full"/>
+                <text class="mx-2">tot</text>
+                <input type="number" min="0" value="@MaxOnOrder" @onchange="@MaxOnOrderChanged" class="border border-gray-300 rounded-lg focus:border-blue-500 block p-2.5 w-full"/>
+            </div>
         </div>
-    </div>
+    </AuthorizeView>
     <button @onclick="Filter" class="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md mt-2">Filter</button>
 </div>
 
