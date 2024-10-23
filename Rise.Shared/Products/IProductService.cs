@@ -4,6 +4,6 @@ namespace Rise.Shared.Products;
 
 public interface IProductService
 {
-    Task<IEnumerable<ProductDto>> GetAllProducts(ProductRequest.Index request);
-    Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null);
+    Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request);
+    Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null);
 }

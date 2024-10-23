@@ -14,17 +14,17 @@ public class ProductService : IProductService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllProducts(ProductRequest.Index request)
+    public async Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request)
     {
-        IQueryable<ProductDto> query;
+        IQueryable<ProductDTO> query;
         
         if (request.CategoryIds != null && request.CategoryIds.Count != 0)
         {
-            IQueryable<ProductDto> temp = 
+            IQueryable<ProductDTO> temp = 
                 from p in dbContext.Products
                 from c in p.Categories
                 where request.CategoryIds.Contains(c.Id)
-                select new ProductDto
+                select new ProductDTO
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -39,7 +39,7 @@ public class ProductService : IProductService
         }
         else
         {
-            query = dbContext.Products.Select(x => new ProductDto
+            query = dbContext.Products.Select(x => new ProductDTO
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -57,13 +57,13 @@ public class ProductService : IProductService
         return products;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null)
+    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null)
     {
-        IQueryable<ProductDto> query = dbContext.Products
+        IQueryable<ProductDTO> query = dbContext.Products
             .Where(x => string.IsNullOrEmpty(searchTerm) ||
                         x.Name.ToLower().Contains(searchTerm.ToLower()) ||
                         x.Barcode.ToLower().Contains(searchTerm.ToLower()))
-            .Select(x => new ProductDto
+            .Select(x => new ProductDTO
             {
                 Id = x.Id,
                 Name = x.Name,

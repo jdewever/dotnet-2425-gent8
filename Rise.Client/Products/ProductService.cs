@@ -13,7 +13,7 @@ public class ProductService : IProductService
         this.httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllProducts(ProductRequest.Index request)
+    public async Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request)
     {
         var url = "product?";
         var categories = request.CategoryIds;
@@ -21,13 +21,13 @@ public class ProductService : IProductService
         url += $"{request.AsQueryString()}";
         if (categories != null)
             url = categories.Select(i => i).Aggregate(url, (current, value) => current + $"&CategoryIds={value}");
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDto>>($"{url}{request.AsQueryString()}");
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"{url}{request.AsQueryString()}");
         return products!;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetSearchedProducts(string? searchTerm = null)
+    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null)
     {
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDto>>($"product/search?searchTerm={searchTerm}");
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/search?searchTerm={searchTerm}");
         return products!;
     }
 }
