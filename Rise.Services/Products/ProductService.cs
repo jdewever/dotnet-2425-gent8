@@ -57,6 +57,11 @@ public class ProductService : IProductService
                 Categories = CategoryEntityToDto(x.Categories)
             });
         }
+        if (!string.IsNullOrWhiteSpace(request.Location))
+        {
+            query = query.Where(x => x.ClassRoomCode.Equals(request.Location));
+        }
+        
 
         var products = await query.ToListAsync();
 
