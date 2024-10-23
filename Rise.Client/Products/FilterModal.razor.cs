@@ -54,7 +54,7 @@ public partial class FilterModal : ComponentBase
     }
     private async Task<IEnumerable<CategoryDTO>> SearchCategory(string searchTerm)
     {
-        return await Task.FromResult(Categories!.Where(category => category.Name.Contains(searchTerm)));
+        return await Task.FromResult(Categories!.Where(category => category.Name.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)));
     }
     private int ConvertMethod(CategoryDTO arg)
     {
@@ -68,7 +68,7 @@ public partial class FilterModal : ComponentBase
     
     private async Task<IEnumerable<string>> SearchLocation(string searchTerm)
     {
-        return await Task.FromResult(Locations!.Where(location => location.Contains(searchTerm)));
+        return await Task.FromResult(Locations!.Where(location => location.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)));
     }
 
     private void MaxInStockChanged(ChangeEventArgs args)
