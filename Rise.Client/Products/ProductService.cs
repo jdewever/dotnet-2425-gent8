@@ -30,4 +30,10 @@ public class ProductService : IProductService
         var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/search?searchTerm={searchTerm}");
         return products!;
     }
+
+    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    {
+        var product = await httpClient.GetFromJsonAsync<ProductDTO>($"api/products/barcode?barcode={barcode}");
+        return product!;
+    }
 }

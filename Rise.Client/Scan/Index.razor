@@ -1,4 +1,4 @@
-@page "/scan"
+@page "/scan/{barcode?}"
 @attribute [Authorize]
 @using Rise.Client.Products
 @using Rise.Shared.Products
@@ -16,4 +16,16 @@
 @code {
     private List<ProductDTO> products = new List<ProductDTO>();
     private ProductDTO? selectedProduct = null;
+
+    [Parameter] public string? Barcode { get; set; }
+
+    [Inject] public required IProductService ProductService { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(Barcode))
+        {
+            selectedProduct = await ProductService.GetProductByBarcode(Barcode);
+        }
+    }
 }

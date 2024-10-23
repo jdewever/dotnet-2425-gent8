@@ -28,4 +28,10 @@ public class ProductController : ControllerBase
     {
         return await productService.GetSearchedProducts(searchTerm);
     }
+
+    [HttpGet("barcode")]
+    public async Task<ProductDTO> GetProductByBarcode([FromQuery] string? barcode = null)
+    {
+        return await productService.GetProductByBarcode(barcode);
+    }
 }

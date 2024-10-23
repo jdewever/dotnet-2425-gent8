@@ -97,4 +97,25 @@ public class ProductService : IProductService
         });
         return categoriesDto;
     }
+
+    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    {
+        IQueryable<ProductDTO> query = dbContext.Products
+            .Where(x => x.Barcode == barcode)
+            .Select(x => new ProductDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Barcode = x.Barcode,
+                QuantityInStock = x.QuantityInStock,
+                QuantityOnOrder = x.QuantityOnOrder,
+                ClassRoomCode = x.ClassRoomCode,
+                Categories = CategoryEntityToDto(x.Categories)
+            });
+        
+        var product = await query.FirstOrDefaultAsync();
+        return product;
+        
+    }
 }
