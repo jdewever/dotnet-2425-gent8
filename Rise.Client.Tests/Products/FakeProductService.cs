@@ -21,5 +21,12 @@ public class FakeProductService : IProductService
         var term = searchTerm?.ToLower() ?? string.Empty;
         return Task.FromResult(products.Where(p => p.Name.ToLower().Contains(term) || p.Barcode.ToLower().Contains(term)));
     }
+
+    public Task<IEnumerable<string>> GetAllLocations()
+    {
+        var locations = Enumerable.Range(1, 5)
+            .Select(i => $"Location {i}");
+        return Task.FromResult(locations);
+    }
 }
 
