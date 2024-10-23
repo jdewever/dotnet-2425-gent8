@@ -14,6 +14,12 @@ public class ProductService : IProductService
         this.dbContext = dbContext;
     }
 
+    public async Task<IEnumerable<string>> GetAllLocations()
+    {
+        IQueryable<string> query = dbContext.Products.GroupBy(product => product.ClassRoomCode).Select(products => products.Key );
+        return await query.ToListAsync();
+    }
+
     public async Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request)
     {
         IQueryable<ProductDTO> query;
@@ -51,6 +57,11 @@ public class ProductService : IProductService
                 Categories = CategoryEntityToDto(x.Categories)
             });
         }
+        if (!string.IsNullOrWhiteSpace(request.Location))
+        {
+            query = query.Where(x => x.ClassRoomCode.Equals(request.Location));
+        }
+        
 
         var products = await query.ToListAsync();
 
