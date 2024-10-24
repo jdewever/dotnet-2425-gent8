@@ -61,7 +61,22 @@ public class ProductService : IProductService
         {
             query = query.Where(x => x.ClassRoomCode.Equals(request.Location));
         }
-        
+        if ( request.MaxInStock is not null && request.MaxInStock >= 0)
+        {
+            query = query.Where(x => x.QuantityInStock <= request.MaxInStock);
+        }
+        if (request.MinInStock is not null && request.MinInStock >= 0)
+        {
+            query = query.Where(x => x.QuantityInStock >= request.MinInStock);
+        }
+        if (request.MaxOnOrder is not null && request.MaxOnOrder >= 0)
+        {
+            query = query.Where(x => x.QuantityOnOrder <= request.MaxOnOrder);
+        }
+        if (request.MinOnOrder is not null && request.MinOnOrder >= 0)
+        {
+            query = query.Where(x => x.QuantityOnOrder >= request.MinOnOrder);
+        }
 
         var products = await query.ToListAsync();
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 
@@ -16,6 +15,10 @@ public partial class Index
     [Inject] public required ICategoryService CategoryService { get; set; }
     [Parameter, SupplyParameterFromQuery(Name = "Category")] public int[] SelectedCategoryList { get; set; } = [];
     [Parameter, SupplyParameterFromQuery(Name = "Location")] public string? Location { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MaxInStock")] public int? MaxInStock { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MinInStock")] public int? MinInStock { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MaxOnOrder")] public int? MaxOnOrder { get; set; }
+    [Parameter,SupplyParameterFromQuery(Name = "MinOnOrder")] public int? MinOnOrder { get; set; }
 
     private async Task OnSearchInput(ChangeEventArgs e)
     {
@@ -30,7 +33,11 @@ public partial class Index
         ProductRequest.Index request = new()
         {
             CategoryIds = SelectedCategoryList,
-            Location = Location
+            Location = Location,
+            MaxInStock = MaxInStock,
+            MinInStock = MinInStock,
+            MaxOnOrder = MaxOnOrder,
+            MinOnOrder = MinOnOrder
         };
         categories = await CategoryService.GetAllCategories();
         _locations = await ProductService.GetAllLocations();
