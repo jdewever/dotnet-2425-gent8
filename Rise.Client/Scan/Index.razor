@@ -1,14 +1,16 @@
 @page "/scan/{barcode?}"
 @attribute [Authorize]
+@using Blazored.LocalStorage
 @using Rise.Client.Products
 @using Rise.Shared.Products
+@inject ILocalStorageService localStorage
 
 <PageTitle>Scannen</PageTitle>
 
 
 <div class="flex flex-col lg:flex-row w-full items-center space-x-4">
     
-    <ScanProduct Product="selectedProduct" AddProduct="addProduct"/>
+    <ScanProduct Product="selectedProduct" AddProduct="addProduct" GetProductCountByBarcode="getProductCountByBarcode"/>
     <ScanTable Products="products"/>
     
 </div>
@@ -27,13 +29,25 @@
         {
             selectedProduct = await ProductService.GetProductByBarcode(Barcode);
         }
+
+        var storedProducts = await localStorage.GetItemAsync<List<ProductDTO>>("products");
+        if (storedProducts != null)
+        {
+            products = storedProducts;
+        }
     }
 
-    private void addProduct((ProductDTO product, int quantity) productInfo)
+    private async Task addProduct((ProductDTO product, int quantity) productInfo)
     {
         for (int i = 0; i < productInfo.quantity; i++)
         {
             products.Add(productInfo.product);
         }
+        await localStorage.SetItemAsync("products", products);
+    }
+
+    private int getProductCountByBarcode(string barcode)
+    {
+        return barcode != "" ? products.Count(p => p.Barcode == barcode) : 0;
     }
 }

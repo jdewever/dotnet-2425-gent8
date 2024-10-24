@@ -5,7 +5,7 @@
     <!-- In Stock-->
     <div class="w-1/2 flex justify-between mb-4">
         <label class="text-gray-500">In stock</label>
-        <label class="text-gray-500">@((Product?.QuantityInStock.ToString() ?? "/"))</label>
+        <label class="text-gray-500">@(((Product?.QuantityInStock - GetProductCount()).ToString() ?? "/"))</label>
     </div>
     
     <div class="flex flex-col items-center w-full xl:w-1/2 bg-gray-100 rounded-lg p-8 mb-4" style="height: 50vh;">
@@ -35,7 +35,7 @@
     <div class="flex items-center space-x-4">
         <button class="text-3xl font-bold text-gray-600 @(Quantity > 0 ? "visible opacity-100" : "invisible opacity-0")" @onclick="subtractQuantity">-</button>
         <span class="text-xl">@Quantity</span>
-        <button class="text-3xl font-bold text-gray-600 @(Quantity < Product?.QuantityInStock ? "visible opacity-100" : "invisible opacity-0")" @onclick="addQuantity">+</button>
+        <button class="text-3xl font-bold text-gray-600 @(Quantity < (Product?.QuantityInStock - GetProductCount()) ? "visible opacity-100" : "invisible opacity-0")" @onclick="addQuantity">+</button>
     </div>
 
     <!-- Add Button -->
@@ -48,7 +48,7 @@
 @code {
     [Parameter] public ProductDTO Product { get; set; }
     [Parameter] public EventCallback<(ProductDTO, int)> AddProduct { get; set; }
-
+    [Parameter] public Func<string, int> GetProductCountByBarcode { get; set; }
     private int Quantity = 0;
 
     private void addQuantity()
@@ -65,5 +65,10 @@
     {
         AddProduct.InvokeAsync((Product, Quantity));
         Quantity = 0;
+    }
+
+    private int GetProductCount()
+    {
+        return GetProductCountByBarcode.Invoke(Product?.Barcode ?? "");
     }
 }
