@@ -4,5 +4,5 @@ namespace Rise.Shared.Cart;
 
 public class CartDTO
 {
-    public required List<ProductDTO> Products { get; set; }
+    public required List<CheckoutItemDTO> checkoutItems { get; set; }
 }
