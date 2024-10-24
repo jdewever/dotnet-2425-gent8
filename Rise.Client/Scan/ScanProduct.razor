@@ -23,7 +23,7 @@
     <div class="w-full flex flex-col items-center space-y-2 mb-4">
         <label class="text-gray-500">Barcode</label>
         <div class="relative w-1/2">
-            <input class="w-full border border-gray-300 rounded-lg p-2 pr-10" type="text" placeholder="123456789" value="@Product?.Barcode" />
+            <input class="w-full border border-gray-300 rounded-lg p-2 pr-10" type="text" placeholder="123456789" @bind="Barcode" @onkeypress="HandleKeyPress"/>
             <svg class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
@@ -49,7 +49,18 @@
     [Parameter] public ProductDTO Product { get; set; }
     [Parameter] public EventCallback<(ProductDTO, int)> AddProduct { get; set; }
     [Parameter] public Func<string, int> GetProductCountByBarcode { get; set; }
+    [Inject] public required IProductService ProductService { get; set; }
     private int Quantity = 0;
+
+    private string Barcode { get; set; } = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (Product != null)
+        {
+            Barcode = Product.Barcode;
+        }
+    }
 
     private void addQuantity()
     {
@@ -70,5 +81,21 @@
     private int GetProductCount()
     {
         return GetProductCountByBarcode.Invoke(Product?.Barcode ?? "");
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SearchProductByBarcode();
+        }
+    }
+
+    private async Task SearchProductByBarcode()
+    {
+        if (!string.IsNullOrEmpty(Barcode))
+        {
+            Product = await ProductService.GetProductByBarcode(Barcode);
+        }
     }
 }
