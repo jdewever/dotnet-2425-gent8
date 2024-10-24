@@ -32,22 +32,22 @@ public partial class FilterModal : ComponentBase
         {
             queryString += $"Location={Location}";
         }
-        if (MaxInStock is > 0)
+        if (MaxInStock is >= 0)
         {
             queryString +=  queryString != "?" ? "&" : "";
             queryString += $"MaxInStock={MaxInStock}";
         }
-        if (MinInStock is > 0)
+        if (MinInStock is >= 0)
         {
             queryString +=  queryString != "?" ? "&" : "";
             queryString += $"MinInStock={MinInStock}";
         }
-        if (MaxOnOrder is > 0)
+        if (MaxOnOrder is >= 0)
         {
             queryString +=  queryString != "?" ? "&" : "";
             queryString += $"MaxOnOrder={MaxOnOrder}";
         }
-        if (MinOnOrder is > 0)
+        if (MinOnOrder is >= 0)
         {
             queryString +=  queryString != "?" ? "&" : "";
             queryString += $"MinOnOrder={MinOnOrder}";
