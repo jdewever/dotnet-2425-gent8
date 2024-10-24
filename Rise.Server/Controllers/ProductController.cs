@@ -23,12 +23,6 @@ public class ProductController : ControllerBase
         return products;
     }
 
-    [HttpGet("search")]
-    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts([FromQuery] string? searchTerm = null)
-    {
-        return await productService.GetSearchedProducts(searchTerm);
-    }
-
     [HttpGet("location")]
     public async Task<IEnumerable<string>> GetLocations()
     {
