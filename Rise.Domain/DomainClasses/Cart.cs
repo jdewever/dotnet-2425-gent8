@@ -3,8 +3,7 @@ namespace Rise.Domain.DomainClasses
     public class Cart : Entity
     {
         private string userId = default!;
-        private List<Product> checkoutItems = default!;
-
+        private Dictionary<Product, int> checkoutItems = new Dictionary<Product, int>();
         // TODO sommige constructors mogen weg
         public Cart() { }
 
@@ -13,7 +12,7 @@ namespace Rise.Domain.DomainClasses
             this.userId = userId;
         }
 
-        public Cart(string userId, List<Product> checkoutItems)
+        public Cart(string userId, Dictionary<Product, int> checkoutItems)
         {
             this.userId = userId;
             this.checkoutItems = checkoutItems;
@@ -25,7 +24,7 @@ namespace Rise.Domain.DomainClasses
             set => userId = Guard.Against.NullOrWhiteSpace(value);
         }
 
-        public List<Product> CheckoutItems
+        public Dictionary<Product, int> CheckoutItems
         {
             get => checkoutItems;
             set => checkoutItems = Guard.Against.Null(value);
