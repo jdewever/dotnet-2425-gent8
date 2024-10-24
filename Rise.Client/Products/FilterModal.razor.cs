@@ -19,6 +19,14 @@ public partial class FilterModal : ComponentBase
 
     private void Filter()
     {
+        if (MaxInStock < MinInStock)
+        {
+            (MinInStock, MaxInStock) = (MaxInStock, MinInStock);
+        }
+        if (MaxOnOrder < MinOnOrder)
+        {
+            (MinOnOrder, MaxOnOrder) = (MaxOnOrder, MinOnOrder);
+        }
         var queryString = "?";
         if (!string.IsNullOrEmpty(Location))
         {
