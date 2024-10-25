@@ -16,17 +16,18 @@ public class ProductService : IProductService
 
     public async Task<IEnumerable<string>> GetAllLocations()
     {
-        IQueryable<string> query = dbContext.Products.GroupBy(product => product.ClassRoomCode).Select(products => products.Key );
+        IQueryable<string> query = dbContext.Products.GroupBy(product => product.ClassRoomCode)
+            .Select(products => products.Key);
         return await query.ToListAsync();
     }
 
     public async Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request)
     {
         IQueryable<ProductDTO> query;
-        
+
         if (request.CategoryIds != null && request.CategoryIds.Count != 0)
         {
-            IQueryable<ProductDTO> temp = 
+            IQueryable<ProductDTO> temp =
                 from p in dbContext.Products
                 from c in p.Categories
                 where request.CategoryIds.Contains(c.Id)
@@ -57,55 +58,42 @@ public class ProductService : IProductService
                 Categories = CategoryEntityToDto(x.Categories)
             });
         }
+
         if (!string.IsNullOrWhiteSpace(request.Location))
         {
             query = query.Where(x => x.ClassRoomCode.Equals(request.Location));
         }
-        if ( request.MaxInStock is not null && request.MaxInStock >= 0)
+
+        if (request.MaxInStock is not null && request.MaxInStock >= 0)
         {
             query = query.Where(x => x.QuantityInStock <= request.MaxInStock);
         }
+
         if (request.MinInStock is not null && request.MinInStock >= 0)
         {
             query = query.Where(x => x.QuantityInStock >= request.MinInStock);
         }
+
         if (request.MaxOnOrder is not null && request.MaxOnOrder >= 0)
         {
             query = query.Where(x => x.QuantityOnOrder <= request.MaxOnOrder);
         }
+
         if (request.MinOnOrder is not null && request.MinOnOrder >= 0)
         {
             query = query.Where(x => x.QuantityOnOrder >= request.MinOnOrder);
         }
 
-        var products = await query.ToListAsync();
-
-        return products;
-    }
-
-    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null)
-    {
-        IQueryable<ProductDTO> query = dbContext.Products
-            .Where(x => string.IsNullOrEmpty(searchTerm) ||
-                        x.Name.ToLower().Contains(searchTerm.ToLower()) ||
-                        x.Barcode.ToLower().Contains(searchTerm.ToLower()))
-            .Select(x => new ProductDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                Barcode = x.Barcode,
-                QuantityInStock = x.QuantityInStock,
-                QuantityOnOrder = x.QuantityOnOrder,
-                ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories)
-            });
+        if (!string.IsNullOrWhiteSpace(request.Searchterm))
+        {
+            query = query.Where(x => x.Name.ToLower().Contains(request.Searchterm.ToLower()) ||
+                                     x.Barcode.ToLower().Contains(request.Searchterm.ToLower()));
+        }
 
         var products = await query.ToListAsync();
 
-        return products;
+        return products.DistinctBy(dto => dto.Id);
     }
-
 
     //todo: needs to be in its own class?
     private static List<CategoryDTO> CategoryEntityToDto(List<Category> categories)

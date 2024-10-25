@@ -8,7 +8,7 @@ public partial class Index
     private IEnumerable<ProductDTO>? products;
     private IEnumerable<CategoryDTO>? categories;
     private IList<int>? _selectedCategories;
-    private string? searchTerm;
+    private string? _searchTerm;
     private IEnumerable<string>? _locations;
 
     [Inject] public required IProductService ProductService { get; set; }
@@ -22,8 +22,8 @@ public partial class Index
 
     private async Task OnSearchInput(ChangeEventArgs e)
     {
-        searchTerm = e.Value?.ToString();
-        products = await ProductService.GetSearchedProducts(searchTerm);
+        _searchTerm = e.Value?.ToString();
+        await OnParametersSetAsync();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -37,7 +37,8 @@ public partial class Index
             MaxInStock = MaxInStock,
             MinInStock = MinInStock,
             MaxOnOrder = MaxOnOrder,
-            MinOnOrder = MinOnOrder
+            MinOnOrder = MinOnOrder,
+            Searchterm = _searchTerm
         };
         categories = await CategoryService.GetAllCategories();
         _locations = await ProductService.GetAllLocations();

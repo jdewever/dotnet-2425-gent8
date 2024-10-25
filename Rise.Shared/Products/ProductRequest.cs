@@ -10,5 +10,6 @@ public class ProductRequest
         public int? MinInStock { get; set; }
         public int? MaxOnOrder { get; set; }
         public int? MinOnOrder { get; set; }
+        public string? Searchterm { get; set; }
     }
 }
