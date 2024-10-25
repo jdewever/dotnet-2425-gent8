@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Components
 @using Rise.Shared.Products
+@inject BarcodeService BarcodeService
 
 <div class="product flex flex-col items-center justify-between text-center bg-gray-50 p-4 rounded-lg shadow-md w-36 transition duration-300 ease-in-out hover:bg-gray-200 ">
     <!-- Product Name -->
@@ -30,6 +31,7 @@
 
     private void NavigateToScan()
     {
-        Navigation.NavigateTo($"/scan/{Product.Barcode}");
+        BarcodeService.Barcode = Product.Barcode;
+        Navigation.NavigateTo($"/scan");
     }
 }

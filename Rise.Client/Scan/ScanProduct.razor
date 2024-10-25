@@ -1,4 +1,7 @@
 @using Rise.Shared.Products
+@inject IProductService ProductService
+@inject BarcodeService BarcodeService
+
 
 <!-- Left Column-->
 <div class="flex flex-col items-center w-full lg:w-1/2">
@@ -23,7 +26,7 @@
     <div class="w-full flex flex-col items-center space-y-2 mb-4">
         <label class="text-gray-500">Barcode</label>
         <div class="relative w-1/2">
-            <input class="w-full border border-gray-300 rounded-lg p-2 pr-10" type="text" placeholder="123456789" @bind="Barcode" @onkeypress="HandleKeyPress"/>
+            <input class="w-full border border-gray-300 rounded-lg p-2 pr-10" type="text" placeholder="123456789" @bind="@BarcodeService.Barcode"/>
             <svg class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
@@ -33,9 +36,9 @@
 
     <!-- Quantity Selector -->
     <div class="flex items-center space-x-4">
-        <button class="text-3xl font-bold text-gray-600 @(Quantity > 0 ? "visible opacity-100" : "invisible opacity-0")" @onclick="subtractQuantity">-</button>
+        <button class="text-3xl font-bold text-gray-600 @(Quantity > 0 ? "visible opacity-100" : "invisible opacity-0")" @onclick="() => Quantity--">-</button>
         <span class="text-xl">@Quantity</span>
-        <button class="text-3xl font-bold text-gray-600 @(Quantity < (Product?.QuantityInStock - GetProductCount()) ? "visible opacity-100" : "invisible opacity-0")" @onclick="addQuantity">+</button>
+        <button class="text-3xl font-bold text-gray-600 @(Quantity < (Product?.QuantityInStock - GetProductCount()) ? "visible opacity-100" : "invisible opacity-0")" @onclick="() => Quantity++">+</button>
     </div>
 
     <!-- Add Button -->
@@ -46,32 +49,31 @@
 </div>
 
 @code {
-    [Parameter] public ProductDTO Product { get; set; }
     [Parameter] public EventCallback<(ProductDTO, int)> AddProduct { get; set; }
     [Parameter] public Func<string, int> GetProductCountByBarcode { get; set; }
-    [Inject] public required IProductService ProductService { get; set; }
     private int Quantity = 0;
+    private ProductDTO Product;
 
-    private string Barcode { get; set; } = string.Empty;
-
-    protected override void OnParametersSet()
+    protected override async Task OnInitializedAsync()
     {
-        if (Product != null)
+        // Subscribe to the OnBarcodeChanged event
+        // When the barcode changes, searchProductByBarcode is called and the product is updated and quantity is reset
+        BarcodeService.OnBarcodeChanged += async (sender, args) => await SearchProductByBarcode();
+        if (!string.IsNullOrEmpty(BarcodeService.Barcode))
         {
-            Barcode = Product.Barcode;
+            await SearchProductByBarcode();
         }
     }
 
-    private void addQuantity()
+    private async Task SearchProductByBarcode()
     {
-        Quantity++;
+        if (!string.IsNullOrEmpty(BarcodeService.Barcode))
+        {
+            Product = await ProductService.GetProductByBarcode(BarcodeService.Barcode);
+            Quantity = 0;
+            StateHasChanged();
+        }
     }
-
-    private void subtractQuantity()
-    {
-        Quantity--;
-    }
-
     private void OnAddProduct()
     {
         AddProduct.InvokeAsync((Product, Quantity));
@@ -81,21 +83,5 @@
     private int GetProductCount()
     {
         return GetProductCountByBarcode.Invoke(Product?.Barcode ?? "");
-    }
-
-    private async Task HandleKeyPress(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            await SearchProductByBarcode();
-        }
-    }
-
-    private async Task SearchProductByBarcode()
-    {
-        if (!string.IsNullOrEmpty(Barcode))
-        {
-            Product = await ProductService.GetProductByBarcode(Barcode);
-        }
     }
 }

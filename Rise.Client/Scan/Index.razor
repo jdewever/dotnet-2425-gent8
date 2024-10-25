@@ -1,4 +1,4 @@
-@page "/scan/{barcode?}"
+@page "/scan"
 @attribute [Authorize]
 @using Blazored.LocalStorage
 @using Rise.Client.Products
@@ -10,31 +10,17 @@
 
 <div class="flex flex-col lg:flex-row w-full items-center space-x-4">
     
-    <ScanProduct Product="selectedProduct" AddProduct="addProduct" GetProductCountByBarcode="getProductCountByBarcode"/>
+    <ScanProduct AddProduct="addProduct" GetProductCountByBarcode="getProductCountByBarcode"/>
     <ScanTable Products="products"/>
     
 </div>
 
 @code {
     private List<ProductDTO> products = new List<ProductDTO>();
-    private ProductDTO? selectedProduct = null;
-
-    [Parameter] public string? Barcode { get; set; }
-
-    [Inject] public required IProductService ProductService { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (!string.IsNullOrEmpty(Barcode))
-        {
-            selectedProduct = await ProductService.GetProductByBarcode(Barcode);
-        }
-
-        var storedProducts = await localStorage.GetItemAsync<List<ProductDTO>>("products");
-        if (storedProducts != null)
-        {
-            products = storedProducts;
-        }
+        products = await localStorage.GetItemAsync<List<ProductDTO>>("products");
     }
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
@@ -43,7 +29,6 @@
         {
             products.Add(productInfo.product);
         }
-        selectedProduct = productInfo.product;
         await localStorage.SetItemAsync("products", products);
     }
 
@@ -51,4 +36,5 @@
     {
         return barcode != "" ? products.Count(p => p.Barcode == barcode) : 0;
     }
+
 }
