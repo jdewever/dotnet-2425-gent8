@@ -1,4 +1,5 @@
-﻿@using Rise.Shared.Products
+﻿@using Rise.Client.Products
+@using Rise.Shared.Products
 @inherits ProductModal
 
 <div class="overflow-x-auto w-full">
@@ -13,7 +14,7 @@
                 @foreach (var product in Items)
                 {
                     <CascadingValue Value="product">
-                        <tr class="hover:bg-gray-100" @onclick="() => ShowModal(product)">
+                        <tr class="hover:bg-gray-100" @onclick="EnableModal ? () => ShowModal(product) : () => {}">
                             @Columns
                         </tr>
                     </CascadingValue>
@@ -25,7 +26,7 @@
     <div class="lg:hidden w-full">
         @foreach (var product in Items)
         {
-            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative" @onclick="() => ShowModal(product)">
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative" @onclick="EnableModal ? () => ShowModal(product) : () => {}">
                 <CascadingValue Value="product">
                     @Columns
                 </CascadingValue>
@@ -42,4 +43,5 @@
 @code {
     [Parameter] public required IEnumerable<ProductDTO> Items { get; set; }
     [Parameter] public RenderFragment? Columns { get; set; }
+    [Parameter] public Boolean EnableModal { get; set; } = true;
 }
