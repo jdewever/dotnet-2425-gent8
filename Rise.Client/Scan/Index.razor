@@ -43,6 +43,7 @@
         {
             products.Add(productInfo.product);
         }
+        selectedProduct = productInfo.product;
         await localStorage.SetItemAsync("products", products);
     }
 
