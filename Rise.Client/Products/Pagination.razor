@@ -28,6 +28,7 @@
 
     private async Task GoToPreviousPage()
     {
+        Console.WriteLine($"Current Page: {CurrentPage}, Total Pages: {TotalPages}");
         if (CurrentPage > 1)
         {
             CurrentPage--;
@@ -37,13 +38,12 @@
 
     private async Task GoToNextPage()
     {
-        //Console.WriteLine($"Current Page: {CurrentPage}, Total Pages: {TotalPages}");
-        //if (CurrentPage < TotalPages)
+       // if (CurrentPage < TotalPages)
         //{
-            Console.WriteLine("test volgende pagina 2");
+        Console.WriteLine($"Current Page: {CurrentPage}, Total Pages: {TotalPages}");
             CurrentPage++;
             await OnPageChanged.InvokeAsync(CurrentPage);
-        //}
+       // }
     }
 
 }
