@@ -25,12 +25,6 @@ public class ProductService : IProductService
         return products!;
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null)
-    {
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/search?searchTerm={searchTerm}");
-        return products!;
-    }
-
     public async Task<IEnumerable<string>> GetAllLocations()
     {
         var locations = await httpClient.GetFromJsonAsync<IEnumerable<string>>($"product/location");

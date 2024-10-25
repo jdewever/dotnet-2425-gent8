@@ -33,7 +33,7 @@ public class Seeder
                 Name = "Blood Pressure Monitor",
                 Description = "A device for monitoring blood pressure.",
                 Barcode = "123456789012",
-                QuantityInStock = 15,
+                QuantityInStock = 0,
                 QuantityOnOrder = 10,
                 ClassRoomCode = "A101",
             },
