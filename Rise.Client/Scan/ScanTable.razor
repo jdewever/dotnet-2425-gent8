@@ -5,7 +5,7 @@
 <!-- Right Column -->
 <div class="flex flex-col w-1/2 items-center p-6">
   <div class="w-full" style="height: 70vh;">
-    <Table Items="ProductsGroupedByBarcode.Keys">
+    <Table Items="Products.Keys">
       <Columns>
         <Column Name="Amount" Label="Aantal" />
         <Column Name="Name" Label="Naam" />
@@ -20,17 +20,7 @@
 </div>
 
 @code {
-  [Parameter] public required List<ProductDTO> Products { get; set; }
+  [Parameter] public required Dictionary<ProductDTO, int> Products { get; set; }
 
-  public Dictionary<ProductDTO, int> ProductsGroupedByBarcode { get; private set; } = new();
-
-  protected override void OnParametersSet()
-  {
-    ProductsGroupedByBarcode = Products
-    .GroupBy(p => p.Barcode)
-    .ToDictionary(
-    group => group.First(),
-    group => group.Count()
-    );
-  }
+  
 }
