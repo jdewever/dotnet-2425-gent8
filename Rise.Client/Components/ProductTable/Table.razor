@@ -1,6 +1,4 @@
-﻿@using Rise.Client.Products
-@using Rise.Shared.Products
-@inherits ProductModal
+﻿@inherits ProductModal
 
 <div class="overflow-x-auto w-full">
     <div class="hidden lg:block min-w-full">
@@ -38,10 +36,4 @@
 @if (isModalVisible && selectedProduct != null)
 {
     <ProductDetailModal SelectedProduct="@selectedProduct" OnClick="CloseModal" />
-}
-
-@code {
-    [Parameter] public required IEnumerable<ProductDTO> Items { get; set; }
-    [Parameter] public RenderFragment? Columns { get; set; }
-    [Parameter] public Boolean EnableModal { get; set; } = true;
 }
