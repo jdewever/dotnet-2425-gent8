@@ -1,7 +1,5 @@
 @page "/scan"
 @attribute [Authorize]
-@using Rise.Client.Products
-@using Rise.Shared.Products
 
 <PageTitle>Scannen</PageTitle>
 
@@ -12,8 +10,3 @@
     <ScanTable Products="products"/>
     
 </div>
-
-@code {
-    private List<ProductDTO> products = new List<ProductDTO>();
-    private ProductDTO? selectedProduct = null;
-}

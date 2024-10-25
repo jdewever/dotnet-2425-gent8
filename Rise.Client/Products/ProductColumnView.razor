@@ -1,5 +1,3 @@
-@using Rise.Shared.Products
-@using Microsoft.AspNetCore.Components
 @using Rise.Client.Components.ProductTable
 @inherits ProductModal
 
@@ -13,9 +11,3 @@
         <ProductDetailModal SelectedProduct="@selectedProduct" OnClick="CloseModal" />
     }
 </div>
-
-@code {
-  
-    [Parameter] public required IEnumerable<ProductDTO> Products { get; set; }
-    
-}
