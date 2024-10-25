@@ -1,5 +1,4 @@
 @using Rise.Client.Components.ProductTable
-@using Rise.Shared.Products
 
 <!-- Right Column -->
 <div class="flex flex-col w-1/2 items-center p-6">
@@ -17,8 +16,3 @@
       <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
   </div>
 </div>
-
-@code {
-    [Parameter] public required List<ProductDTO> Products { get; set; }
-}
-
