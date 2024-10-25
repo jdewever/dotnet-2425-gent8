@@ -90,6 +90,10 @@ public class ProductService : IProductService
                                      x.Barcode.ToLower().Contains(request.Searchterm.ToLower()));
         }
 
+        //pagination 
+        int skip = (request.PageNumber - 1) * request.PageSize;
+        query = query.Skip(skip).Take(request.PageSize);
+
         var products = await query.ToListAsync();
 
         return products.DistinctBy(dto => dto.Id);

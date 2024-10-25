@@ -38,7 +38,9 @@ public partial class Index
             MinInStock = MinInStock,
             MaxOnOrder = MaxOnOrder,
             MinOnOrder = MinOnOrder,
-            Searchterm = _searchTerm
+            Searchterm = _searchTerm,
+            PageNumber = CurrentPage,
+            PageSize = PageSize
         };
         categories = await CategoryService.GetAllCategories();
         _locations = await ProductService.GetAllLocations();

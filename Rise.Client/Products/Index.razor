@@ -44,6 +44,8 @@ else
                 </Columns>
             </Table>
         </div>
+
+        <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" OnPageChanged="HandlePageChanged" />
     }
 
     @if (table2)
@@ -51,12 +53,18 @@ else
         <div class="flex justify-center mb-8">
             <ProductTable2 Products="products"/>
         </div>
+
+        <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" OnPageChanged="HandlePageChanged" />
     }
 }
 
 @code {
     private Boolean table = false;
     private Boolean table2 = true;
+
+    private int CurrentPage { get; set; } = 1;
+    private int TotalPages { get; set; } = 1;
+    private int PageSize { get; set; } = 10;
 
     private void showTable()
     {
@@ -72,6 +80,12 @@ else
 
     private async void Callback(CategoryDTO obj)
     {
+        await OnParametersSetAsync();
+    }
+
+    private async Task HandlePageChanged(int newPage)
+    {
+        CurrentPage = newPage;
         await OnParametersSetAsync();
     }
 
