@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Rise.Shared.Cart;
+using Rise.Shared.Products;
 
 namespace Rise.Server.Controllers;
 
@@ -17,7 +18,7 @@ public class CartController : ControllerBase
     }
 
     [HttpPut]
-    public async Task Put([FromBody] CartDTO cart)
+    public async Task Put([FromBody] List<ProductDTO> cart)
     {
         // TODO
         /* var result = */

@@ -4,5 +4,5 @@ namespace Rise.Shared.Cart;
 
 public interface ICartService
 {
-    Task CheckoutItems(CartDTO cart);
+    Task CheckoutItems(List<ProductDTO> cart);
 }
