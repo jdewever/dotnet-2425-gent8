@@ -1,24 +1,36 @@
 @using Rise.Client.Products
 @using Rise.Shared.Products
 
+
 <!-- Right Column -->
 <div class="flex flex-col w-1/2 items-center p-6">
-<div class="w-full" style="height: 70vh;">
-  <Table Items="Products">
+  <div class="w-full" style="height: 70vh;">
+    <Table Items="ProductsGroupedByBarcode.Keys">
       <Columns>
-        <Column Name="Amount" Label="Aantal" />   
+        <Column Name="Amount" Label="Aantal" />
         <Column Name="Name" Label="Naam" />
-    </Columns>
-  </Table>
-</div>
-  
+      </Columns>
+    </Table>
+  </div>
+
   <div class="flex justify-between space-x-4 mt-4">
-      <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan uit</button>
-      <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
+    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan uit</button>
+    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
   </div>
 </div>
 
 @code {
-    [Parameter] public required List<ProductDTO> Products { get; set; }
-}
+  [Parameter] public required List<ProductDTO> Products { get; set; }
 
+  public Dictionary<ProductDTO, int> ProductsGroupedByBarcode { get; private set; } = new();
+
+  protected override void OnParametersSet()
+  {
+    ProductsGroupedByBarcode = Products
+    .GroupBy(p => p.Barcode)
+    .ToDictionary(
+    group => group.First(),
+    group => group.Count()
+    );
+  }
+}
