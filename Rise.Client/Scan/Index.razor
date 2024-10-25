@@ -20,7 +20,11 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        products = await localStorage.GetItemAsync<List<ProductDTO>>("products");
+        var storedProducts = await localStorage.GetItemAsync<List<ProductDTO>>("products");
+        if (storedProducts != null)
+        {
+            products = storedProducts;
+        }
     }
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
