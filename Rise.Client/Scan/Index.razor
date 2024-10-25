@@ -16,7 +16,7 @@
 </div>
 
 @code {
-    private Dictionary<ProductDTO,int> products = new();
+    private List<ProductDTO> products = new List<ProductDTO>();
     private ProductDTO? selectedProduct = null;
 
     [Parameter] public string? Barcode { get; set; }
@@ -30,7 +30,7 @@
             selectedProduct = await ProductService.GetProductByBarcode(Barcode);
         }
 
-        var storedProducts = await localStorage.GetItemAsync<Dictionary<ProductDTO, int>>("products");
+        var storedProducts = await localStorage.GetItemAsync<List<ProductDTO>>("products");
         if (storedProducts != null)
         {
             products = storedProducts;
@@ -39,12 +39,15 @@
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
     {
-        products[productInfo.product] = productInfo.quantity;
+        for (int i = 0; i < productInfo.quantity; i++)
+        {
+            products.Add(productInfo.product);
+        }
         await localStorage.SetItemAsync("products", products);
     }
 
     private int getProductCountByBarcode(string barcode)
     {
-        return barcode != "" ? products.Where(p => p.Key.Barcode == barcode).Sum(p => p.Value) : 0;
+        return barcode != "" ? products.Count(p => p.Barcode == barcode) : 0;
     }
 }
