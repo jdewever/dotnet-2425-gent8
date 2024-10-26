@@ -10,6 +10,7 @@ public partial class Index
     private IList<int>? _selectedCategories;
     private string? _searchTerm;
     private IEnumerable<string>? _locations;
+    private int totalPages;
 
     [Inject] public required IProductService ProductService { get; set; }
     [Inject] public required ICategoryService CategoryService { get; set; }
@@ -18,7 +19,7 @@ public partial class Index
     [Parameter, SupplyParameterFromQuery(Name = "MaxInStock")] public int? MaxInStock { get; set; }
     [Parameter, SupplyParameterFromQuery(Name = "MinInStock")] public int? MinInStock { get; set; }
     [Parameter, SupplyParameterFromQuery(Name = "MaxOnOrder")] public int? MaxOnOrder { get; set; }
-    [Parameter,SupplyParameterFromQuery(Name = "MinOnOrder")] public int? MinOnOrder { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MinOnOrder")] public int? MinOnOrder { get; set; }
 
     private async Task OnSearchInput(ChangeEventArgs e)
     {
@@ -29,7 +30,7 @@ public partial class Index
     protected override async Task OnParametersSetAsync()
     {
         _selectedCategories = SelectedCategoryList.ToList();
-        
+
         ProductRequest.Index request = new()
         {
             CategoryIds = SelectedCategoryList,
@@ -42,8 +43,12 @@ public partial class Index
             PageNumber = CurrentPage,
             PageSize = PageSize
         };
+
         categories = await CategoryService.GetAllCategories();
         _locations = await ProductService.GetAllLocations();
-        products = await ProductService.GetAllProducts(request);
+
+        var productResponse = await ProductService.GetAllProducts(request);
+        products = productResponse.Products;
+        TotalPages = productResponse.TotalPages;
     }
 }
