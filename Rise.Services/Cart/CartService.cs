@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Shared.Products;
 using Rise.Shared.Cart;
+using Rise.Shared.Products;
 
 namespace Rise.Services.Cart;
 
