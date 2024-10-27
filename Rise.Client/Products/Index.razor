@@ -2,7 +2,6 @@
 @attribute [Authorize]
 @using Rise.Shared.Products
 
-
 <PageTitle>Products</PageTitle>
 
 @if (products == null || categories == null)
@@ -64,18 +63,20 @@ else
 
     private int CurrentPage { get; set; } = 1;
     private int TotalPages { get; set; } = 1;
-    private int PageSize { get; set; } = 10;
+    private int PageSize { get; set; } = 14;
 
     private void showTable()
     {
         table = true;
         table2 = false;
+        PageSize = 10;
     }
 
     private void showTable2()
     {
         table = false;
         table2 = true;
+        PageSize = 14;
     }
 
     private async void Callback(CategoryDTO obj)
