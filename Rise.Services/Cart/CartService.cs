@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Shared.Products;
 using Rise.Shared.Cart;
-using Rise.Shared.Products;
 
 namespace Rise.Services.Cart;
 
@@ -17,7 +16,6 @@ public class CartService : ICartService
 
     public async Task CheckoutItems(Dictionary<ProductDTO, int> cart)
     {
-        //Dictionary<ProductDTO, int> checkoutItems = getCheckoutItemsDictionary(cart);
 
         foreach (var item in cart)
         {
@@ -44,17 +42,5 @@ public class CartService : ICartService
             }
         }
         await dbContext.SaveChangesAsync();
-    }
-
-    private Dictionary<ProductDTO, int> getCheckoutItemsDictionary(List<ProductDTO> productList)
-    {
-        var dict = productList
-        .GroupBy(p => p.Barcode)
-        .ToDictionary(
-            group => group.First(),
-            group => group.Count()
-        );
-
-        return dict;
     }
 }
