@@ -8,12 +8,26 @@
                            placeholder="Zoeken via categorie ...">
             <SelectedTemplate Context="categoryId">
                 @{
-                var selectedCategory = GetCategory(categoryId);
-                <text>@selectedCategory.Name</text>
+                    var selectedCategory = GetCategory(categoryId);
+                    <text>@selectedCategory.Name</text>
                 }
             </SelectedTemplate>
             <ResultTemplate Context="category">
                 @category.Name
+            </ResultTemplate>
+        </BlazoredTypeahead>
+    </div>
+    <div class="w-full mt-2">
+        <label>Locatie</label>
+        <BlazoredTypeahead SearchMethod="SearchLocation"
+                           @bind-Value="Location"
+                           EnableDropDown="true"
+                           placeholder="Zoeken via Locatie ...">
+            <SelectedTemplate Context="location">
+                @location
+            </SelectedTemplate>
+            <ResultTemplate Context="location">
+                @location
             </ResultTemplate>
         </BlazoredTypeahead>
     </div>

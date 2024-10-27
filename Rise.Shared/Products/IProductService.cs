@@ -6,6 +6,5 @@ public interface IProductService
 {
     Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request);
     Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null);
-
     Task<ProductDTO> GetProductByBarcode(string? barcode = null);
 }
