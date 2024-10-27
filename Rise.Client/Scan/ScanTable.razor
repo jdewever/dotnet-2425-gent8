@@ -14,13 +14,7 @@
   </div>
 
   <div class="flex justify-between space-x-4 mt-4">
-    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan uit</button>
+    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg" @onclick="CheckoutCart">Scan uit</button>
     <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
   </div>
 </div>
-
-@code {
-  [Parameter] public required List<ProductDTO> Products { get; set; }
-
-  
-}
