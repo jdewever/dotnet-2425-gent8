@@ -31,9 +31,14 @@ public class ProductService : IProductService
         return products!;
     }
 
-    public async Task<IEnumerable<string>> GetAllLocations()
+    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
     {
-        var locations = await httpClient.GetFromJsonAsync<IEnumerable<string>>($"product/location");
-        return locations!;
+        try {
+            var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/barcode?barcode={barcode}");
+            return product!;
+        } catch (Exception e) {
+            // Log error
+        }
+        return null;
     }
 }

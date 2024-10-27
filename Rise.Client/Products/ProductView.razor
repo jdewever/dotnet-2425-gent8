@@ -1,4 +1,6 @@
+@using Microsoft.AspNetCore.Components
 @using Rise.Shared.Products
+@inject BarcodeService BarcodeService
 
 <div class="product flex flex-col items-center justify-between text-center bg-gray-50 p-4 rounded-lg shadow-md w-36 transition duration-300 ease-in-out hover:bg-gray-200 ">
     <!-- Product Name -->
@@ -14,7 +16,7 @@
     <span class="text-3xl font-bold text-gray-900 mb-2">@Product.QuantityInStock</span>
 
     <!-- Button Uitlenen -->
-    <button class="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md">
+    <button class="bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-md" @onclick="NavigateToScan">
         Uitlenen
     </button>
 </div>
@@ -24,4 +26,12 @@
     [Parameter] public string ImageUrl { get; set; }
 
     [Parameter] public EventCallback OnClick { get; set; }
+
+    [Inject] private NavigationManager Navigation { get; set; }
+
+    private void NavigateToScan()
+    {
+        BarcodeService.Barcode = Product.Barcode;
+        Navigation.NavigateTo($"/scan");
+    }
 }

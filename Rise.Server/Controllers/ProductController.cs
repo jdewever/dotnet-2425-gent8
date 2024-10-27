@@ -29,9 +29,9 @@ public class ProductController : ControllerBase
         return await productService.GetSearchedProducts(searchTerm);
     }
 
-    [HttpGet("location")]
-    public async Task<IEnumerable<string>> GetLocations()
+    [HttpGet("barcode")]
+    public async Task<ProductDTO> GetProductByBarcode([FromQuery] string? barcode = null)
     {
-        return await productService.GetAllLocations();
+        return await productService.GetProductByBarcode(barcode);
     }
 }
