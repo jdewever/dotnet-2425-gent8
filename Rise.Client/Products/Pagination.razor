@@ -1,13 +1,13 @@
-﻿<div class="pagination-container bg-gray-100 py-2 px-4 rounded-md flex justify-between items-center shadow-md">
-    <span class="text-gray-700">Pagina @CurrentPage van  @TotalPages</span>
+﻿<div class="pagination-container bg-gray-200 py-3 px-4 flex justify-between items-center shadow-md rounded-t-lg border border-gray-200">
+    <span class="text-gray-500">Pagina @CurrentPage van @TotalPages</span>
     <div>
-        <button class="bg-gray-200 text-gray-600 px-4 py-2 mr-2 rounded-md hover:bg-gray-400 disabled:opacity-50"
+        <button class="bg-gray-200 text-gray-500 px-4 py-2 mr-2 rounded hover:bg-gray-300 disabled:opacity-50 border border-gray-200"
                 @onclick="GoToPreviousPage" disabled="@IsFirstPage">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
             </svg>
         </button>
-        <button class="bg-gray-200 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-400 disabled:opacity-50"
+        <button class="bg-gray-200 text-gray-500 px-4 py-2 rounded hover:bg-gray-300 disabled:opacity-50 border border-gray-200"
                 @onclick="GoToNextPage" disabled="@IsLastPage">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
@@ -15,5 +15,3 @@
         </button>
     </div>
 </div>
-
-
