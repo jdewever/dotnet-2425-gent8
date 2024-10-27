@@ -24,6 +24,7 @@ public partial class Index
     private async Task OnSearchInput(ChangeEventArgs e)
     {
         _searchTerm = e.Value?.ToString();
+        CurrentPage = 1;
         await OnParametersSetAsync();
     }
 

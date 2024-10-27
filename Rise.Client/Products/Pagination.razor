@@ -16,29 +16,4 @@
     </div>
 </div>
 
-@code {
-    [Parameter] public int CurrentPage { get; set; }
-    [Parameter] public int TotalPages { get; set; }
-    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
 
-    private bool IsFirstPage => CurrentPage <= 1;
-    private bool IsLastPage => CurrentPage >= TotalPages;
-
-    private async Task GoToPreviousPage()
-    {
-        if (!IsFirstPage)
-        {
-            CurrentPage--;
-            await OnPageChanged.InvokeAsync(CurrentPage);
-        }
-    }
-
-    private async Task GoToNextPage()
-    {
-        if (!IsLastPage)
-        {
-            CurrentPage++;
-            await OnPageChanged.InvokeAsync(CurrentPage);
-        }
-    }
-}
