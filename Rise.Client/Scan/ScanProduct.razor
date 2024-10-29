@@ -40,6 +40,7 @@
     <div class="flex items-center space-x-4">
         <button class="text-3xl font-bold text-gray-600 @(Quantity > 0 ? "visible opacity-100" : "invisible opacity-0")" @onclick="() => Quantity--">-</button>
         <span class="text-xl">@Quantity</span>
+        @* change with low stock qty *@
         <button class="text-3xl font-bold text-gray-600 @(Quantity < (Product?.QuantityInStock - GetProductCount()) ? "visible opacity-100" : "invisible opacity-0")" @onclick="() => Quantity++">+</button>
     </div>
 
@@ -47,6 +48,6 @@
     @if (Product?.QuantityInStock - GetProductCount() == 0) {
         <small class="text-red-500">Niet op voorraad</small>
     }
-    <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @(Product?.QuantityInStock - GetProductCount() == 0 ? "disabled" : "")" @onclick="OnAddProduct">Voeg toe</button>
+    <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @(Product?.QuantityInStock - GetProductCount() == 0 ? "disabled cursor-not-allowed" : "")" @onclick="OnAddProduct">Voeg toe</button>
     
 </div>
