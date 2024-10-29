@@ -1,6 +1,7 @@
 @page "/products"
 @attribute [Authorize]
 @using Rise.Shared.Products
+@using Rise.Client.Components.ProductTable
 
 <PageTitle>Products</PageTitle>
 
@@ -50,7 +51,7 @@ else
     @if (table2)
     {
         <div class="flex justify-center mb-8">
-            <ProductTable2 Products="products"/>
+            <ProductColumnView Products="products.ToList()"/>
         </div>
 
         <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" OnPageChanged="HandlePageChanged" />
