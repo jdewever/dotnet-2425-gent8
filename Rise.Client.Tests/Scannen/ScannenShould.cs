@@ -23,6 +23,8 @@ public class ScannenShould : TestContext
     private List<ProductDTO> addedProducts;
     private Func<string, int> getProductCountByBarcode;
 
+    private EventCallback<(ProductDTO, int)> addProduct;
+
     public ScannenShould(ITestOutputHelper outputHelper)
     {
         _output = outputHelper;
@@ -32,6 +34,14 @@ public class ScannenShould : TestContext
         Services.AddSingleton(new BarcodeService());
         barcodeService = Services.GetRequiredService<BarcodeService>();
         getProductCountByBarcode = barcode => addedProducts.Count(p => p.Barcode == barcode);
+        addProduct = EventCallback.Factory.Create<(ProductDTO, int)>(this, async productInfo =>
+        {
+            for (int i = 0; i < productInfo.Item2; i++)
+            {
+                addedProducts.Add(productInfo.Item1);
+            }
+            await Task.CompletedTask;
+        });
     }
     
 
@@ -43,6 +53,7 @@ public class ScannenShould : TestContext
 
         var cut = RenderComponent<ScanProduct>(parameters => parameters
             .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, addProduct)
         );
 
         // Act
@@ -60,6 +71,7 @@ public class ScannenShould : TestContext
 
         var cut = RenderComponent<ScanProduct>(parameters => parameters
             .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, addProduct)
         );
 
         // Act
@@ -86,6 +98,7 @@ public class ScannenShould : TestContext
         
         var cut = RenderComponent<ScanProduct>(parameters => parameters
             .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, addProduct)
         );
 
         // Act
@@ -114,7 +127,7 @@ public class ScannenShould : TestContext
 
         var cut = RenderComponent<ScanProduct>(parameters => parameters
             .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
-            .Add(p => p.AddProduct, EventCallback.Factory.Create<(ProductDTO, int)>(this, product => addedProducts.Add(product.Item1)))
+            .Add(p => p.AddProduct, addProduct)
         );
 
         // Act
@@ -148,7 +161,7 @@ public class ScannenShould : TestContext
 
         var cut = RenderComponent<ScanProduct>(parameters => parameters
             .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
-            .Add(p => p.AddProduct, EventCallback.Factory.Create<(ProductDTO, int)>(this, async productInfo => { for (int i = 0; i < productInfo.Item2; i++) { addedProducts.Add(productInfo.Item1); } await Task.CompletedTask; }))
+            .Add(p => p.AddProduct, addProduct)
         );
 
         // Act
@@ -173,4 +186,119 @@ public class ScannenShould : TestContext
         addedProducts.All(p => p.Barcode == "Barcode 2").ShouldBeTrue();
     }
 
+    [Fact]
+    public void UpdateStockOnProductAddTwiceAndRemoveOnce()
+    {
+        // Arrange
+        addedProducts = new List<ProductDTO>();
+
+        var cut = RenderComponent<ScanProduct>(parameters => parameters
+            .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, addProduct)
+        );
+
+        // Act
+        cut.InvokeAsync(() =>
+        {
+            barcodeService.Barcode = "Barcode 3";
+            cut.Render();
+        }).Wait();
+
+        var increaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        increaseButton.Click();
+        increaseButton.Click();
+
+        var decreaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("-"));
+        decreaseButton.Click();
+
+        var addButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton.Click();
+
+        
+
+        // Assert
+        var label = cut.Find("label.quantity-in-stock");
+        label.TextContent.ShouldBe("2");
+
+        addedProducts.Count.ShouldBe(1);
+        addedProducts.All(p => p.Barcode == "Barcode 3").ShouldBeTrue();
+    }
+
+    [Fact] 
+    public void UpdateStockOnProductAddTwiceAndRemoveTwice()
+    {
+        // Arrange
+        addedProducts = new List<ProductDTO>();
+
+        var cut = RenderComponent<ScanProduct>(parameters => parameters
+            .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, addProduct)
+        );
+
+        // Act
+        cut.InvokeAsync(() =>
+        {
+            barcodeService.Barcode = "Barcode 1";
+            cut.Render();
+        }).Wait();
+
+        var increaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        increaseButton.Click();
+        increaseButton.Click();
+
+        var decreaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("-"));
+        decreaseButton.Click();
+        decreaseButton.Click();
+
+        var addButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton.Click();
+
+        // Assert
+        var label = cut.Find("label.quantity-in-stock");
+        label.TextContent.ShouldBe("1");
+
+        addedProducts.Count.ShouldBe(0);
+    }
+
+    [Fact]
+    public void UpdateStockOnDifferentProductAdd(){
+        // Arrange
+        addedProducts = new List<ProductDTO>();
+
+        var cut = RenderComponent<ScanProduct>(parameters => parameters
+            .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, addProduct)
+        );
+
+        // Act
+        cut.InvokeAsync(() =>
+        {
+            barcodeService.Barcode = "Barcode 1";
+            cut.Render();
+        }).Wait();
+
+        var increaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        increaseButton.Click();
+
+        var addButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton.Click();
+
+        cut.InvokeAsync(() =>
+        {
+            barcodeService.Barcode = "Barcode 2";
+            cut.Render();
+        }).Wait();
+
+        var increaseButton2 = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        increaseButton2.Click();
+
+        var addButton2 = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton2.Click();
+
+        // Assert
+        var label = cut.Find("label.quantity-in-stock");
+        label.TextContent.ShouldBe("1");
+
+        addedProducts.Count.ShouldBe(2);
+    }
 }
