@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 
 namespace Rise.Client.Products;
@@ -32,6 +33,7 @@ public class ScannenShould : TestContext
         barcodeService = Services.GetRequiredService<BarcodeService>();
         getProductCountByBarcode = barcode => addedProducts.Count(p => p.Barcode == barcode);
     }
+    
 
     [Fact]
     public void ShowsBarcode()
@@ -146,7 +148,7 @@ public class ScannenShould : TestContext
 
         var cut = RenderComponent<ScanProduct>(parameters => parameters
             .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
-            .Add(p => p.AddProduct, EventCallback.Factory.Create<(ProductDTO, int)>(this, product => addedProducts.Add(product.Item1)))
+            .Add(p => p.AddProduct, EventCallback.Factory.Create<(ProductDTO, int)>(this, async productInfo => { for (int i = 0; i < productInfo.Item2; i++) { addedProducts.Add(productInfo.Item1); } await Task.CompletedTask; }))
         );
 
         // Act
@@ -163,9 +165,12 @@ public class ScannenShould : TestContext
         var addButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
         addButton.Click();
 
+        // Assert
         var label = cut.Find("label.quantity-in-stock");
         label.TextContent.ShouldBe("0");
-        
+
+        addedProducts.Count.ShouldBe(2);
+        addedProducts.All(p => p.Barcode == "Barcode 2").ShouldBeTrue();
     }
 
 }
