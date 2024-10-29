@@ -10,7 +10,7 @@
     <!-- In Stock-->
     <div class="w-1/2 flex justify-between mb-4">
         <label class="text-gray-500">In stock</label>
-        <label class="text-gray-500 quantity-in-stock">@(((Product?.QuantityInStock - GetProductCount()).ToString() ?? "/"))</label>
+        <label class="@(Product?.QuantityInStock - GetProductCount() == 0 ? "text-red-500 font-bold" : "text-gray-500") quantity-in-stock">@(((Product?.QuantityInStock - GetProductCount()).ToString() ?? "/"))</label>
     </div>
     
     <div class="flex flex-col items-center w-full xl:w-1/2 bg-gray-100 rounded-lg p-8 mb-4" style="height: 50vh;">
@@ -44,6 +44,9 @@
     </div>
 
     <!-- Add Button -->
-    <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg" @onclick="OnAddProduct">Voeg toe</button>
+    @if (Product?.QuantityInStock - GetProductCount() == 0) {
+        <small class="text-red-500">Niet op voorraad</small>
+    }
+    <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @(Product?.QuantityInStock - GetProductCount() == 0 ? "disabled" : "")" @onclick="OnAddProduct">Voeg toe</button>
     
 </div>
