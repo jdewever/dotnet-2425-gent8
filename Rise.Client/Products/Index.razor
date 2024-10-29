@@ -44,8 +44,6 @@ else
                 </Columns>
             </Table>
         </div>
-
-        <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" OnPageChanged="HandlePageChanged" OnPageSizeChanged="OnPageSizeChange" />
     }
 
     @if (table2)
@@ -53,9 +51,9 @@ else
         <div class="flex justify-center mb-8">
             <ProductColumnView Products="products.ToList()"/>
         </div>
-
- <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" OnPageChanged="HandlePageChanged" OnPageSizeChanged="OnPageSizeChange" />
     }
+
+    <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" />
 }
 
 @code {
@@ -98,13 +96,10 @@ else
         await OnParametersSetAsync();
     }
 
-
     private async Task HandlePageSizeChanged(int newPageSize)
     {
         PageSize = newPageSize;
         CurrentPage = 1;
         await OnParametersSetAsync();
     }
-
-
 }
