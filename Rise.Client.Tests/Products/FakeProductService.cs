@@ -15,24 +15,17 @@ public class FakeProductService : IProductService
         return Task.FromResult(products);
     }
 
-    public Task<ProductDTO> GetProductByBarcode(string? barcode = null)
-    {
-        var products = GetAllProducts(new ProductRequest.Index()).Result;
-        return Task.FromResult(products.Where(p => p.Barcode == barcode).First());
-    }
-
-    public Task<IEnumerable<ProductDTO>> GetSearchedProducts(string? searchTerm = null)
-    {
-        var products = GetAllProducts(new ProductRequest.Index()).Result;
-        var term = searchTerm?.ToLower() ?? string.Empty;
-        return Task.FromResult(products.Where(p => p.Name.ToLower().Contains(term) || p.Barcode.ToLower().Contains(term)));
-    }
-
     public Task<IEnumerable<string>> GetAllLocations()
     {
         var locations = Enumerable.Range(1, 5)
             .Select(i => $"Location {i}");
         return Task.FromResult(locations);
+    }
+
+    public Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    {
+        var product = new ProductDTO { Id = 1, Name = "Product 1", Barcode = "Barcode 1", Description = "Description 1", ClassRoomCode = "ClassRoom 1", QuantityInStock = 1, QuantityOnOrder = 1, Categories = null };
+        return Task.FromResult(product);
     }
 }
 

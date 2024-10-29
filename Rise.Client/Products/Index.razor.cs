@@ -1,4 +1,3 @@
-using System.Collections;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 
@@ -9,18 +8,22 @@ public partial class Index
     private IEnumerable<ProductDTO>? products;
     private IEnumerable<CategoryDTO>? categories;
     private IList<int>? _selectedCategories;
-    private string? searchTerm;
+    private string? _searchTerm;
     private IEnumerable<string>? _locations;
 
     [Inject] public required IProductService ProductService { get; set; }
     [Inject] public required ICategoryService CategoryService { get; set; }
     [Parameter, SupplyParameterFromQuery(Name = "Category")] public int[] SelectedCategoryList { get; set; } = [];
     [Parameter, SupplyParameterFromQuery(Name = "Location")] public string? Location { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MaxInStock")] public int? MaxInStock { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MinInStock")] public int? MinInStock { get; set; }
+    [Parameter, SupplyParameterFromQuery(Name = "MaxOnOrder")] public int? MaxOnOrder { get; set; }
+    [Parameter,SupplyParameterFromQuery(Name = "MinOnOrder")] public int? MinOnOrder { get; set; }
 
     private async Task OnSearchInput(ChangeEventArgs e)
     {
-        searchTerm = e.Value?.ToString();
-        products = await ProductService.GetSearchedProducts(searchTerm);
+        _searchTerm = e.Value?.ToString();
+        await OnParametersSetAsync();
     }
 
     protected override async Task OnParametersSetAsync()
@@ -30,7 +33,12 @@ public partial class Index
         ProductRequest.Index request = new()
         {
             CategoryIds = SelectedCategoryList,
-            Location = Location
+            Location = Location,
+            MaxInStock = MaxInStock,
+            MinInStock = MinInStock,
+            MaxOnOrder = MaxOnOrder,
+            MinOnOrder = MinOnOrder,
+            Searchterm = _searchTerm
         };
         categories = await CategoryService.GetAllCategories();
         _locations = await ProductService.GetAllLocations();

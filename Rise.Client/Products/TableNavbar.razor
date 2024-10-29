@@ -1,5 +1,3 @@
-@using Rise.Shared.Products
-
 <div class="flex items-center justify-between w-full">
     <!-- Left side elements -->
     <div class="flex items-center space-x-2">
@@ -7,10 +5,10 @@
         <label class="relative inline-flex items-center cursor-pointer">
             <div class="w-16 h-8 bg-gray-200 rounded-full peer flex items-center justify-between px-2">
                 <svg @onclick="OnShowTable2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 transition-all duration-300 hover:scale-110">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125Z"/>
                 </svg>
                 <svg @onclick="OnShowTable" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 transition-all duration-300 hover:scale-110">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
                 </svg>
             </div>
         </label>
@@ -18,29 +16,9 @@
         <!-- Filter Icon -->
         <div @onclick="ShowModal" class="cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 transition-all duration-300 hover:scale-110">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"/>
             </svg>
         </div>
     </div>
 
 </div>
-
-@code {
-    [Parameter] public EventCallback OnShowTable { get; set; }
-    [Parameter] public EventCallback OnShowTable2 { get; set; }
-    [CascadingParameter] public IModalService Modal { get; set; } = default!;
-    [Parameter] public IList<int>? SelectedCategoriesIds { get; set; }
-    [Parameter] public IEnumerable<CategoryDTO>? Categories { get; set; }
-    [Parameter] public string? Location { get; set; }
-    [Parameter] public IEnumerable<string>? Locations { get; set; }
-
-    private void ShowModal()
-    {
-        var parameters = new ModalParameters()
-            .Add(nameof(FilterModal.Categories), Categories)
-            .Add(nameof(FilterModal.SelectedCategoriesIds), SelectedCategoriesIds)
-            .Add(nameof(FilterModal.Location), Location)
-            .Add(nameof(FilterModal.Locations), Locations);
-        Modal.Show<FilterModal>("Filters", parameters);
-    }
-}

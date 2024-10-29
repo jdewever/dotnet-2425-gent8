@@ -23,10 +23,10 @@ public class ProductController : ControllerBase
         return products;
     }
 
-    [HttpGet("search")]
-    public async Task<IEnumerable<ProductDTO>> GetSearchedProducts([FromQuery] string? searchTerm = null)
+    [HttpGet("location")]
+    public async Task<IEnumerable<string>> GetLocations()
     {
-        return await productService.GetSearchedProducts(searchTerm);
+        return await productService.GetAllLocations();
     }
 
     [HttpGet("barcode")]

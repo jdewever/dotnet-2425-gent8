@@ -10,25 +10,16 @@ else
 {
     var property = string.IsNullOrEmpty(Name) ? null : typeof(ProductDTO).GetProperty(Name);
 
-    @if (Name != "Barcode")
-    {
-        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
-            @if (property != null)
-            {
-                @property?.GetValue(Item)?.ToString()
-            }
-            else
-            {
-                @ChildContent
-            }
-        </td>
-    }
-    else if (Name == "Barcode")
-    {
-        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 lg:table-cell hidden">
+    <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
+        @if (property != null)
+        {
             @property?.GetValue(Item)?.ToString()
-        </td>
-    }
+        }
+        else
+        {
+            @ChildContent
+        }
+    </td>
 
     @if (Name != "Barcode")
     {
@@ -53,11 +44,4 @@ else
             </p>
         </div>
     }
-}
-
-@code {
-    [Parameter] public string Name { get; set; }
-    [Parameter] public string Label { get; set; }
-    [CascadingParameter] public ProductDTO Item { get; set; }
-    [Parameter] public RenderFragment? ChildContent { get; set; }
 }
