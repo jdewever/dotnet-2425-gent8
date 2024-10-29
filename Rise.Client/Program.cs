@@ -5,6 +5,8 @@ using Rise.Client;
 using Client.Auth;
 using Rise.Shared.Products;
 using Rise.Client.Products;
+using Rise.Shared.Cart;
+using Rise.Client.Cart;
 using Blazored.Modal;
 using Blazored.LocalStorage;
 
@@ -24,6 +26,8 @@ builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg", cli
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
        .CreateClient("360zorg"));
+
+builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOidcAuthentication(options =>

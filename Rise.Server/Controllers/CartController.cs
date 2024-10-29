@@ -20,17 +20,7 @@ public class CartController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Put([FromBody] List<CartItem> cartItems)
     {
-        // TODO
-        /* var result = */
-        //await cartService.CheckoutItems(cart);
-        //return result;
-        var cart = new Dictionary<ProductDTO, int>();
-        foreach (var item in cartItems)
-        {
-            cart[item.Product] = item.Quantity;
-        }
-
-        await cartService.CheckoutItems(cart);
+        await cartService.CheckoutItems(cartItems);
         return Ok();
     }
 
