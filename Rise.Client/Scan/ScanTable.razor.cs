@@ -10,19 +10,7 @@ namespace Rise.Client.Scan
         [Parameter] public required List<CartItem> CartItems { get; set; }
         [Inject] public required ICartService CartService { get; set; }
 
-        /*
-                private List<CartItem> ConvertProductsToCartItems()
-                {
-                    return Products
-                        .GroupBy(product => product.Id)
-                        .Select(group => new CartItem
-                        {
-                            Product = group.First(),
-                            Quantity = group.Count()
-                        })
-                        .ToList();
-                }*/
-
+        // TODO: Put this functin in index.razor.cs
         private async Task CheckoutCart()
         {
             //var cartItems = ConvertProductsToCartItems();

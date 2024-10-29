@@ -35,6 +35,16 @@ public partial class Index : ComponentBase
         await localStorage.SetItemAsync("products", products);
     }
 
+    private async Task removeCartItem(CartItem product)
+    {
+        var existingProduct = products.Find(p => p == product);
+        if (existingProduct != null)
+        {
+            products.Remove(existingProduct);
+            await localStorage.SetItemAsync("products", products);
+        }
+    }
+
     private int getProductCountByBarcode(string barcode)
     {
         return barcode != "" ? products.Count(p => p.Product.Barcode == barcode) : 0;
