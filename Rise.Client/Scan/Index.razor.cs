@@ -8,7 +8,6 @@ namespace Rise.Client.Scan;
 public partial class Index : ComponentBase
 {
     private List<CartItem> products = new List<CartItem>();
-    private ProductDTO? selectedProduct = null;
 
     [Inject] private ILocalStorageService localStorage { get; set; } = null!;
 
@@ -33,16 +32,6 @@ public partial class Index : ComponentBase
             products.Add(new CartItem { Product = productInfo.product, Quantity = productInfo.quantity });
         }
         await localStorage.SetItemAsync("products", products);
-    }
-
-    private async Task removeCartItem(CartItem product)
-    {
-        var existingProduct = products.Find(p => p == product);
-        if (existingProduct != null)
-        {
-            products.Remove(existingProduct);
-            await localStorage.SetItemAsync("products", products);
-        }
     }
 
     private int getProductCountByBarcode(string barcode)

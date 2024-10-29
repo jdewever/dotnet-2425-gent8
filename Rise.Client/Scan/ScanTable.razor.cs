@@ -13,7 +13,6 @@ namespace Rise.Client.Scan
         // TODO: Put this functin in index.razor.cs
         private async Task CheckoutCart()
         {
-            //var cartItems = ConvertProductsToCartItems();
             await CartService.CheckoutItems(CartItems);
             CartItems.Clear();
             // TODO: How to verify if the checkout was successful?
