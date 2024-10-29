@@ -24,8 +24,8 @@ public class FakeProductService : IProductService
 
     public Task<ProductDTO> GetProductByBarcode(string? barcode = null)
     {
-        var product = new ProductDTO { Id = 1, Name = "Product 1", Barcode = "Barcode 1", Description = "Description 1", ClassRoomCode = "ClassRoom 1", QuantityInStock = 1, QuantityOnOrder = 1, Categories = null };
-        return Task.FromResult(product);
+        var products = GetAllProducts(new ProductRequest.Index()).Result;
+        return Task.FromResult(products.Where(p => p.Barcode == barcode).First());
     }
 }
 

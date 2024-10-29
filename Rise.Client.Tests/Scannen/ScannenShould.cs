@@ -89,7 +89,7 @@ public class ScannenShould : TestContext
         // Act
         cut.InvokeAsync(() =>
         {
-            barcodeService.Barcode = "Barcode 10";
+            barcodeService.Barcode = "dqnzdjknqznd";
             cut.Render();
         }).Wait();
 
@@ -139,33 +139,33 @@ public class ScannenShould : TestContext
     }
 
     [Fact]
-public void UpdateStockOnProductAddTwice()
-{
-    // Arrange
-    addedProducts = new List<ProductDTO>();
-
-    var cut = RenderComponent<ScanProduct>(parameters => parameters
-        .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
-        .Add(p => p.AddProduct, EventCallback.Factory.Create<(ProductDTO, int)>(this, product => addedProducts.Add(product.Item1)))
-    );
-
-    // Act
-    cut.InvokeAsync(() =>
+    public void UpdateStockOnProductAddTwice()
     {
-        barcodeService.Barcode = "Barcode 2";
-        cut.Render();
-    }).Wait();
+        // Arrange
+        addedProducts = new List<ProductDTO>();
 
-    var increaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
-    increaseButton.Click();
-    increaseButton.Click();
+        var cut = RenderComponent<ScanProduct>(parameters => parameters
+            .Add(p => p.GetProductCountByBarcode, getProductCountByBarcode)
+            .Add(p => p.AddProduct, EventCallback.Factory.Create<(ProductDTO, int)>(this, product => addedProducts.Add(product.Item1)))
+        );
 
-    var addButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
-    addButton.Click();
+        // Act
+        cut.InvokeAsync(() =>
+        {
+            barcodeService.Barcode = "Barcode 2";
+            cut.Render();
+        }).Wait();
 
-    var label = cut.Find("label.quantity-in-stock");
-    label.TextContent.ShouldBe("0");
-    
-}
+        var increaseButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        increaseButton.Click();
+        increaseButton.Click();
+
+        var addButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton.Click();
+
+        var label = cut.Find("label.quantity-in-stock");
+        label.TextContent.ShouldBe("0");
+        
+    }
 
 }
