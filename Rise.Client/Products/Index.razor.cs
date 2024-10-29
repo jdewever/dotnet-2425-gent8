@@ -10,10 +10,12 @@ public partial class Index
     private IEnumerable<CategoryDTO>? categories;
     private IList<int>? _selectedCategories;
     private string? searchTerm;
+    private IEnumerable<string>? _locations;
 
     [Inject] public required IProductService ProductService { get; set; }
     [Inject] public required ICategoryService CategoryService { get; set; }
-    [Parameter, SupplyParameterFromQuery(Name = "SelectedCategory")] public int[] SelectedCategoryList { get; set; } = [];
+    [Parameter, SupplyParameterFromQuery(Name = "Category")] public int[] SelectedCategoryList { get; set; } = [];
+    [Parameter, SupplyParameterFromQuery(Name = "Location")] public string? Location { get; set; }
 
     private async Task OnSearchInput(ChangeEventArgs e)
     {
@@ -24,11 +26,14 @@ public partial class Index
     protected override async Task OnParametersSetAsync()
     {
         _selectedCategories = SelectedCategoryList.ToList();
+        
         ProductRequest.Index request = new()
         {
             CategoryIds = SelectedCategoryList,
+            Location = Location
         };
         categories = await CategoryService.GetAllCategories();
+        _locations = await ProductService.GetAllLocations();
         products = await ProductService.GetAllProducts(request);
     }
 }

@@ -133,8 +133,8 @@ public class Seeder
         dbContext.Products.AddRange(products);
         
         //relation between product and categories
-        products[0].Categories = [categories[3]];
-        products[1].Categories = [categories[1]];
+        products[0].Categories = [categories[3], categories[2]];
+        products[1].Categories = [categories[1], categories[2], categories[2]];
         products[2].Categories = [categories[3]];
         products[3].Categories = [categories[4]];
         products[4].Categories = [categories[0]];
