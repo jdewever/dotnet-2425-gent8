@@ -30,4 +30,15 @@ public class ProductService : IProductService
         var locations = await httpClient.GetFromJsonAsync<IEnumerable<string>>($"product/location");
         return locations!;
     }
+
+    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    {
+        try {
+            var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/barcode?barcode={barcode}");
+            return product!;
+        } catch (Exception e) {
+            // Log error
+        }
+        return null;
+    }
 }
