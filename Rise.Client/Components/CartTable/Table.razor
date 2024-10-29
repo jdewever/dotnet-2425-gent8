@@ -29,12 +29,13 @@
                         <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
                             @cartItem.Quantity
                         </td>
-                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
+                        <td
+                            class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell text-center">
                             <button @onclick="async () => await OnRemove(cartItem)" class="text-red-600 hover:text-red-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12" />
+                                        d="M9 3h6a1 1 0 011 1v1h3a1 1 0 110 2h-1v12a2 2 0 01-2 2H8a2 2 0 01-2-2V7H5a1 1 0 110-2h3V4a1 1 0 011-1zm-1 5v10m4-10v10m4-10v10" />
                                 </svg>
                             </button>
                         </td>
