@@ -19,6 +19,15 @@ else
                      MaxInStock="MaxInStock" MaxOnOrder="MaxOnOrder"
                      MinInStock="MinInStock" MinOnOrder="MinOnOrder"/>
         <input type="text" placeholder="zoektermen" @oninput="OnSearchInput" class="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+        <select @onchange="OnPageSizeChange" class="border border-gray-300 rounded-lg py-2 px-4 ml-4 bg-white text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+            <option value="5">5 per pagina</option>
+            <option value="10">10 per pagina</option>
+            <option value="14">14 per pagina</option>
+            <option value="20">20 per pagina</option>
+            <option value="50">50 per pagina</option>
+        </select>
+
     </div>
 
     @if (table)
@@ -90,5 +99,16 @@ else
         CurrentPage = newPage;
         await OnParametersSetAsync();
     }
+
+    private async Task OnPageSizeChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int newPageSize))
+        {
+            PageSize = newPageSize;
+            CurrentPage = 1;
+            await OnParametersSetAsync();
+        }
+    }
+
 
 }
