@@ -7,6 +7,7 @@ namespace Rise.Client.Products
         [Parameter] public int CurrentPage { get; set; }
         [Parameter] public int TotalPages { get; set; }
         [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+        [Parameter] public EventCallback<int> OnPageSizeChanged { get; set; }
 
         private bool IsFirstPage => CurrentPage <= 1;
         private bool IsLastPage => CurrentPage >= TotalPages;
@@ -26,6 +27,14 @@ namespace Rise.Client.Products
             {
                 CurrentPage++;
                 await OnPageChanged.InvokeAsync(CurrentPage);
+            }
+        }
+
+        private async Task OnPageSizeChange(ChangeEventArgs e)
+        {
+            if (int.TryParse(e.Value?.ToString(), out int newPageSize))
+            {
+                await OnPageSizeChanged.InvokeAsync(newPageSize);
             }
         }
     }
