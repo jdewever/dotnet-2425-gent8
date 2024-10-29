@@ -7,26 +7,27 @@ namespace Rise.Client.Scan
 {
     public partial class ScanTable
     {
-        [Parameter] public required List<ProductDTO> Products { get; set; }
-        [Inject] public ICartService CartService { get; set; }
+        [Parameter] public required List<CartItem> CartItems { get; set; }
+        [Inject] public required ICartService CartService { get; set; }
 
-        private List<CartItem> ConvertProductsToCartItems()
-        {
-            return Products
-                .GroupBy(product => product.Id)
-                .Select(group => new CartItem
+        /*
+                private List<CartItem> ConvertProductsToCartItems()
                 {
-                    Product = group.First(),
-                    Quantity = group.Count()
-                })
-                .ToList();
-        }
+                    return Products
+                        .GroupBy(product => product.Id)
+                        .Select(group => new CartItem
+                        {
+                            Product = group.First(),
+                            Quantity = group.Count()
+                        })
+                        .ToList();
+                }*/
 
         private async Task CheckoutCart()
         {
-            var cartItems = ConvertProductsToCartItems();
-            await CartService.CheckoutItems(cartItems);
-            Products.Clear();
+            //var cartItems = ConvertProductsToCartItems();
+            await CartService.CheckoutItems(CartItems);
+            CartItems.Clear();
             // TODO: How to verify if the checkout was successful?
             /*
             if (response.IsSuccessStatusCode)

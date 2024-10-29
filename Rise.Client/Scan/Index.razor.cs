@@ -1,19 +1,20 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Rise.Shared.Cart;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Scan;
 
 public partial class Index : ComponentBase
 {
-    private List<ProductDTO> products = new List<ProductDTO>();
+    private List<CartItem> products = new List<CartItem>();
     private ProductDTO? selectedProduct = null;
 
     [Inject] private ILocalStorageService localStorage { get; set; } = null!;
 
     protected override async Task OnParametersSetAsync()
     {
-        var storedProducts = await localStorage.GetItemAsync<List<ProductDTO>>("products");
+        var storedProducts = await localStorage.GetItemAsync<List<CartItem>>("products");
         if (storedProducts != null)
         {
             products = storedProducts;
@@ -22,16 +23,21 @@ public partial class Index : ComponentBase
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
     {
-        for (int i = 0; i < productInfo.quantity; i++)
+        var existingProduct = products.Find(p => p.Product.Barcode == productInfo.product.Barcode);
+        if (existingProduct != null)
         {
-            products.Add(productInfo.product);
+            existingProduct.Quantity += productInfo.quantity;
+        }
+        else
+        {
+            products.Add(new CartItem { Product = productInfo.product, Quantity = productInfo.quantity });
         }
         await localStorage.SetItemAsync("products", products);
     }
 
     private int getProductCountByBarcode(string barcode)
     {
-        return barcode != "" ? products.Count(p => p.Barcode == barcode) : 0;
+        return barcode != "" ? products.Count(p => p.Product.Barcode == barcode) : 0;
     }
 
 }
