@@ -5,13 +5,10 @@
 
     <div class="flex items-center space-x-1">
         <select @onchange="OnPageSizeChange" class="border border-gray-200 bg-gray-200 text-gray-500 rounded-lg py-1 px-2 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
-            <option value="5">5 per pagina</option>
-            <option value="10">10 per pagina</option>
-            <option value="14">14 per pagina</option>
-            <option value="20">20 per pagina</option>
-            <option value="50">50 per pagina</option>
-            <option value="100">100 per pagina</option>
-            <option value="200">200 per pagina</option>
+            @foreach (var pageSize in PageSizes)
+            {
+                <option value="@pageSize" selected="@(CurrentPageSize == pageSize ? "selected" : null)">@pageSize per pagina</option>
+            }
         </select>
 
         <button class="bg-gray-200 text-gray-500 px-2 py-1 rounded hover:bg-gray-300 disabled:opacity-50 border border-gray-200"
