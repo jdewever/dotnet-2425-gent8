@@ -11,5 +11,7 @@ public class ProductRequest
         public int? MaxOnOrder { get; set; }
         public int? MinOnOrder { get; set; }
         public string? Searchterm { get; set; }
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
 }

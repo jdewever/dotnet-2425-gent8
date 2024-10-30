@@ -17,10 +17,10 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ProductDTO>> Get([FromQuery] ProductRequest.Index request)
+    public async Task<ProductResponse> Get([FromQuery] ProductRequest.Index request)
     {
-        var products = await productService.GetAllProducts(request);
-        return products;
+        var productResponse = await productService.GetAllProducts(request);
+        return productResponse;
     }
 
     [HttpGet("location")]
