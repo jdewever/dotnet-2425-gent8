@@ -12,8 +12,8 @@ using Rise.Persistence;
 namespace Rise.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241030110522_Transaction")]
-    partial class Transaction
+    [Migration("20241030123321_Transactions")]
+    partial class Transactions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,7 +141,7 @@ namespace Rise.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("StockTransactionID")
+                    b.Property<int>("TransactionID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")

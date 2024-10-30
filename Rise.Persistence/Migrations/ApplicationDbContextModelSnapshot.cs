@@ -138,7 +138,7 @@ namespace Rise.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("StockTransactionID")
+                    b.Property<int>("TransactionID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")

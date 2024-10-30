@@ -5,7 +5,7 @@
 namespace Rise.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Transaction : Migration
+    public partial class Transactions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
