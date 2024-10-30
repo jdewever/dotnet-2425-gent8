@@ -44,4 +44,10 @@ public class ProductService : IProductService
         }
         return null;
     }
+
+    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    {
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/lowstock");
+        return products!;
+    }
 }

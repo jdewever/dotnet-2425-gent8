@@ -23,8 +23,9 @@
                     <div class="mb-2">
                         <div class="flex justify-between items-center">
                             <p class="text-xs sm:text-sm text-gray-500"><strong>In Stock:</strong></p>
-                            @* change with low stock qty *@
-                            <p class="text-xs sm:text-sm @(SelectedProduct.QuantityInStock > 0 ? "text-green-600" : "text-red-600")">@SelectedProduct.QuantityInStock</p>
+                            <p class="text-xs sm:text-sm @(SelectedProduct.QuantityInStock + SelectedProduct.QuantityOnOrder < SelectedProduct.LowStock ? "text-orange-400" : "text-green-600")">
+                                @SelectedProduct.QuantityInStock
+                            </p>
                         </div>
                         <div class="flex justify-between items-center">
                             <p class="text-xs sm:text-sm text-gray-500"><strong>On Order:</strong></p>
