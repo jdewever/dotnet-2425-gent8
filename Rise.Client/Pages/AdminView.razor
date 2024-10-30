@@ -1,0 +1,36 @@
+@using Rise.Client.Components
+@using Rise.Client.Components.ProductTable
+
+<div class="grid grid-cols-1 space-y-2 lg:space-y-0 lg:grid-cols-3 lg:space-x-2">
+    <Card Title="Vandaag gebruikt" Value="xxx" IconUrl="/images/icons/calendar.svg" />
+    <Card Title="In kritieke voorraad" Value="@lowStockProductCount.ToString()" IconUrl="/images/icons/warning.svg" />
+    <Card Title="Vandaag uitgeleend" Value="xxx" IconUrl="/images/icons/out.svg" />
+</div>
+<h1 class="text-2xl font-light py-8">Producten met beperkte voorraad</h1>
+
+<div class="w-full" style="height: 70vh;">
+    @if (lowStockProducts == null)
+    {
+        <p>
+            <em>Loading...</em>
+        </p>
+    }
+    else
+    {
+        <Table Items="lowStockProducts" EnableModal=false>
+            <Columns>
+                <Column Name="Barcode" Label="Barcode" />
+                <Column Name="Name" Label="Naam" />
+                <Column Name="QuantityInStock" Label="Aantal in stock" />
+                <Column Name="QuantityOnOrder" Label="Aantal in bestelling" />
+                <Column Name="LowStock" Label="Minimum gewenste voorraad" />
+                <Column Label="Acties">
+                    <button name="uitlenenBtn"
+                        class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
+                        Aankopen
+                    </button>
+                </Column>
+            </Columns>
+        </Table>
+    }
+</div>
