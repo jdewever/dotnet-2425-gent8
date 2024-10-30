@@ -1,32 +1,19 @@
-using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
-using Rise.Shared.Products;
 
 namespace Rise.Client.Scan
 {
     public partial class ScanTable
     {
-        [Parameter] public required List<ProductDTO> Products { get; set; }
-        [Inject] public ICartService CartService { get; set; }
+        [Parameter] public required List<CartItem> CartItems { get; set; }
+        [Parameter] public required EventCallback<CartItem> RemoveProduct { get; set; }
+        [Inject] public required ICartService CartService { get; set; }
 
-        private List<CartItem> ConvertProductsToCartItems()
-        {
-            return Products
-                .GroupBy(product => product.Id)
-                .Select(group => new CartItem
-                {
-                    Product = group.First(),
-                    Quantity = group.Count()
-                })
-                .ToList();
-        }
-
+        // TODO: Put this functin in index.razor.cs
         private async Task CheckoutCart()
         {
-            var cartItems = ConvertProductsToCartItems();
-            await CartService.CheckoutItems(cartItems);
-            Products.Clear();
+            await CartService.CheckoutItems(CartItems);
+            CartItems.Clear();
             // TODO: How to verify if the checkout was successful?
             /*
             if (response.IsSuccessStatusCode)

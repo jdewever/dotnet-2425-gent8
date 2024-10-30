@@ -35,6 +35,10 @@ public partial class ScanProduct : ComponentBase
     }
     private void OnAddProduct()
     {
+        if (Product == null)
+        {
+            return;
+        }
         AddProduct.InvokeAsync((Product, Quantity));
         Quantity = 0;
     }

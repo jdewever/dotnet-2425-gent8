@@ -38,6 +38,7 @@ public class ProductService : IProductService
                         Barcode = p.Barcode,
                         QuantityInStock = p.QuantityInStock,
                         QuantityOnOrder = p.QuantityOnOrder,
+                        LowStock = p.LowStock,
                         ClassRoomCode = p.ClassRoomCode,
                         Categories = CategoryEntityToDto(p.Categories)
                     };
@@ -52,6 +53,7 @@ public class ProductService : IProductService
                 Barcode = x.Barcode,
                 QuantityInStock = x.QuantityInStock,
                 QuantityOnOrder = x.QuantityOnOrder,
+                LowStock = x.LowStock,
                 ClassRoomCode = x.ClassRoomCode,
                 Categories = CategoryEntityToDto(x.Categories)
             });
@@ -131,6 +133,7 @@ public class ProductService : IProductService
                 Barcode = x.Barcode,
                 QuantityInStock = x.QuantityInStock,
                 QuantityOnOrder = x.QuantityOnOrder,
+                LowStock = x.LowStock,
                 ClassRoomCode = x.ClassRoomCode,
                 Categories = CategoryEntityToDto(x.Categories)
             });
@@ -138,5 +141,25 @@ public class ProductService : IProductService
         var product = await query.FirstOrDefaultAsync();
         return product;
         
+    }
+
+    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    {
+        IQueryable<ProductDTO> query = dbContext.Products
+            .Where(x => x.QuantityInStock + x.QuantityOnOrder < x.LowStock)
+            .Select(x => new ProductDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Barcode = x.Barcode,
+                QuantityInStock = x.QuantityInStock,
+                QuantityOnOrder = x.QuantityOnOrder,
+                LowStock = x.LowStock,
+                ClassRoomCode = x.ClassRoomCode,
+                Categories = CategoryEntityToDto(x.Categories)
+            });
+
+        return await query.ToListAsync();
     }
 }

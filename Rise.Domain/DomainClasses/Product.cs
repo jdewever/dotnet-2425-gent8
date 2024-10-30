@@ -6,6 +6,7 @@ public class Product : Entity
     private string description = default!;
     private int quantityInStock = default!;
     private int quantityOnOrder = default!;
+    private int lowStock = default!;
     private string classRoomCode = default!;
     private string barcode = default!;
     private List<Category> categories = default!;
@@ -13,12 +14,13 @@ public class Product : Entity
 
     public Product() { } 
 
-    public Product(string name, string description, int quantityInStock, int quantityOnOrder, string classRoomCode, string barcode)
+    public Product(string name, string description, int quantityInStock, int quantityOnOrder, int lowStock, string classRoomCode, string barcode)
     {
         this.name = name;
         this.description = description;
         this.quantityInStock = quantityInStock;
         this.quantityOnOrder = quantityOnOrder;
+        this.lowStock = lowStock;
         this.classRoomCode = classRoomCode;
         this.barcode = barcode;
     }
@@ -45,6 +47,12 @@ public class Product : Entity
     {
         get => quantityOnOrder;
         set => quantityOnOrder = Guard.Against.Negative(value, nameof(QuantityOnOrder));
+    }
+
+    public int LowStock
+    {
+        get => lowStock;
+        set => lowStock = Guard.Against.Negative(value, nameof(LowStock));
     }
 
     public string ClassRoomCode
