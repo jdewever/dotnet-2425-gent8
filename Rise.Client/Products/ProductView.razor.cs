@@ -9,8 +9,8 @@ public partial class ProductView : ComponentBase
     [Parameter] public string? ImageUrl { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
 
-    [Inject] private BarcodeService BarcodeService { get; set; }
-    [Inject] private NavigationManager Navigation { get; set; }
+    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private NavigationManager Navigation { get; set; } = null!;
 
     private void NavigateToScan()
     {
