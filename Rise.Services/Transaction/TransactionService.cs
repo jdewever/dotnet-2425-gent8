@@ -23,7 +23,7 @@ public class TransactionService : ITransactionService
         };
 
         dbContext.Transaction.Add(transaction);
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
 
         var transId = dbContext.Find<UserTransaction>(transaction.UserId) ?? throw new InvalidOperationException("Transaction not found.");
 
