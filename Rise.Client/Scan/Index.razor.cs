@@ -22,6 +22,11 @@ public partial class Index : ComponentBase
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
     {
+        if (productInfo.quantity <= 0)
+        {
+            return;
+        }
+
         var existingProduct = products.Find(p => p.Product.Barcode == productInfo.product.Barcode);
         if (existingProduct != null)
         {
