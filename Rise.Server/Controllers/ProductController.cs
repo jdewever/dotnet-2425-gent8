@@ -34,4 +34,10 @@ public class ProductController : ControllerBase
     {
         return await productService.GetProductByBarcode(barcode);
     }
+
+    [HttpGet("lowstock")]
+    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    {
+        return await productService.GetProductsHavingLowStock();
+    }
 }
