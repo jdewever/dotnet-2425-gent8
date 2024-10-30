@@ -22,13 +22,13 @@ public class IndexWithMockExampleShould : TestContext
     public void ShowsProducts()
     {
         var products = Enumerable.Range(1, 5)
-            .Select(i => new ProductDTO { Id = i, Name = $"Product {i}", Barcode = $"Barcode {i}", Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, Categories = null });
+            .Select(i => new ProductDTO { Id = i, Name = $"Product {i}", Barcode = $"Barcode {i}", Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null });
         var categories = Enumerable.Range(1, 5)
             .Select(i => new CategoryDTO { Id = i, Name = $"Category {i}" });
         
         var productServiceMock = Substitute.For<IProductService>();
         productServiceMock.GetAllProducts(Arg.Any<ProductRequest.Index>())
-            .Returns(Task.FromResult(products));
+            .Returns(Task.FromResult(new ProductResponse { Products = products, TotalPages = 1 }));
         
         var categoryServiceMock = Substitute.For<ICategoryService>();
         categoryServiceMock.GetAllCategories()

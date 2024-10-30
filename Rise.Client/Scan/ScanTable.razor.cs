@@ -2,13 +2,13 @@ using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
-using Rise.Shared.Products;
 
 namespace Rise.Client.Scan
 {
     public partial class ScanTable
     {
         [Parameter] public required List<CartItem> CartItems { get; set; }
+        [Parameter] public required EventCallback<CartItem> RemoveProduct { get; set; }
         [Inject] public required ICartService CartService { get; set; }
         [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
 

@@ -8,9 +8,9 @@ public partial class ScanProduct : ComponentBase
 {
     [Parameter] public ProductDTO? Product { get; set; }
     [Parameter] public EventCallback<(ProductDTO, int)> AddProduct { get; set; }
-    [Parameter] public Func<string, int> GetProductCountByBarcode { get; set; }
-    [Inject] private BarcodeService BarcodeService { get; set; }
-    [Inject] private IProductService ProductService { get; set; }
+    [Parameter] public required Func<string, int> GetProductCountByBarcode { get; set; }
+    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private IProductService ProductService { get; set; } = null!;
     private int Quantity = 0;
 
     protected override async Task OnInitializedAsync()
@@ -35,6 +35,10 @@ public partial class ScanProduct : ComponentBase
     }
     private void OnAddProduct()
     {
+        if (Product == null)
+        {
+            return;
+        }
         AddProduct.InvokeAsync((Product, Quantity));
         Quantity = 0;
     }

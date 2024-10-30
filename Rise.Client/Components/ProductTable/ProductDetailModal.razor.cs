@@ -1,20 +1,19 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 
-namespace Rise.Client.Products;
+namespace Rise.Client.Components.ProductTable;
 
-public partial class ProductView : ComponentBase
+public partial class ProductDetailModal : ComponentBase
 {
-    [Parameter] public required ProductDTO Product { get; set; }
-    [Parameter] public string? ImageUrl { get; set; }
+    [Parameter] public required ProductDTO SelectedProduct { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
-
     [Inject] private BarcodeService BarcodeService { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
 
+
     private void NavigateToScan()
     {
-        BarcodeService.Barcode = Product.Barcode;
+        BarcodeService.Barcode = SelectedProduct.Barcode;
         Navigation.NavigateTo($"/scan");
     }
 }

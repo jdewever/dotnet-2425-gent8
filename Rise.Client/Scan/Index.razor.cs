@@ -22,6 +22,11 @@ public partial class Index : ComponentBase
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
     {
+        if (productInfo.quantity <= 0)
+        {
+            return;
+        }
+
         var existingProduct = products.Find(p => p.Product.Barcode == productInfo.product.Barcode);
         if (existingProduct != null)
         {
@@ -34,9 +39,28 @@ public partial class Index : ComponentBase
         await localStorage.SetItemAsync("products", products);
     }
 
+    private async Task removeProduct(CartItem item)
+    {
+        var storedProducts = await localStorage.GetItemAsync<List<CartItem>>("products");
+        if (storedProducts == null)
+        {
+            // TODO: Add toast notification
+            Console.WriteLine("No items in cart");
+            return;
+        }
+
+        var existingProduct = storedProducts.Find(p => p.Product.Barcode == item.Product.Barcode);
+        if (existingProduct != null)
+        {
+            storedProducts.Remove(existingProduct);
+            await localStorage.SetItemAsync("products", storedProducts);
+            products = storedProducts;
+        }
+    }
+
     private int getProductCountByBarcode(string barcode)
     {
-        return barcode != "" ? products.Count(p => p.Product.Barcode == barcode) : 0;
+        return barcode != "" ? products.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity) : 0;
     }
 
 }

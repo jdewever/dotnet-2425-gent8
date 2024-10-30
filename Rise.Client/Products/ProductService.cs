@@ -13,16 +13,19 @@ public class ProductService : IProductService
         this.httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request)
+ public async Task<ProductResponse> GetAllProducts(ProductRequest.Index request)
     {
         var url = "product?";
         var categories = request.CategoryIds;
         request.CategoryIds = null;
-        url += $"{request.AsQueryString()}";
+        url += request.AsQueryString();
+
         if (categories != null)
             url = categories.Select(i => i).Aggregate(url, (current, value) => current + $"&CategoryIds={value}");
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"{url}");
-        return products!;
+
+        var response = await httpClient.GetFromJsonAsync<ProductResponse>(url);
+
+        return response!;
     }
 
     public async Task<IEnumerable<string>> GetAllLocations()
@@ -40,5 +43,11 @@ public class ProductService : IProductService
             // Log error
         }
         return null;
+    }
+
+    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    {
+        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/lowstock");
+        return products!;
     }
 }

@@ -11,6 +11,7 @@ public class ProductDTO
     public required int QuantityInStock { get; set; }
 
     public required int QuantityOnOrder { get; set; }
+    public required int LowStock { get; set; }
 
     public required string ClassRoomCode { get; set; }
     
