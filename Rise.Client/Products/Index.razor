@@ -52,27 +52,6 @@ else
             <ProductColumnView Products="products.ToList()"/>
         </div>
     }
-}
 
-@code {
-    private Boolean table = false;
-    private Boolean table2 = true;
-
-    private void showTable()
-    {
-        table = true;
-        table2 = false;
-    }
-
-    private void showTable2()
-    {
-        table = false;
-        table2 = true;
-    }
-
-    private async void Callback(CategoryDTO obj)
-    {
-        await OnParametersSetAsync();
-    }
-
+    <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" CurrentPageSize="@PageSize" OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" />
 }
