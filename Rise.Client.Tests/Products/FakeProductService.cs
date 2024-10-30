@@ -21,5 +21,11 @@ public class FakeProductService : IProductService
             .Select(i => $"Location {i}");
         return Task.FromResult(locations);
     }
+
+    public Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    {
+        var products = GetAllProducts(new ProductRequest.Index()).Result;
+        return Task.FromResult(products.Where(p => p.Barcode == barcode).First());
+    }
 }
 

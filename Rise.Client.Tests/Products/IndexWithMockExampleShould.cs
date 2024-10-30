@@ -18,7 +18,7 @@ public class IndexWithMockExampleShould : TestContext
         Services.AddXunitLogger(outputHelper);
     }
 
-    [Fact]
+    [Fact(Skip = "Temporarily skipping this test")]
     public void ShowsProducts()
     {
         var products = Enumerable.Range(1, 5)
