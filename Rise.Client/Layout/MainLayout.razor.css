@@ -8,10 +8,6 @@ main {
     flex: 1;
 }
 
-.sidebar {
-    width: 100%;
-}
-
 @media (min-width: 641px) {
     .page {
         flex-direction: row;
@@ -22,10 +18,5 @@ main {
         height: 100vh;
         position: sticky;
         top: 0;
-    }
-
-    article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
     }
 }

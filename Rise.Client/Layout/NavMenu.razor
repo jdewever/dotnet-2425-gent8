@@ -1,7 +1,4 @@
-﻿@inject NavigationManager Navigation
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-
-<div
+﻿<div
     class="@NavHeight relative flex w-full md:max-w-[20rem] flex-col bg-white p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5">
     <div class="p-4 mb-2 flex justify-between items-center">
         <img src="images/logo.png" alt="Rise" class="w-auto h-8" />
@@ -50,38 +47,3 @@
         </div>
     </div>
 </div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-[calc(100vh-20rem)] min-h-full";
-    private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
-    private List<NavItem> NavItems => new() {
-        new NavItem { Label = "Dashboard", Href = "", Icon = "dashboard" },
-        new NavItem { Label = "Voorraadbeheer", Href = "products", Icon = "inventory",
-            Children = new[] {
-                new NavItem { Label = "Uitlenen", Href = "products" },
-                new NavItem { Label = "Reserveren", Href = "reserve" },
-            },
-        },
-        new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
-        new NavItem { Label = "Reserveringen", Href = "reservations", Icon = "reservation" },
-    };
-
-    private void ToggleNavMenu() {
-        collapseNavMenu = !collapseNavMenu;
-    }
-    public void BeginLogOut()
-    {
-        Navigation.NavigateToLogout("authentication/logout");
-    }
-
-    // only used here, but maybe better in Persistence once linked to users?
-    private class NavItem {
-        public required string Label { get; set; }
-        public required string Href { get; set; }
-        public string? Icon { get; set; }
-        public NavItem[] Children { get; set; } = Array.Empty<NavItem>();
-        public bool IsVisible { get; set; } = true; // to filter for admins/inventory role
-    }
-}
