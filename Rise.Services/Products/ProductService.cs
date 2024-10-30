@@ -16,33 +16,31 @@ public class ProductService : IProductService
 
     public async Task<IEnumerable<string>> GetAllLocations()
     {
-        IQueryable<string> query = dbContext.Products.GroupBy(product => product.ClassRoomCode)
-            .Select(products => products.Key);
+        var query = dbContext.Products.GroupBy(product => product.ClassRoomCode)
+                                      .Select(products => products.Key);
         return await query.ToListAsync();
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetAllProducts(ProductRequest.Index request)
+    public async Task<ProductResponse> GetAllProducts(ProductRequest.Index request)
     {
         IQueryable<ProductDTO> query;
 
         if (request.CategoryIds != null && request.CategoryIds.Count != 0)
         {
-            IQueryable<ProductDTO> temp =
-                from p in dbContext.Products
-                from c in p.Categories
-                where request.CategoryIds.Contains(c.Id)
-                select new ProductDTO
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Barcode = p.Barcode,
-                    QuantityInStock = p.QuantityInStock,
-                    QuantityOnOrder = p.QuantityOnOrder,
-                    ClassRoomCode = p.ClassRoomCode,
-                    Categories = CategoryEntityToDto(p.Categories)
-                };
-            query = temp;
+            query = from p in dbContext.Products
+                    from c in p.Categories
+                    where request.CategoryIds.Contains(c.Id)
+                    select new ProductDTO
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Barcode = p.Barcode,
+                        QuantityInStock = p.QuantityInStock,
+                        QuantityOnOrder = p.QuantityOnOrder,
+                        ClassRoomCode = p.ClassRoomCode,
+                        Categories = CategoryEntityToDto(p.Categories)
+                    };
         }
         else
         {
@@ -90,25 +88,55 @@ public class ProductService : IProductService
                                      x.Barcode.ToLower().Contains(request.Searchterm.ToLower()));
         }
 
+        int totalCount = await query.CountAsync();
+        int totalPages = (int)Math.Ceiling((double)totalCount / request.PageSize);
+
+        //paginatie
+        int skip = (request.PageNumber - 1) * request.PageSize;
+        query = query.Skip(skip).Take(request.PageSize);
+
         var products = await query.ToListAsync();
 
-        return products.DistinctBy(dto => dto.Id);
+        return new ProductResponse
+        {
+            Products = products.DistinctBy(dto => dto.Id),
+            TotalPages = totalPages
+        };
     }
 
-    //todo: needs to be in its own class?
     private static List<CategoryDTO> CategoryEntityToDto(List<Category> categories)
     {
         var categoriesDto = new List<CategoryDTO>();
         categories.ForEach(category =>
         {
-            CategoryDTO dto = new CategoryDTO
+            categoriesDto.Add(new CategoryDTO
             {
                 Id = category.Id,
                 Name = category.Name,
                 Products = null
-            };
-            categoriesDto.Add(dto);
+            });
         });
         return categoriesDto;
+    }
+
+    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    {
+        IQueryable<ProductDTO> query = dbContext.Products
+            .Where(x => x.Barcode == barcode)
+            .Select(x => new ProductDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Barcode = x.Barcode,
+                QuantityInStock = x.QuantityInStock,
+                QuantityOnOrder = x.QuantityOnOrder,
+                ClassRoomCode = x.ClassRoomCode,
+                Categories = CategoryEntityToDto(x.Categories)
+            });
+        
+        var product = await query.FirstOrDefaultAsync();
+        return product;
+        
     }
 }
