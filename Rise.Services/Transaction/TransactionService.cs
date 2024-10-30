@@ -14,7 +14,7 @@ public class TransactionService : ITransactionService
         this.dbContext = dbContext;
     }
 
-    public async Task AddTransactionScanOut(List<CartItem> transactionItems)
+    public async Task<int> AddTransactionScanOut()
     {
         var transaction = new UserTransaction
         {
@@ -25,20 +25,8 @@ public class TransactionService : ITransactionService
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();
 
-        var transId = dbContext.Find<UserTransaction>(transaction.UserId) ?? throw new InvalidOperationException("Transaction not found.");
+        var transactionDB = dbContext.Find<UserTransaction>(transaction.UserId) ?? throw new InvalidOperationException("Transaction not found.");
 
-        foreach (var item in transactionItems)
-        {
-            var transactionItem = new TransactionItem
-            {
-                TransactionID = transId.Id,
-                ProductID = item.Product.Id,
-                Quantity = item.Quantity
-            };
-
-            dbContext.TransactionItems.Add(transactionItem);
-        }
-        await dbContext.SaveChangesAsync();
-
+        return transactionDB.Id;
     }
 }

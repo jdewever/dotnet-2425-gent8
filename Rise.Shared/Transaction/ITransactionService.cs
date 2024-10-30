@@ -4,5 +4,5 @@ namespace Rise.Shared.Transaction;
 
 public interface ITransactionService
 {
-    Task AddTransactionScanOut(List<CartItem> transactionItems);
+    Task<int> AddTransactionScanOut();
 }
