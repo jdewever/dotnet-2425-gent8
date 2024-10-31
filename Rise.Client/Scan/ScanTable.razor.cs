@@ -28,16 +28,19 @@ namespace Rise.Client.Scan
                 }
             }
 
-
+            if (!CartItems.Any(cartItem => !cartItem.Valid))
+            {
+                await CartService.CheckoutItems(CartItems);
+                CartItems.Clear();
+                var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
+                storedProducts!.Clear();
+                await LocalStorage.SetItemAsync("products", storedProducts);
+            }
             
         
             // TODO: How to verify if the checkout was successful?
             /*
-            await CartService.CheckoutItems(CartItems);
-            CartItems.Clear();
-            var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
-            storedProducts!.Clear();
-            await LocalStorage.SetItemAsync("products", storedProducts);
+            
             if (response.IsSuccessStatusCode)
             {
                 // Handle success (e.g., navigate to a confirmation page, show a success message, etc.)

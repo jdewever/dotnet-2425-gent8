@@ -11,6 +11,8 @@ public partial class Index : ComponentBase
 
     [Inject] private ILocalStorageService localStorage { get; set; } = null!;
 
+    [Inject] private IProductService ProductService { get; set; } = null!;
+
     protected override async Task OnParametersSetAsync()
     {
         var storedProducts = await localStorage.GetItemAsync<List<CartItem>>("products");
@@ -18,6 +20,7 @@ public partial class Index : ComponentBase
         {
             products = storedProducts;
         }
+        await ValidateCartItems();
     }
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
@@ -37,6 +40,7 @@ public partial class Index : ComponentBase
             products.Add(new CartItem { Product = productInfo.product, Quantity = productInfo.quantity });
         }
         await localStorage.SetItemAsync("products", products);
+        await ValidateCartItems();
     }
 
     private async Task removeProduct(CartItem item)
@@ -55,12 +59,22 @@ public partial class Index : ComponentBase
             storedProducts.Remove(existingProduct);
             await localStorage.SetItemAsync("products", storedProducts);
             products = storedProducts;
+            await ValidateCartItems();
         }
     }
 
     private int getProductCountByBarcode(string barcode)
     {
         return barcode != "" ? products.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity) : 0;
+    }
+
+    private async Task ValidateCartItems()
+    {
+        foreach (var cartItem in products)
+        {
+            var product = await ProductService.GetProductByBarcode(cartItem.Product.Barcode);
+            cartItem.Valid = cartItem.Quantity <= product.QuantityInStock;
+        }
     }
 
 }
