@@ -1,0 +1,32 @@
+services:
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=abcd_EFGH
+    networks:
+      - app-network
+    volumes:
+      - rise_data:/var/opt/mssql/data
+      - rise_secrets:/var/opt/mssql/secrets
+
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - sqlserver
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    volumes:
+      - ./appsettings.json:/appsettings.json
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  rise_data:
+  rise_secrets:
