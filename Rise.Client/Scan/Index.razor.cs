@@ -20,7 +20,6 @@ public partial class Index : ComponentBase
         {
             products = storedProducts;
         }
-        await ValidateCartItems();
     }
 
     private async Task addProduct((ProductDTO product, int quantity) productInfo)
@@ -40,7 +39,6 @@ public partial class Index : ComponentBase
             products.Add(new CartItem { Product = productInfo.product, Quantity = productInfo.quantity });
         }
         await localStorage.SetItemAsync("products", products);
-        await ValidateCartItems();
     }
 
     private async Task removeProduct(CartItem item)
@@ -59,7 +57,6 @@ public partial class Index : ComponentBase
             storedProducts.Remove(existingProduct);
             await localStorage.SetItemAsync("products", storedProducts);
             products = storedProducts;
-            await ValidateCartItems();
         }
     }
 
@@ -68,13 +65,6 @@ public partial class Index : ComponentBase
         return barcode != "" ? products.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity) : 0;
     }
 
-    private async Task ValidateCartItems()
-    {
-        foreach (var cartItem in products)
-        {
-            var product = await ProductService.GetProductByBarcode(cartItem.Product.Barcode);
-            cartItem.Valid = cartItem.Quantity <= product.QuantityInStock;
-        }
-    }
+    
 
 }
