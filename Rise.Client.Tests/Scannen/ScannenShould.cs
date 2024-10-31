@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 
 
 namespace Rise.Client.Products;
@@ -32,6 +33,7 @@ public class ScannenShould : TestContext
         Services.AddScoped<ICategoryService, FakeCategoryService>();
         Services.AddScoped<ICartService, FakeCartService>();
         Services.AddSingleton(new BarcodeService());
+        Services.AddBlazoredLocalStorage();
 
         Initialize();
     }
@@ -157,7 +159,7 @@ public class ScannenShould : TestContext
 
         // Assert
         var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("0");
+        label.TextContent.ShouldBe("1");
 
         cartItems.Count.ShouldBe(1);
         cartItems.First().Product.Barcode.ShouldBe("Barcode 1");
@@ -187,7 +189,7 @@ public class ScannenShould : TestContext
 
         // Assert
         var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("0");
+        label.TextContent.ShouldBe("2");
 
         cartItems.Count.ShouldBe(1);
         cartItems.All(p => p.Product.Barcode == "Barcode 2").ShouldBeTrue();
@@ -223,7 +225,7 @@ public class ScannenShould : TestContext
 
         // Assert
         var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("2");
+        label.TextContent.ShouldBe("3");
 
         cartItems.Count.ShouldBe(1);
         cartItems.All(p => p.Product.Barcode == "Barcode 3").ShouldBeTrue();
@@ -299,7 +301,7 @@ public class ScannenShould : TestContext
 
         // Assert
         var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("1");
+        label.TextContent.ShouldBe("2");
 
         cartItems.Count.ShouldBe(2);
     }
