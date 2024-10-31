@@ -7,8 +7,15 @@
     <Table Items="CartItems" RemoveProduct="RemoveProduct" />
   </div>
 
+  <div class="mt-4 text-red-700" style="min-height: 1.5rem;">
+    @if (CartItems.Any(item => !item.Valid))
+    {
+      <h3 class="font-bold">Sommige producten zijn niet genoeg in stock</h3>
+    }
+  </div>
+
   <div class="flex justify-between space-x-4 mt-4">
-    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg" @onclick="CheckoutCart">Scan uit</button>
+    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @(CartItems == null || !CartItems.Any() ? "disabled cursor-not-allowed" : "")" @onclick="CheckoutCart">Scan uit</button>
     <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
   </div>
 </div>

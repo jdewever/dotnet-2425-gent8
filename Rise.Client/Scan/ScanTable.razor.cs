@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
+using Rise.Shared.Products;
 
 namespace Rise.Client.Scan
 {
@@ -12,25 +13,31 @@ namespace Rise.Client.Scan
         [Inject] public required ICartService CartService { get; set; }
         [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
 
+        [Inject] private IProductService ProductService { get; set; } = null!;
+
         // TODO: Put this functin in index.razor.cs
         private async Task CheckoutCart()
         {
+
+            foreach (var cartItem in CartItems)
+            {
+                var product = await ProductService.GetProductByBarcode(cartItem.Product.Barcode);
+                if (cartItem.Quantity > product.QuantityInStock)
+                {
+                    cartItem.SetInValid();
+                }
+            }
+
+
+            
+        
+            // TODO: How to verify if the checkout was successful?
+            /*
             await CartService.CheckoutItems(CartItems);
             CartItems.Clear();
             var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
-            if (storedProducts == null)
-            {
-                // TODO: Add toast notification
-                Console.WriteLine("No items in cart");
-                return;
-            }
-            else
-            {
-                storedProducts.Clear();
-                await LocalStorage.SetItemAsync("products", storedProducts);
-            }
-            // TODO: How to verify if the checkout was successful?
-            /*
+            storedProducts!.Clear();
+            await LocalStorage.SetItemAsync("products", storedProducts);
             if (response.IsSuccessStatusCode)
             {
                 // Handle success (e.g., navigate to a confirmation page, show a success message, etc.)
