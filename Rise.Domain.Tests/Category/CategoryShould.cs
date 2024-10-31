@@ -45,13 +45,15 @@ public class CategoryShould
     [Fact]
     public void AllowUpdatingProductList()
     {
-        var products = new List<string> { "Laptop", "Phone" };
+        var product1 = new Product("Laptop", "description", 1, 2, 1, "classRoomCode", "123456789012");
+        var product2 = new Product("Phone", "description", 1, 2, 1, "classRoomCode", "123456789012");
+        var products = new List<Product> { product1, product2 };
         var category = new Category("Electronics");
 
         category.Products = products;
 
         category.Products.ShouldBe(products);
-        category.Products.ShouldContain("Laptop");
-        category.Products.ShouldContain("Phone");
+        category.Products.ShouldContain(product1);
+        category.Products.ShouldContain(product2);
     }
 }
