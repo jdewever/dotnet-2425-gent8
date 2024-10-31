@@ -137,10 +137,14 @@ public class ProductService : IProductService
                 ClassRoomCode = x.ClassRoomCode,
                 Categories = CategoryEntityToDto(x.Categories)
             });
-        
+
         var product = await query.FirstOrDefaultAsync();
+        if (product == null)
+        {
+            throw new InvalidOperationException($"Product with barcode '{barcode}' not found.");
+        }
         return product;
-        
+
     }
 
     public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
