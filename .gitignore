@@ -401,3 +401,5 @@ Rise.Server/appsettings.json
 
 **/css/app.min.css
 .idea/
+
+docker/appsettings.json
