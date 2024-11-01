@@ -9,19 +9,30 @@ services:
     volumes:
       - rise_data:/var/opt/mssql/data
       - rise_secrets:/var/opt/mssql/secrets
+    user: "0" # mssql user
+    # from: https://github.com/Microsoft/mssql-docker/issues/133
+    # used to not start dotnet earlier
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S sqlserver -U sa -P $$MSSQL_SA_PASSWORD -Q 'select 1'"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   webapp:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: rise-gent-gr08
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
       - app-network
     volumes:
-      - ./appsettings.json:/appsettings.json
+      - ./appsettings.json:/App/appsettings.json
 
 networks:
   app-network:
