@@ -6,7 +6,7 @@ namespace Rise.Domain.DomainClasses
         private int productId;
         private int quantity;
 
-        private TransactionItem() { }
+        public TransactionItem() { }
 
         public TransactionItem(int transactionId, int productId, int quantity)
         {

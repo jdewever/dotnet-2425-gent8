@@ -5,7 +5,7 @@
         private string name = null!;
         private List<Product> products = [];
 
-        private Category() { }
+        public Category() { }
 
         public Category(string name)
         {
