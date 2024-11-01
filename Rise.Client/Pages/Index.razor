@@ -4,8 +4,19 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
-
 <AuthorizeView Roles="Administrator">
-    <AdminView />
+    <Authorized>
+        @* should be user management *@
+        <InventoryView />
+    </Authorized>
+    <NotAuthorized>
+        <AuthorizeView Roles="Inventory Manager" Context="innerContext">
+            <Authorized>
+                <InventoryView />
+            </Authorized>
+            <NotAuthorized>
+                <RedirectToProducts />
+            </NotAuthorized>
+        </AuthorizeView>
+    </NotAuthorized>
 </AuthorizeView>

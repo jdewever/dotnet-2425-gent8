@@ -3,7 +3,7 @@ using Rise.Shared.Products;
 
 namespace Rise.Client.Pages;
 
-public partial class AdminView : ComponentBase
+public partial class InventoryView : ComponentBase
 {
     private IEnumerable<ProductDTO>? lowStockProducts;
     private int lowStockProductCount => lowStockProducts?.Count() ?? 0;
