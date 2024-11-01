@@ -16,11 +16,7 @@ public class TransactionService : ITransactionService
 
     public async Task<int> AddTransactionScanOut()
     {
-        var transaction = new UserTransaction
-        {
-            UserId = 1, // TODO: Get user ID from logged in user
-            Type = "ScanOut"
-        };
+        var transaction = new UserTransaction(1, "ScanOut");
 
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();

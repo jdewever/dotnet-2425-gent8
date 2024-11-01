@@ -18,12 +18,7 @@ public class TransactionItemService : ITransactionItemService
     {
         foreach (var item in transactionItems)
         {
-            var transactionItem = new TransactionItem
-            {
-                TransactionID = transactionId,
-                ProductID = item.Product.Id,
-                Quantity = item.Quantity
-            };
+            var transactionItem = new TransactionItem(transactionId, item.Product.Id, item.Quantity);
 
             dbContext.TransactionItems.Add(transactionItem);
         }

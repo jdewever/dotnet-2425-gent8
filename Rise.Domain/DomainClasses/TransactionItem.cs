@@ -2,8 +2,21 @@ namespace Rise.Domain.DomainClasses
 {
     public class TransactionItem : Entity
     {
-        public required int TransactionID { get; init; }
-        public required int ProductID { get; init; }
-        public required int Quantity { get; init; }
+        private int transactionId;
+        private int productId;
+        private int quantity;
+
+        private TransactionItem() { }
+
+        public TransactionItem(int transactionId, int productId, int quantity)
+        {
+            this.transactionId = Guard.Against.NegativeOrZero(transactionId, nameof(transactionId));
+            this.productId = Guard.Against.NegativeOrZero(productId, nameof(productId));
+            this.quantity = Guard.Against.NegativeOrZero(quantity, nameof(quantity));
+        }
+
+        public int TransactionID => transactionId;
+        public int ProductID => productId;
+        public int Quantity => quantity;
     }
 }
