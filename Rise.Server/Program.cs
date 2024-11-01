@@ -105,6 +105,7 @@ app.MapFallbackToFile("index.html");
 using (var scope = app.Services.CreateScope())
 { // Require a DbContext from the service provider and seed the database.
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
     Seeder seeder = new(dbContext);
     seeder.Seed();
 }
