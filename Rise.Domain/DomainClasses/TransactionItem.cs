@@ -6,7 +6,6 @@ namespace Rise.Domain.DomainClasses
         private int productId;
         private int quantity;
 
-        // EF Core needs a parameterless constructor????
         private TransactionItem() { }
 
         public TransactionItem(int transactionId, int productId, int quantity)
