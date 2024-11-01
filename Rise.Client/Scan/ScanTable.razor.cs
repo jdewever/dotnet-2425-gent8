@@ -15,16 +15,17 @@ namespace Rise.Client.Scan
 
         [Inject] private IProductService ProductService { get; set; } = null!;
 
-        private string selectedButton = "left";
+        private Boolean selectedButton = true;
 
         protected override async Task OnParametersSetAsync()
         {
-            await ValidateCartItems();
+            await checkCartItems();
         }
 
-        private void SelectButton(string button)
+        private async Task SelectButton(Boolean button)
         {
             selectedButton = button;
+            await checkCartItems();
         }
 
         // TODO: Put this functin in index.razor.cs
@@ -60,12 +61,36 @@ namespace Rise.Client.Scan
             */
         }
 
+        private async Task CheckInCart()
+        {
+            // TODO
+        }
+
         private async Task ValidateCartItems()
         {
             foreach (var cartItem in CartItems)
             {
                 var product = await ProductService.GetProductByBarcode(cartItem.Product.Barcode);
                 cartItem.Valid = cartItem.Quantity <= product.QuantityInStock;
+            }
+        }
+
+        private void DeVaildateCartItems()
+        {
+            foreach (var cartItem in CartItems)
+            {
+                cartItem.Valid = true;
+            }
+        }
+
+        private async Task checkCartItems()
+        {
+            if(selectedButton)
+            {
+                await ValidateCartItems();
+            } else
+            {
+                DeVaildateCartItems();
             }
         }
     }
