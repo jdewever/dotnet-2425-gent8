@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Transactions;
+using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 
 namespace Rise.Persistence;
@@ -8,6 +9,10 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
+
+    public DbSet<UserTransaction> Transaction => Set<UserTransaction>();
+
+    public DbSet<TransactionItem> TransactionItems => Set<TransactionItem>();
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {

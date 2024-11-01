@@ -1,6 +1,9 @@
+using System.Diagnostics;
+using System.Web;
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using Microsoft.AspNetCore.Components;
+using Rise.Client.Extensions;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products;
@@ -19,6 +22,8 @@ public partial class TableNavbar : ComponentBase
     [Parameter] public int? MaxOnOrder { get; set; }
     [Parameter] public int? MinOnOrder { get; set; }
 
+    [Inject] public NavigationManager NavigationManager { get; set; } = default!;
+
     private void ShowModal()
     {
         var parameters = new ModalParameters()
@@ -33,4 +38,80 @@ public partial class TableNavbar : ComponentBase
         Modal.Show<FilterModal>("Filters", parameters);
     }
 
+    private ProductRequest.Index GetFilters()
+    {
+        ProductRequest.Index result = new()
+        {
+            MaxInStock = MaxInStock,
+            MinInStock = MinInStock,
+            MaxOnOrder = MaxOnOrder,
+            MinOnOrder = MinOnOrder,
+            Location = Location,
+            CategoryIds = SelectedCategoriesIds,
+        };
+        Console.WriteLine(Location);
+        return result;
+    }
+
+    private string? GetCategoryById(int categoryId)
+    {
+        return Categories?.FirstOrDefault(category => category.Id == categoryId)?.Name;
+    }
+
+    private void RemoveFilter(string filter, int? categoryId)
+    {
+        switch (filter)
+        {
+            case "Category" when categoryId != null:
+                SelectedCategoriesIds?.Remove(categoryId.Value);
+                break;
+            case "InStock":
+                MaxInStock = null;
+                MinInStock = null;
+                break;
+            case "OnOrder":
+                MaxOnOrder = null;
+                MinOnOrder = null;
+                break;
+            case "Location":
+                Location = null;
+                break;
+        }
+        var request = new
+        {
+            MaxInStock = MaxInStock,
+            MinInStock = MinInStock,
+            MaxOnOrder = MaxOnOrder,
+            MinOnOrder = MinOnOrder,
+            Location = Location,
+        };
+        var url = "products?";
+        url += request.AsQueryString();
+
+        if (SelectedCategoriesIds != null)
+        {
+            url = SelectedCategoriesIds.Select(i => i).Aggregate(url, (current, value) => current + $"&Category={value}");
+        }
+        NavigationManager.NavigateTo(url);
+    }
+
+    private string GetFilterRangeString(int? min, int? max)
+    {
+        var result = string.Empty;
+        if (min.HasValue && max.HasValue)
+        {
+            result = $"{min} - {max}";
+        }
+
+        if (min.HasValue && !max.HasValue)
+        {
+            result = $"> {min}";
+        }
+
+        if (!min.HasValue && max.HasValue)
+        {
+            result = $"< {max}";
+        }
+        return result;
+    }
 }

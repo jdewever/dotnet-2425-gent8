@@ -2,17 +2,17 @@
 {
     public class Category : Entity
     {
-        private string name = default!;
-        private List<Product> products = default!;
+        private string name = null!;
+        private List<Product> products = [];
 
         public Category() { }
 
         public Category(string name)
         {
-            this.name = name;
+            this.name = Guard.Against.NullOrWhiteSpace(name);
         }
 
-        public required string Name
+        public string Name
         {
             get => name;
             set => name = Guard.Against.NullOrWhiteSpace(value);
