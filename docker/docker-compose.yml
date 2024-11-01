@@ -9,7 +9,7 @@ services:
     volumes:
       - rise_data:/var/opt/mssql/data
       - rise_secrets:/var/opt/mssql/secrets
-    user: "0" # mssql user
+    user: "0" # root user
     # from: https://github.com/Microsoft/mssql-docker/issues/133
     # used to not start dotnet earlier
     healthcheck:
@@ -28,7 +28,7 @@ services:
       sqlserver:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8999:8080"
     networks:
       - app-network
     volumes:
