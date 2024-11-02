@@ -41,6 +41,9 @@ public partial class ScanProduct : ComponentBase
         }
         AddProduct.InvokeAsync((Product, Quantity));
         Quantity = 0;
+        BarcodeService.Barcode = "";
+        Product = null;
+        StateHasChanged();
     }
 
 
