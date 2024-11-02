@@ -21,12 +21,21 @@ public class CartController : ControllerBase
         this.transactionItemService = transactionItemService;
     }
 
-    [HttpPut]
+    [HttpPut("checkout")]
     public async Task<IActionResult> Put([FromBody] List<CartItem> cartItems)
     {
         var transactionID = await transactionService.AddTransactionScanOut();
         await transactionItemService.AddTransactionItems(transactionID, cartItems);
         await cartService.CheckoutItems(cartItems);
+        return Ok();
+    }
+
+    [HttpPut("checkin")]
+    public async Task<IActionResult> PutCheckIn([FromBody] List<CartItem> cartItems)
+    {
+        var transactionID = await transactionService.AddTransactionScanIn();
+        await transactionItemService.AddTransactionItems(transactionID, cartItems);
+        await cartService.CheckInItems(cartItems);
         return Ok();
     }
 
