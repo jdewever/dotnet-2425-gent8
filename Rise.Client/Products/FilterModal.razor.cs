@@ -13,7 +13,6 @@ public partial class FilterModal : ComponentBase
     [Parameter, EditorRequired] public int? MinInStock { get; set; }
     [Parameter, EditorRequired] public int? MaxOnOrder { get; set; }
     [Parameter, EditorRequired] public int? MinOnOrder { get; set; }
-    [Parameter, EditorRequired] public string? StockStatus { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     
     private int[] _selectedCategoriesIds = [];
@@ -59,11 +58,6 @@ public partial class FilterModal : ComponentBase
             _selectedCategoriesIds = SelectedCategoriesIds!.ToArray();
             queryString += string.Join("&", _selectedCategoriesIds.Select(x=>"Category=" + x));
         }
-        if (!string.IsNullOrEmpty(StockStatus))
-        {
-            queryString += queryString != "?" ? "&" : "";
-            queryString += $"StockStatus={StockStatus}";
-        }
         NavigationManager.NavigateTo($"/products{queryString}");
     }
     private async Task<IEnumerable<CategoryDTO>> SearchCategory(string searchTerm)
@@ -103,28 +97,5 @@ public partial class FilterModal : ComponentBase
     private void MinOnOrderChanged(ChangeEventArgs args)
     {
         MinOnOrder = string.IsNullOrWhiteSpace(args.Value?.ToString()) ? null : int.Parse(args.Value.ToString()!);
-    }
-    private void StockStatusChanged(ChangeEventArgs args)
-    {
-        StockStatus = args.Value?.ToString();
-
-        if (!string.IsNullOrEmpty(StockStatus) && StockStatus != "All")
-        {
-            if (StockStatus == "InStock")
-            {
-                MinInStock = 1;
-                MaxInStock = null;
-            }
-            else if (StockStatus == "OutOfStock")
-            {
-                MinInStock = null;
-                MaxInStock = 0;
-            }
-        }
-        else
-        {
-            MinInStock = null;
-            MaxInStock = null;
-        }
     }
 }
