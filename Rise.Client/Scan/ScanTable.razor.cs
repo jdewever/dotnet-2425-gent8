@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
 using Rise.Shared.Products;
@@ -14,6 +15,10 @@ namespace Rise.Client.Scan
         [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
 
         [Inject] private IProductService ProductService { get; set; } = null!;
+
+        [Inject] private IToastService ToastService { get; set; } = null!;
+
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         private Boolean selectedButton = true;
 
@@ -34,23 +39,30 @@ namespace Rise.Client.Scan
 
             await ValidateCartItems();
 
-            if (!CartItems.Any(cartItem => !cartItem.Valid))
+            if (CartItems.Any() && CartItems.All(cartItem => cartItem.Valid))
             {
                 await CartService.CheckoutItems(CartItems);
                 CartItems.Clear();
                 var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
                 storedProducts!.Clear();
                 await LocalStorage.SetItemAsync("products", storedProducts);
+                ToastService.ShowInfo("Producten succesvol uitgescand. <a href='/geschiedenis'>Geschiedenis</a>");
+                NavigationManager.NavigateTo("/products");
             }
         }
 
         private async Task CheckInCart()
         {
-            await CartService.CheckInItems(CartItems);
-            CartItems.Clear();
-            var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
-            storedProducts!.Clear();
-            await LocalStorage.SetItemAsync("products", storedProducts);
+             if (CartItems.Any())
+            {
+                await CartService.CheckInItems(CartItems);
+                CartItems.Clear();
+                var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
+                storedProducts!.Clear();
+                await LocalStorage.SetItemAsync("products", storedProducts);
+                ToastService.ShowInfo("Producten succesvol ingescand. <a href='/geschiedenis'>Geschiedenis</a>");
+                NavigationManager.NavigateTo("/products");
+            }
         }
 
         private async Task ValidateCartItems()

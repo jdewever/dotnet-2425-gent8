@@ -9,6 +9,7 @@ using Rise.Shared.Cart;
 using Rise.Client.Cart;
 using Blazored.Modal;
 using Blazored.LocalStorage;
+using Blazored.Toast;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,6 +18,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<BarcodeService>();
+
+builder.Services.AddBlazoredToast();
 
 builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();

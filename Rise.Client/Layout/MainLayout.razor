@@ -1,4 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@using Blazored.Toast.Configuration
+@using Blazored.Toast
+@using Blazored.Toast.Services
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                IconType="IconType.FontAwesome"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa fa-bug" 
+                ShowProgressBar="true" />
 
 <AuthorizeView>
     <Authorized>
