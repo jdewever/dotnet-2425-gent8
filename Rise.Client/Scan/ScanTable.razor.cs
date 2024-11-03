@@ -46,7 +46,7 @@ namespace Rise.Client.Scan
                 var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
                 storedProducts!.Clear();
                 await LocalStorage.SetItemAsync("products", storedProducts);
-                ToastService.ShowInfo("Producten succesvol uitgescand. <a href='/geschiedenis'>Geschiedenis</a>");
+                ToastService.ShowSuccess("Producten succesvol uitgescand");
                 NavigationManager.NavigateTo("/products");
             }
         }
@@ -60,7 +60,7 @@ namespace Rise.Client.Scan
                 var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
                 storedProducts!.Clear();
                 await LocalStorage.SetItemAsync("products", storedProducts);
-                ToastService.ShowInfo("Producten succesvol ingescand. <a href='/geschiedenis'>Geschiedenis</a>");
+                ToastService.ShowSuccess("Producten succesvol ingescand");
                 NavigationManager.NavigateTo("/products");
             }
         }
