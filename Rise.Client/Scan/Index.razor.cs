@@ -11,6 +11,8 @@ public partial class Index : ComponentBase
 
     [Inject] private ILocalStorageService localStorage { get; set; } = null!;
 
+    [Inject] private IProductService ProductService { get; set; } = null!;
+
     protected override async Task OnParametersSetAsync()
     {
         var storedProducts = await localStorage.GetItemAsync<List<CartItem>>("products");
@@ -62,5 +64,7 @@ public partial class Index : ComponentBase
     {
         return barcode != "" ? products.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity) : 0;
     }
+
+    
 
 }

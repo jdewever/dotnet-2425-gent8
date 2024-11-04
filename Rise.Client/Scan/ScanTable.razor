@@ -2,13 +2,30 @@
 
 
 <!-- Right Column -->
-<div class="flex flex-col w-1/2 items-center p-6">
+<div class="flex flex-col w-1/2 items-center p-2">
+
+  <div class="relative w-2/5 mb-4">
+    <div class="absolute inset-0 flex">
+        <div class="w-1/2 bg-gray-300 rounded-lg transition-transform duration-300" style="transform: translateX(@(selectedButton ? "0%" : "100%"))"></div>
+    </div>
+    <div class="relative z-10 flex w-full">
+        <button class="w-1/2 px-3 text-gray-600 rounded-lg" @onclick='() => SelectButton(true)'>Scan uit</button>
+        <button class="w-1/2 px-3 text-gray-600 rounded-lg" @onclick='() => SelectButton(false)'>Scan in</button>
+    </div>
+  </div>
+
   <div class="w-full" style="height: 70vh;">
     <Table Items="CartItems" RemoveProduct="RemoveProduct" />
   </div>
 
+  <div class="mt-4 text-red-700" style="min-height: 1.5rem;">
+    @if (CartItems.Any(item => !item.Valid))
+    {
+      <h3 class="font-bold">Niet alle producten in stock</h3>
+    }
+  </div>
+
   <div class="flex justify-between space-x-4 mt-4">
-    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg" @onclick="CheckoutCart">Scan uit</button>
-    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg">Scan in</button>
+    <button class="px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @(CartItems == null || !CartItems.Any() ? "disabled cursor-not-allowed" : "")" @onclick="@(selectedButton ? (() => CheckoutCart()) : (() => CheckInCart()))">Bevestig</button>
   </div>
 </div>

@@ -21,7 +21,19 @@ public class TransactionService : ITransactionService
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();
 
-        var transactionDB = dbContext.Find<UserTransaction>(transaction.UserId) ?? throw new InvalidOperationException("Transaction not found.");
+        var transactionDB = dbContext.Find<UserTransaction>(transaction.Id) ?? throw new InvalidOperationException("Transaction not found.");
+
+        return transactionDB.Id;
+    }
+
+    public async Task<int> AddTransactionScanIn()
+    {
+        var transaction = new UserTransaction(1, "ScanIn");
+
+        dbContext.Transaction.Add(transaction);
+        await dbContext.SaveChangesAsync();
+
+        var transactionDB = dbContext.Find<UserTransaction>(transaction.Id) ?? throw new InvalidOperationException("Transaction not found.");
 
         return transactionDB.Id;
     }

@@ -1,7 +1,9 @@
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
+using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
+using Rise.Shared.Products;
 
 namespace Rise.Client.Scan
 {
@@ -12,37 +14,83 @@ namespace Rise.Client.Scan
         [Inject] public required ICartService CartService { get; set; }
         [Inject] private ILocalStorageService LocalStorage { get; set; } = null!;
 
+        [Inject] private IProductService ProductService { get; set; } = null!;
+
+        [Inject] private IToastService ToastService { get; set; } = null!;
+
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+
+        private Boolean selectedButton = true;
+
+        protected override async Task OnParametersSetAsync()
+        {
+            await checkCartItems();
+        }
+
+        private async Task SelectButton(Boolean button)
+        {
+            selectedButton = button;
+            await checkCartItems();
+        }
+
         // TODO: Put this functin in index.razor.cs
         private async Task CheckoutCart()
         {
-            await CartService.CheckoutItems(CartItems);
-            CartItems.Clear();
-            var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
-            if (storedProducts == null)
+
+            await ValidateCartItems();
+
+            if (CartItems.Any() && CartItems.All(cartItem => cartItem.Valid))
             {
-                // TODO: Add toast notification
-                Console.WriteLine("No items in cart");
-                return;
-            }
-            else
-            {
-                storedProducts.Clear();
+                await CartService.CheckoutItems(CartItems);
+                CartItems.Clear();
+                var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
+                storedProducts!.Clear();
                 await LocalStorage.SetItemAsync("products", storedProducts);
+                ToastService.ShowSuccess("Producten succesvol uitgescand");
+                NavigationManager.NavigateTo("/products");
             }
-            // TODO: How to verify if the checkout was successful?
-            /*
-            if (response.IsSuccessStatusCode)
+        }
+
+        private async Task CheckInCart()
+        {
+             if (CartItems.Any())
             {
-                // Handle success (e.g., navigate to a confirmation page, show a success message, etc.)
-                // Add toast notification
-                Products.Clear();
+                await CartService.CheckInItems(CartItems);
+                CartItems.Clear();
+                var storedProducts = await LocalStorage.GetItemAsync<List<CartItem>>("products");
+                storedProducts!.Clear();
+                await LocalStorage.SetItemAsync("products", storedProducts);
+                ToastService.ShowSuccess("Producten succesvol ingescand");
+                NavigationManager.NavigateTo("/products");
             }
-            else
+        }
+
+        private async Task ValidateCartItems()
+        {
+            foreach (var cartItem in CartItems)
             {
-                // Handle error (e.g., show an error message)
-                // Add toast notification
+                var product = await ProductService.GetProductByBarcode(cartItem.Product.Barcode);
+                cartItem.Valid = cartItem.Quantity <= product.QuantityInStock;
             }
-            */
+        }
+
+        private void DeVaildateCartItems()
+        {
+            foreach (var cartItem in CartItems)
+            {
+                cartItem.Valid = true;
+            }
+        }
+
+        private async Task checkCartItems()
+        {
+            if(selectedButton)
+            {
+                await ValidateCartItems();
+            } else
+            {
+                DeVaildateCartItems();
+            }
         }
     }
 }

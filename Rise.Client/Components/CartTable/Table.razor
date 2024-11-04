@@ -20,16 +20,16 @@
             <tbody>
                 @foreach (var cartItem in Items)
                 {
-                    <tr class="hover:bg-gray-100">
+                    <tr class="hover:bg-gray-100" @onclick="() => OnRowClick(cartItem)">
                         <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
                             @cartItem.Product.Name
                         </td>
-                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
+                        <td class="px-4 py-2 border-b border-gray-200 text-sm hidden lg:table-cell @(cartItem.Valid ? "text-gray-700" : "text-red-700")">
                             @cartItem.Quantity
                         </td>
                         <td
                             class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell text-center">
-                            <button @onclick="() => OnRemoveProduct(cartItem)" class="text-red-600 hover:text-red-800">
+                            <button @onclick:stopPropagation @onclick="() => OnRemoveProduct(cartItem)" class="text-red-600 hover:text-red-800">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

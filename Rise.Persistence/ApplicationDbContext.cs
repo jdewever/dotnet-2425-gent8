@@ -32,9 +32,18 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Applying all types of IEntityTypeConfiguration in the Persistence project.
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        modelBuilder.Entity<UserTransaction>(entity =>
+        {
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.Type).IsRequired();
+        });
+
+        modelBuilder.Entity<TransactionItem>(entity =>
+        {
+            entity.Property(e => e.TransactionID).IsRequired();
+        });
     }
 
 }

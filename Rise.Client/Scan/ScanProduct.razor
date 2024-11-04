@@ -10,7 +10,7 @@
     <!-- In Stock-->
     <div class="w-1/2 flex justify-between mb-4">
         <label class="text-gray-500">In stock</label>
-        <label class="@(Product?.QuantityInStock - GetProductCount() <= Product?.LowStock ? "text-red-500 font-bold" : "text-gray-500") quantity-in-stock">@(((Product?.QuantityInStock - GetProductCount()).ToString() ?? "/"))</label>
+        <label class="text-gray-500 quantity-in-stock">@(((Product?.QuantityInStock).ToString() ?? "/"))</label>
     </div>
     
     <div class="flex flex-col items-center w-full xl:w-1/2 bg-gray-100 rounded-lg p-8 mb-4" style="height: 50vh;">
@@ -37,16 +37,17 @@
 
 
     <!-- Quantity Selector -->
-    <div class="flex items-center space-x-4">
-        <button class="text-3xl font-bold text-gray-600 @(Quantity > 0 ? "visible opacity-100" : "invisible opacity-0")" @onclick="() => Quantity--">-</button>
-        <span class="text-xl">@Quantity</span>
-        <button class="text-3xl font-bold text-gray-600 @(Quantity < (Product?.QuantityInStock - GetProductCount()) ? "visible opacity-100" : "invisible opacity-0")" @onclick="() => Quantity++">+</button>
+    <div class="flex items-center space-x-2">
+        <button class="text-xl font-bold @(Quantity < 100 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 100" disabled="@(Quantity < 100 || Product == null)">-100</button>
+        <button class="text-xl font-bold @(Quantity < 10 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 10" disabled="@(Quantity < 10 || Product == null)">-10</button>
+        <button class="text-xl font-bold @(Quantity <= 0 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity--" disabled="@(Quantity <= 0 || Product == null)">-1</button>
+        <span class="text-xl w-16 text-center">@Quantity</span>
+        <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity++" disabled="@(Product == null)">+1</button>
+        <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 10" disabled="@(Product == null)">+10</button>
+        <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 100" disabled="@(Product == null)">+100</button>
     </div>
 
     <!-- Add Button -->
-    @if (Product?.QuantityInStock - GetProductCount() == 0) {
-        <small class="text-red-500">Niet op voorraad</small>
-    }
     <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @((Product?.QuantityInStock - GetProductCount() == 0 || Quantity <= 0) ? "disabled cursor-not-allowed" : "")" @onclick="OnAddProduct">Voeg toe</button>
     
 </div>

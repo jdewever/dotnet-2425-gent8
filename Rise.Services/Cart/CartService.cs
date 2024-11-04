@@ -43,4 +43,27 @@ public class CartService : ICartService
         }
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task CheckInItems(List<CartItem> cart)
+    {
+        foreach (var item in cart)
+        {
+            var productDTO = item.Product;
+            var quantityToCheckIn = item.Quantity;
+
+            var product = await dbContext.Products.Where(p => p.Id == productDTO.Id).FirstOrDefaultAsync();
+
+            if (product is not null)
+            {
+                product.QuantityInStock += quantityToCheckIn;
+                dbContext.Products.Update(product);
+            }
+            else
+            {
+                // Product not found
+                throw new Exception($"Product with ID {productDTO.Id} not found.");
+            }
+        }
+        await dbContext.SaveChangesAsync();
+    }
 }
