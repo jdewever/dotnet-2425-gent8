@@ -33,12 +33,21 @@
     </div>
     <div class="w-full mt-2">
         <label>Voorraad Status</label>
-        <select @onchange="StockStatusChanged" class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full">
-            <option value="All">Alle</option>
-            <option value="InStock">In stock</option>
-            <option value="OutOfStock">Uit stock</option>
-        </select>
+        <BlazoredTypeahead SearchMethod="SearchStockStatus"
+                           @bind-Value="SelectedStockStatus"
+                           ValueMember="Value"
+                           TextMember="Display"
+                           EnableDropDown="true"
+                           placeholder="Zoeken via Voorraad Status ...">
+            <SelectedTemplate Context="status">
+                @status.Display
+            </SelectedTemplate>
+            <ResultTemplate Context="status">
+                @status.Display
+            </ResultTemplate>
+        </BlazoredTypeahead>
     </div>
+
     <div class="w-full mt-2">
         <label>Aantal in stock</label>
         <div class="flex justify-between items-center">
