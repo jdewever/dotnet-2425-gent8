@@ -15,7 +15,7 @@
                     <CascadingValue Value="product">
                         <tr class="hover:bg-gray-100" @onclick="EnableModal ? () => ShowModal(product) : () => {}">
                             @Columns
-                            <td>
+                            <td class="border-b border-gray-200 lg:table-cell">
                                 <button name="uitlenenBtn"
                                     class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300" @onclick="() => OnUitlenenClick(product)">
                                     Uitlenen
