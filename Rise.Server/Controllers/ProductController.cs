@@ -42,8 +42,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{barcode}")]
-    public async Task DeleteProduct(string barcode)
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task HideProduct(string barcode)
     {
-        await productService.DeleteProduct(barcode);
+        await productService.HideProduct(barcode);
     }
 }

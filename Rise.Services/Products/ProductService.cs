@@ -168,7 +168,7 @@ public class ProductService : IProductService
         return await query.ToListAsync();
     }
 
-    public async Task DeleteProduct(string barcode)
+    public async Task HideProduct(string barcode)
     {
         var product = await dbContext.Products.Where(x => x.Barcode == barcode).FirstOrDefaultAsync();
         if (product is not null)
