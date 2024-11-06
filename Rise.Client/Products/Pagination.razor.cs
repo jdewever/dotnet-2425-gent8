@@ -9,6 +9,7 @@ namespace Rise.Client.Products
         [Parameter] public int CurrentPageSize { get; set; }
         [Parameter] public EventCallback<int> OnPageChanged { get; set; }
         [Parameter] public EventCallback<int> OnPageSizeChanged { get; set; }
+        [Parameter] public bool table2 { get; set; }
 
         private bool IsFirstPage => CurrentPage <= 1;
         private bool IsLastPage => CurrentPage >= TotalPages;
