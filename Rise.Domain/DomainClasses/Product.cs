@@ -9,12 +9,13 @@ namespace Rise.Domain.DomainClasses
         private int lowStock = default!;
         private string classRoomCode = default!;
         private string barcode = default!;
+        private bool isReservable = default!;
         private List<Category> categories = default!;
         // public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 
         public Product() { }
 
-        public Product(string name, string description, int quantityInStock, int quantityOnOrder, int lowStock, string classRoomCode, string barcode)
+        public Product(string name, string description, int quantityInStock, int quantityOnOrder, int lowStock, string classRoomCode, string barcode, bool isReservable)
         {
             Name = name;
             this.description = description;
@@ -23,6 +24,7 @@ namespace Rise.Domain.DomainClasses
             this.lowStock = lowStock;
             this.classRoomCode = classRoomCode;
             this.barcode = barcode;
+            this.isReservable = isReservable;
         }
 
         public string Name
@@ -65,6 +67,12 @@ namespace Rise.Domain.DomainClasses
         {
             get => barcode;
             set => barcode = Guard.Against.NullOrWhiteSpace(value);
+        }
+
+        public bool IsReservable
+        {
+            get => isReservable;
+            set => isReservable = value;
         }
 
         public List<Category> Categories
