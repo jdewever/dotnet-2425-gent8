@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @using Rise.Shared.Products
 @using Rise.Client.Components.ProductTable
+@using Rise.Client.Products.Components
 
 <PageTitle>Products</PageTitle>
 
@@ -15,10 +16,13 @@ else
 {
     <div class="flex justify-center mb-8">
         <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2" Categories="categories"
-                     SelectedCategoriesIds="_selectedCategories" Location="@Location" Locations="_locations"
-                     MaxInStock="MaxInStock" MaxOnOrder="MaxOnOrder"
-                     MinInStock="MinInStock" MinOnOrder="MinOnOrder"/>
-        <input type="text" placeholder="zoektermen" @oninput="OnSearchInput" class="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            SelectedCategoriesIds="_selectedCategories" Location="@Location" Locations="_locations" MaxInStock="MaxInStock"
+            MaxOnOrder="MaxOnOrder" MinInStock="MinInStock" MinOnOrder="MinOnOrder" />
+        <input type="text" placeholder="zoektermen" @oninput="OnSearchInput"
+            class="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <AuthorizeView Roles="Administrator, Invertorymanager">
+            <DeleteButton />
+        </AuthorizeView>
     </div>
 
     @if (table)
@@ -27,17 +31,18 @@ else
             <Table Items="products">
                 <Columns>
                     <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="Barcode" Label="Code"/>
+                        <Column Name="Barcode" Label="Code" />
                     </AuthorizeView>
-                    <Column Name="Name" Label="Naam"/>
-                    <Column Name="Description" Label="Beschrijving"/>
-                    <Column Name="QuantityInStock" Label="In Stock"/>
+                    <Column Name="Name" Label="Naam" />
+                    <Column Name="Description" Label="Beschrijving" />
+                    <Column Name="QuantityInStock" Label="In Stock" />
                     <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="QuantityOnOrder" Label="In Bestelling"/>
+                        <Column Name="QuantityOnOrder" Label="In Bestelling" />
                     </AuthorizeView>
-                    <Column Name="ClassRoomCode" Label="Lokaal"/>
+                    <Column Name="ClassRoomCode" Label="Lokaal" />
                     <Column Label="">
-                        <button name="uitlenenBtn" class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
+                        <button name="uitlenenBtn"
+                            class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300">
                             Uitlenen
                         </button>
                     </Column>
@@ -49,9 +54,10 @@ else
     @if (table2)
     {
         <div class="flex justify-center mb-8">
-            <ProductColumnView Products="products.ToList()"/>
+            <ProductColumnView Products="products.ToList()" />
         </div>
     }
 
-    <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" CurrentPageSize="@PageSize" OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" table2="table2"/>
+    <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" CurrentPageSize="@PageSize"
+        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" table2="table2" />
 }
