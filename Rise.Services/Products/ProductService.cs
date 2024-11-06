@@ -40,7 +40,8 @@ public class ProductService : IProductService
                         QuantityOnOrder = p.QuantityOnOrder,
                         LowStock = p.LowStock,
                         ClassRoomCode = p.ClassRoomCode,
-                        Categories = CategoryEntityToDto(p.Categories)
+                        Categories = CategoryEntityToDto(p.Categories),
+                        IsReservable = p.IsReservable,
                     };
         }
         else
@@ -55,8 +56,19 @@ public class ProductService : IProductService
                 QuantityOnOrder = x.QuantityOnOrder,
                 LowStock = x.LowStock,
                 ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories)
+                Categories = CategoryEntityToDto(x.Categories),
+                IsReservable = x.IsReservable,
             });
+        }
+
+        //by default only get the non-reservable products
+        if (request.OnlyReservable == true)
+        {
+            query = query.Where(x => x.IsReservable);
+        }
+        else
+        {
+            query = query.Where(x => !x.IsReservable);
         }
 
         if (!string.IsNullOrWhiteSpace(request.Location))
@@ -135,7 +147,8 @@ public class ProductService : IProductService
                 QuantityOnOrder = x.QuantityOnOrder,
                 LowStock = x.LowStock,
                 ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories)
+                Categories = CategoryEntityToDto(x.Categories),
+                IsReservable = x.IsReservable, 
             });
 
         var product = await query.FirstOrDefaultAsync();
@@ -161,9 +174,11 @@ public class ProductService : IProductService
                 QuantityOnOrder = x.QuantityOnOrder,
                 LowStock = x.LowStock,
                 ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories)
+                Categories = CategoryEntityToDto(x.Categories),
+                IsReservable = x.IsReservable,  
             });
 
         return await query.ToListAsync();
     }
+
 }
