@@ -40,4 +40,10 @@ public class ProductController : ControllerBase
     {
         return await productService.GetProductsHavingLowStock();
     }
+
+    [HttpDelete("{barcode}")]
+    public async Task DeleteProduct(string barcode)
+    {
+        await productService.DeleteProduct(barcode);
+    }
 }
