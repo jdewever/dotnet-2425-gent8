@@ -1,0 +1,139 @@
+@page "/agenda"
+@inject IJSRuntime JSRuntime
+
+<div class="p-8">
+    <div class="flex justify-center items-center space-x-8 mb-8">
+        <span class="bg-gray-500 rounded-full px-4 py-2">Niet Beschikbaar</span>
+        <span class="bg-gray-200 rounded-full px-4 py-2">Gereserveerd</span>
+    </div>
+    
+    <div class="w-full max-w-lg mx-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">@currentMonth.ToString("MMMM yyyy")</h2>
+            <div class="space-x-2">
+                @if (!IsPreviousMonthDisabled)
+                {
+                    <button class="px-2 py-1 bg-gray-200 rounded" @onclick="PreviousMonth">&lt;</button>
+                }
+                <button class="px-2 py-1 bg-gray-200 rounded" @onclick="NextMonth">&gt;</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-7 text-center select-none" @onmousedown="() => StartSelection()" @onmouseup="() => EndSelection()" @onmousemove="(e) => UpdateSelection(e)">
+            <span class="font-semibold">Ma</span>
+            <span class="font-semibold">Di</span>
+            <span class="font-semibold">Wo</span>
+            <span class="font-semibold">Do</span>
+            <span class="font-semibold">Vr</span>
+            <span class="font-semibold">Za</span>
+            <span class="font-semibold">Zo</span>
+            
+            @for (int day = 1; day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month); day++)
+            {
+                var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
+                <div class="relative p-2 border rounded h-20 day-cell @(isPastDate ? "bg-gray-100" : "")" data-day="@day" @onmouseover="() => SelectDay(day)" style="@(isPastDate ? "pointer-events: none;" : "")">
+                    <div class="absolute left-0 right-0 mx-auto bg-green-500" style="height: 10px; top: 15px;" hidden="@(selectedDays.Contains(day) ? false : true)"></div>
+                    <span class="absolute top-1 left-1 text-xs select-none pointer-events-none">@day</span>
+                </div>
+            }
+        </div>
+        <div class="flex justify-center items-center">
+            <button class="mt-4 w-1/3 px-4 py-2 bg-gray-300 rounded">Reserveer</button>    
+        </div>
+        
+    </div>
+</div>
+
+@code {
+    private DateTime currentMonth = DateTime.Now;
+    private bool isSelecting = false;
+    private List<int> selectedDays = new List<int>();
+
+    private bool IsPreviousMonthDisabled => currentMonth.Year < DateTime.Now.Year || (currentMonth.Year == DateTime.Now.Year && currentMonth.Month <= DateTime.Now.Month);
+
+    private void PreviousMonth()
+    {
+        if (!IsPreviousMonthDisabled)
+        {
+            currentMonth = currentMonth.AddMonths(-1);
+            selectedDays.Clear(); // Clear selection when changing months
+        }
+    }
+
+    private void NextMonth()
+    {
+        currentMonth = currentMonth.AddMonths(1);
+        selectedDays.Clear(); // Clear selection when changing months
+    }
+
+    private void StartSelection()
+    {
+        isSelecting = true;
+        selectedDays.Clear();
+    }
+
+    private void EndSelection()
+    {
+        isSelecting = false;
+    }
+
+    private void UpdateSelection(MouseEventArgs e)
+    {
+        // JavaScript Script 
+    }
+
+    private void SelectDay(int day)
+    {
+        var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
+        if (isSelecting && !selectedDays.Contains(day) && !isPastDate)
+        {
+            selectedDays.Add(day);
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public void UpdateSelection(int day)
+    {
+        if (isSelecting && !selectedDays.Contains(day))
+        {
+            selectedDays.Add(day);
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("dragSelection.startSelection", DotNetObjectReference.Create(this));
+        }
+    }
+}
+
+<script>
+    window.dragSelection = {
+        startSelection: function (dotNetHelper) {
+            document.addEventListener('mousedown', function (event) {
+                dotNetHelper.invokeMethodAsync('StartSelection');
+            });
+
+            document.addEventListener('mouseup', function (event) {
+                dotNetHelper.invokeMethodAsync('EndSelection');
+            });
+
+            document.addEventListener('mousemove', function (event) {
+                if (event.buttons === 1) { 
+                    let element = document.elementFromPoint(event.clientX, event.clientY);
+                    if (element && !element.classList.contains('day-cell')) {
+                        element = element.closest('.day-cell');
+                    }
+                    if (element && element.classList.contains('day-cell')) {
+                        const day = element.getAttribute('data-day');
+                        dotNetHelper.invokeMethodAsync('UpdateSelection', parseInt(day));
+                    }
+                }
+            });
+        }
+    };
+</script>
