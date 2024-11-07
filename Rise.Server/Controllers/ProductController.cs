@@ -40,4 +40,11 @@ public class ProductController : ControllerBase
     {
         return await productService.GetProductsHavingLowStock();
     }
+
+    [HttpDelete("{barcode}")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task HideProduct(string barcode)
+    {
+        await productService.HideProduct(barcode);
+    }
 }
