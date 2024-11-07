@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-7 text-center select-none" @onmousedown="() => StartSelection()" @onmouseup="() => EndSelection()" @onmousemove="(e) => UpdateSelection(e)">
+        <div class="grid grid-cols-7 text-center select-none" @onmousedown="StartSelection" @onmouseup="EndSelection" @onmousemove="(e) => UpdateSelection(e)">
             <span class="font-semibold">Ma</span>
             <span class="font-semibold">Di</span>
             <span class="font-semibold">Wo</span>
@@ -31,8 +31,9 @@
             @for (int day = 1; day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month); day++)
             {
                 var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
-                <div class="relative p-2 border rounded h-20 day-cell @(isPastDate ? "bg-gray-100" : "")" data-day="@day" @onmouseover="() => SelectDay(day)" style="@(isPastDate ? "pointer-events: none;" : "")">
-                    <div class="absolute left-0 right-0 mx-auto bg-green-500" style="height: 10px; top: 15px;" hidden="@(selectedDays.Contains(day) ? false : true)"></div>
+                var isInRange = firstSelectedDay.HasValue && lastSelectedDay.HasValue && day >= Math.Min(firstSelectedDay.Value, lastSelectedDay.Value) && day <= Math.Max(firstSelectedDay.Value, lastSelectedDay.Value);
+                <div class="relative p-2 border rounded h-20 day-cell @(isPastDate ? "bg-gray-200" : "")" data-day="@day" @onmouseover="() => SelectDay(day)" style="@(isPastDate ? "pointer-events: none;" : "")">
+                    <div class="absolute left-0 right-0 mx-auto bg-green-500" style="height: 10px; top: 15px;" hidden="@(isInRange ? false : true)"></div>
                     <span class="absolute top-1 left-1 text-xs select-none pointer-events-none">@day</span>
                 </div>
             }
@@ -48,6 +49,8 @@
     private DateTime currentMonth = DateTime.Now;
     private bool isSelecting = false;
     private List<int> selectedDays = new List<int>();
+    private int? firstSelectedDay = null;
+    private int? lastSelectedDay = null;
 
     private bool IsPreviousMonthDisabled => currentMonth.Year < DateTime.Now.Year || (currentMonth.Year == DateTime.Now.Year && currentMonth.Month <= DateTime.Now.Month);
 
@@ -56,20 +59,20 @@
         if (!IsPreviousMonthDisabled)
         {
             currentMonth = currentMonth.AddMonths(-1);
-            selectedDays.Clear(); // Clear selection when changing months
+            ClearSelection();
         }
     }
 
     private void NextMonth()
     {
         currentMonth = currentMonth.AddMonths(1);
-        selectedDays.Clear(); // Clear selection when changing months
+        ClearSelection();
     }
 
     private void StartSelection()
     {
         isSelecting = true;
-        selectedDays.Clear();
+        ClearSelection();
     }
 
     private void EndSelection()
@@ -77,29 +80,43 @@
         isSelecting = false;
     }
 
+    private void ClearSelection()
+    {
+        selectedDays.Clear();
+        firstSelectedDay = null;
+        lastSelectedDay = null;
+    }
+
     private void UpdateSelection(MouseEventArgs e)
     {
-        // JavaScript Script 
+        // JavaScript Script
     }
 
     private void SelectDay(int day)
     {
         var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
-        if (isSelecting && !selectedDays.Contains(day) && !isPastDate)
+        if (isSelecting && !isPastDate)
         {
-            selectedDays.Add(day);
-            StateHasChanged();
+            if (!firstSelectedDay.HasValue)
+            {
+                firstSelectedDay = day;
+            }
+            lastSelectedDay = day;
+
+            selectedDays.Clear();
+            for (int i = Math.Min(firstSelectedDay.Value, lastSelectedDay.Value); i <= Math.Max(firstSelectedDay.Value, lastSelectedDay.Value); i++)
+            {
+                selectedDays.Add(i);
+            }
+
+            StateHasChanged(); 
         }
     }
 
     [JSInvokable]
     public void UpdateSelection(int day)
     {
-        if (isSelecting && !selectedDays.Contains(day))
-        {
-            selectedDays.Add(day);
-            StateHasChanged();
-        }
+        SelectDay(day);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
