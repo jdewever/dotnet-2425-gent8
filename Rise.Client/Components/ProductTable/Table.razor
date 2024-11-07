@@ -6,6 +6,7 @@
             <thead class="bg-gray-200">
                 <tr>
                     @Columns
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
@@ -14,6 +15,14 @@
                     <CascadingValue Value="product">
                         <tr class="hover:bg-gray-100" @onclick="EnableModal ? () => ShowModal(product) : () => {}">
                             @Columns
+                            @if(!@Dashboard) {
+                                <td class="border-b border-gray-200 lg:table-cell">
+                                    <button name="uitlenenBtn"
+                                        class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300" @onclick="() => OnUitlenenClick(product)">
+                                        Uitscannen
+                                    </button>
+                                </td>
+                            }
                         </tr>
                     </CascadingValue>
                 }
@@ -27,6 +36,13 @@
             <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative" @onclick="EnableModal ? () => ShowModal(product) : () => {}">
                 <CascadingValue Value="product">
                     @Columns
+                    @if(!@Dashboard) {
+                        <button name="uitlenenBtn"
+                            class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300" @onclick="() => OnUitlenenClick(product)">
+                            Uitscannen
+                        </button>
+                    }
+                    
                 </CascadingValue>
             </div>
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Ardalis.GuardClauses;
+using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
@@ -181,4 +182,17 @@ public class ProductService : IProductService
         return await query.ToListAsync();
     }
 
+    public async Task HideProduct(string barcode)
+    {
+        var product = await dbContext.Products.Where(x => x.Barcode == barcode).FirstOrDefaultAsync();
+        if (product is not null)
+        {
+            product.IsDeleted = true;
+        }
+        else
+        {
+            throw new Exception($"Product with barcode {barcode} not found.");
+        }
+        await dbContext.SaveChangesAsync();
+    }
 }

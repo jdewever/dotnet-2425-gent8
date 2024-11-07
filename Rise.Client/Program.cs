@@ -7,6 +7,7 @@ using Rise.Shared.Products;
 using Rise.Client.Products;
 using Rise.Shared.Cart;
 using Rise.Client.Cart;
+using Rise.Client.Products.Components;
 using Blazored.Modal;
 using Blazored.LocalStorage;
 using Blazored.Toast;
