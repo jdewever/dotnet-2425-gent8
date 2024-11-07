@@ -10,6 +10,8 @@ public partial class Table : ProductModal
     [Parameter] public Boolean EnableModal { get; set; } = true;
 
     [Parameter] public Boolean Dashboard { get; set; } = false;
+
+    [Parameter] public Boolean Reserve {  get; set; } = false;
  
     [Inject] NavigationManager NavigationManager { get; set; }
 
@@ -19,5 +21,11 @@ public partial class Table : ProductModal
     {
         BarcodeService.Barcode = product.Barcode;
         NavigationManager.NavigateTo("/scan");
+    }
+
+    private void OnReserverenClick(ProductDTO product)
+    {
+        BarcodeService.Barcode = product.Barcode;
+        NavigationManager.NavigateTo("/reservations");
     }
 }

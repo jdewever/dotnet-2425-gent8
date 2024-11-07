@@ -8,13 +8,21 @@ public partial class ProductView : ComponentBase
     [Parameter] public required ProductDTO Product { get; set; }
     [Parameter] public string? ImageUrl { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public Boolean Reserve { get; set; } = false;
 
     [Inject] private BarcodeService BarcodeService { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
+
 
     private void NavigateToScan()
     {
         BarcodeService.Barcode = Product.Barcode;
         Navigation.NavigateTo($"/scan");
+    }
+
+    private void OnReserverenClick(ProductDTO product)
+    {
+        BarcodeService.Barcode = product.Barcode;
+        Navigation.NavigateTo("/reservations");
     }
 }
