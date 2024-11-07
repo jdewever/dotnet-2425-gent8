@@ -54,7 +54,7 @@ public class ProductService : IProductService
         return products!;
     }
 
-    public async Task DeleteProduct(string barcode)
+    public async Task HideProduct(string barcode)
     {
         await httpClient.DeleteAsync($"product/{barcode}");
     }
