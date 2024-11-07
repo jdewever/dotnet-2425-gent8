@@ -8,6 +8,8 @@ public partial class Table : ProductModal
     [Parameter] public required IEnumerable<ProductDTO> Items { get; set; }
     [Parameter] public RenderFragment? Columns { get; set; }
     [Parameter] public Boolean EnableModal { get; set; } = true;
+
+    [Parameter] public Boolean Dashboard { get; set; } = false;
  
     [Inject] NavigationManager NavigationManager { get; set; }
 
