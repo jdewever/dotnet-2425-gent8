@@ -13,7 +13,7 @@ public class ProductService : IProductService
         this.httpClient = httpClient;
     }
 
- public async Task<ProductResponse> GetAllProducts(ProductRequest.Index request)
+    public async Task<ProductResponse> GetAllProducts(ProductRequest.Index request)
     {
         var url = "product?";
         var categories = request.CategoryIds;
@@ -36,10 +36,13 @@ public class ProductService : IProductService
 
     public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
     {
-        try {
+        try
+        {
             var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/barcode?barcode={barcode}");
             return product!;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // Log error
         }
         return null;
@@ -49,5 +52,10 @@ public class ProductService : IProductService
     {
         var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/lowstock");
         return products!;
+    }
+
+    public async Task HideProduct(string barcode)
+    {
+        await httpClient.DeleteAsync($"product/{barcode}");
     }
 }
