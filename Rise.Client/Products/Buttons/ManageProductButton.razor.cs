@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Components;
 
-namespace Rise.Client.Products.Components;
+namespace Rise.Client.Products.Buttons;
 
-public partial class DeleteButton
+public partial class ManageProductButton
 {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     private void ProductManagement()
