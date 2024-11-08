@@ -53,7 +53,7 @@ namespace Rise.Client.Scan
 
         private async Task CheckInCart()
         {
-             if (CartItems.Any())
+            if (CartItems.Any())
             {
                 await CartService.CheckInItems(CartItems);
                 CartItems.Clear();
@@ -84,10 +84,11 @@ namespace Rise.Client.Scan
 
         private async Task checkCartItems()
         {
-            if(selectedButton)
+            if (selectedButton)
             {
                 await ValidateCartItems();
-            } else
+            }
+            else
             {
                 DeVaildateCartItems();
             }

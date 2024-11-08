@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Components;
 
-partial class DeleteButton
+namespace Rise.Client.Products.Components;
+
+public partial class DeleteButton
 {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
-    private Task ProductManagement()
+    private void ProductManagement()
     {
-        Navigation.NavigateTo("/products");
+        Navigation.NavigateTo("/products/management");
     }
 }

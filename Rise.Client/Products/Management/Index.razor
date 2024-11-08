@@ -1,11 +1,29 @@
-@page "/product/management"
+@page "/products/management"
 @attribute [Authorize]
 @using Rise.Client.Products.Management
 
 <PageTitle>Product Management</PageTitle>
 
-
-<div class="relative z-10 flex w-full">
-    <button class="w-1/2 px-3 text-gray-600 rounded-lg" @onclick='() => SelectButton("toevoegen")'>Toevoegen</button>
-    <button class="w-1/2 px-3 text-gray-600 rounded-lg" @onclick='() => SelectButton("test")'>Scan in</button>
+<div class="z-10 flex justify-center w-full">
+    @foreach (var button in new[] { "Toevoegen", "Wijzigen", "Verbergen", "Verwijderen" })
+    {
+        <button class="@GetButtonClass(button)" @onclick='() => SelectButton(button)'>@button</button>
+    }
 </div>
+<main>
+    @switch (selectedButton)
+    {
+        case "Toevoegen":
+            <AddProduct />
+            break;
+        case "Wijzigen":
+            <EditProduct />
+            break;
+        case "Verbergen":
+            <HideProduct />
+            break;
+        case "Verwijderen":
+            <DeleteProduct />
+            break;
+    }
+</main>
