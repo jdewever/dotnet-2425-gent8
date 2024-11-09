@@ -22,4 +22,9 @@ public partial class ProductDetailModal : ComponentBase
         BarcodeService.Barcode = SelectedProduct.Barcode;
         Navigation.NavigateTo("/reservations");
     }
+
+    private void ProductManagement()
+    {
+        Navigation.NavigateTo("/products/management");
+    }
 }

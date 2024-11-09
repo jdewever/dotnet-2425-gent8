@@ -17,13 +17,6 @@
     </span>
 
     <!-- Button Uitlenen -->
-    @if (Reserve)
-    {
-        <BigButton Text="Reserveren" OnClick="() => OnReserverenClick()" />
-    }
-    else
-    {
-        <BigButton OnClick="() => NavigateToScan()" />
-    }
+    <BigButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@(Reserve ? OnReserverenClick : NavigateToScan)" />
     
 </div>
