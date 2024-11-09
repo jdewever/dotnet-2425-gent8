@@ -16,4 +16,10 @@ public partial class ProductDetailModal : ComponentBase
         BarcodeService.Barcode = SelectedProduct.Barcode;
         Navigation.NavigateTo($"/scan");
     }
+
+    private void OnReserverenClick()
+    {
+        BarcodeService.Barcode = SelectedProduct.Barcode;
+        Navigation.NavigateTo("/reservations");
+    }
 }

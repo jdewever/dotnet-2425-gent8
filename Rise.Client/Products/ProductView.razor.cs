@@ -20,9 +20,9 @@ public partial class ProductView : ComponentBase
         Navigation.NavigateTo($"/scan");
     }
 
-    private void OnReserverenClick(ProductDTO product)
+    private void OnReserverenClick()
     {
-        BarcodeService.Barcode = product.Barcode;
+        BarcodeService.Barcode = Product.Barcode;
         Navigation.NavigateTo("/reservations");
     }
 }

@@ -17,23 +17,11 @@
                             @Columns
                             @if (!Reserve && !Dashboard)
                             {
-                                <td class="border-b border-gray-200 lg:table-cell">
-                                    <button name="uitlenenBtn"
-                                            class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300"
-                                            @onclick="() => OnUitlenenClick(product)">
-                                        Uitscannen
-                                    </button>
-                                </td>
+                                <SmallButton OnClick="() => OnUitlenenClick(product)" />
                             }
                             @if (Reserve)
                             {
-                                <td class="border-b border-gray-200 lg:table-cell">
-                                    <button name="reserverenBtn"
-                                            class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300"
-                                            @onclick="() => OnReserverenClick(product)">
-                                        Reserveren
-                                    </button>
-                                </td>
+                                <SmallButton Text="Reserveren" OnClick="() => OnReserverenClick(product)" />
                             }
                         </tr>
                     </CascadingValue>
@@ -50,19 +38,11 @@
                 <CascadingValue Value="product">
                     @Columns
                     @if(!@Dashboard) {
-                        <button name="uitlenenBtn"
-                            class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300" @onclick="() => OnUitlenenClick(product)">
-                            Uitscannen
-                        </button>
+                        <SmallButton OnClick="() => OnUitlenenClick(product)" />
                     }
                     @if (@Reserve)
                     {
-                        <td class="border-b border-gray-200 lg:table-cell">
-                            <button name="uitlenenBtn"
-                                    class="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full hover:bg-gray-300" @onclick="() => OnReserverenClick(product)">
-                                Reserveren
-                            </button>
-                        </td>
+                        <SmallButton Text="Reserveren" OnClick="() => OnReserverenClick(product)" />
                     }
                     
                 </CascadingValue>
