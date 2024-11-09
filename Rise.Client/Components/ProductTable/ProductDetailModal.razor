@@ -1,3 +1,5 @@
+@using Rise.Client.Products.Buttons;
+
 <div class="fixed inset-0 flex items-center justify-center z-50">
     <div class="fixed inset-0 bg-black opacity-50" @onclick="OnClick"></div>
 
@@ -75,7 +77,8 @@
             </p>
         </div>
 
-        <div class="absolute right-4 bottom-4">
+        <div class="absolute right-4 bottom-4 flex items-center space-x-2">
+            <ManageProductButton />
             <button class="bg-gray-200 text-gray-700 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full hover:bg-gray-300" @onclick="NavigateToScan">
                 @(Reserve ? "Reserveren" : "Uitscannen")
             </button>
