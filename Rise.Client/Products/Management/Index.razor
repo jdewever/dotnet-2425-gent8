@@ -7,7 +7,7 @@
 <PageTitle>Product Management</PageTitle>
 
 <div class="z-10 flex justify-center w-full">
-    @foreach (var button in new[] { "Toevoegen","Wijzigen", "Verbergen", "Verwijderen" })
+    @foreach (var button in new[] { "Wijzigen", "Verbergen", "Verwijderen" })
     {
         <button class="@GetButtonClass(button)" @onclick='() => SelectButton(button)'>@button</button>
     }
@@ -15,9 +15,6 @@
 <main>
     @switch (selectedButton)
     {
-        case "Toevoegen":
-            <AddProduct/>
-        break;
         case "Wijzigen":
             <EditProduct />
             break;

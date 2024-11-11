@@ -1,5 +1,52 @@
 @page "/products/add"
 
-<div>
-  Toevoegen van een product form
-</div>
+<form class="max-w-xl mx-auto">
+    <div class="grid md:grid-cols-2 md:gap-6">
+        <div class="grid md:grid-cols-1 md:gap-6">
+            <div>
+                <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Naam</label>
+                <input type="text" class="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="naam" required>
+                <label for="location" class="block mb-2 text-sm font-medium text-gray-900">Lokaal</label>
+                <input type="text" class="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="lokaal" required>
+                <label for="lowStock" class="block mb-2 text-sm font-medium text-gray-900">Minimum gewenste voorraad</label>
+                <input type="text" class="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="aantal" required>
+            </div>
+        </div>
+        <div>
+            <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Omschrijving</label>
+            <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 h-[220px]" placeholder="omschrijving..."></textarea>
+        </div>
+    </div>
+
+    <label for="barcode" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
+    <input type="text" class="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="barcode" required>
+
+    <div class="flex items-center mb-4">
+        <input id="checkbox-3" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+        <label for="checkbox-3" class="ms-2 text-sm font-medium">Product is reserveerbaar</label>
+    </div>
+
+    <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Categorieën</label>
+    <div>
+        @for (int i = 0; i < SelectedCategories.Count; i++)
+        {
+            <div class="flex items-center space-x-2 mb-2">
+                <select class="block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5" @bind="SelectedCategories[i]">
+                    @foreach (var option in CategoryOptions)
+                    {
+                        <option value="@option">@option</option>
+                    }
+                </select>
+                <button type="button" @onclick="() => RemoveCategory(i)" class="text-red-600 hover:text-red-800 font-medium">-</button>
+            </div>
+        }
+        <button type="button" @onclick="AddCategory" class="text-blue-600 hover:text-blue-800 font-medium">+ Categorie toevoegen</button>
+    </div>
+
+    <label class="block mb-2 text-sm font-medium text-gray-900" for="user_avatar">Foto</label>
+    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" type="file">
+
+    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5">Submit</button>
+</form>
+
+
