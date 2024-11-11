@@ -14,6 +14,8 @@ public class ProductDTO
     public required int LowStock { get; set; }
 
     public required string ClassRoomCode { get; set; }
+
+    public required bool IsReservable { get; set; }
     
     public required List<CategoryDTO>? Categories { get; set; }
 }

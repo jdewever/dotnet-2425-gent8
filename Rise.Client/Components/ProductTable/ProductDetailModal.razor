@@ -78,10 +78,8 @@
         </div>
 
         <div class="absolute right-4 bottom-4 flex items-center space-x-2">
-            <ManageProductButton />
-            <button class="bg-gray-200 text-gray-700 text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-full hover:bg-gray-300" @onclick="NavigateToScan">
-                Uitlenen
-            </button>
+            <SmallButton Text="Beheren" OnClick="ProductManagement" />
+            <SmallButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@(Reserve ? OnReserverenClick : NavigateToScan)"/>
         </div>
     </div>
 </div>
