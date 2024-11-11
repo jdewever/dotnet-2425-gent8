@@ -28,7 +28,7 @@ else
     @if (table)
     {
         <div class="overflow-x-auto w-full">
-            <Table Items="products">
+            <Table Items="products" Reserve="OnlyReservable">
                 <Columns>
                     <AuthorizeView Roles="Administrator, Inventory Manager">
                         <Column Name="Barcode" Label="Code" />
@@ -48,7 +48,7 @@ else
     @if (table2)
     {
         <div class="flex justify-center mb-8">
-            <ProductColumnView Products="products.ToList()" />
+            <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" />
         </div>
     }
 

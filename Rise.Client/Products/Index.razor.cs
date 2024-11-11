@@ -62,6 +62,8 @@ public partial class Index
     [Parameter, SupplyParameterFromQuery(Name = "MinInStock")] public int? MinInStock { get; set; }
     [Parameter, SupplyParameterFromQuery(Name = "MaxOnOrder")] public int? MaxOnOrder { get; set; }
     [Parameter, SupplyParameterFromQuery(Name = "MinOnOrder")] public int? MinOnOrder { get; set; }
+    [Parameter] public bool OnlyReservable { get; set; } = false;
+
 
     private async Task OnSearchInput(ChangeEventArgs e)
     {
@@ -84,7 +86,8 @@ public partial class Index
             MinOnOrder = MinOnOrder,
             Searchterm = _searchTerm,
             PageNumber = CurrentPage,
-            PageSize = PageSize
+            PageSize = PageSize,
+            OnlyReservable = OnlyReservable,
         };
 
         categories = await CategoryService.GetAllCategories();
