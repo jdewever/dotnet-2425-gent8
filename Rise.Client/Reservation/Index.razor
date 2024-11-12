@@ -1,0 +1,37 @@
+@page "/agenda"
+@inject IJSRuntime JSRuntime;
+@using Blazored.Toast.Services;
+
+@inject NavigationManager NavigationManager;
+@inject IToastService ToastService;
+
+<div class="p-8">
+    <Agenda />
+</div>
+
+<script>
+    window.dragSelection = {
+        startSelection: function (dotNetHelper) {
+            document.addEventListener('mousedown', function (event) {
+                dotNetHelper.invokeMethodAsync('StartSelection');
+            });
+
+            document.addEventListener('mouseup', function (event) {
+                dotNetHelper.invokeMethodAsync('EndSelection');
+            });
+
+            document.addEventListener('mousemove', function (event) {
+                if (event.buttons === 1) { 
+                    let element = document.elementFromPoint(event.clientX, event.clientY);
+                    if (element && !element.classList.contains('day-cell')) {
+                        element = element.closest('.day-cell');
+                    }
+                    if (element && element.classList.contains('day-cell')) {
+                        const day = element.getAttribute('data-day');
+                        dotNetHelper.invokeMethodAsync('UpdateSelection', parseInt(day));
+                    }
+                }
+            });
+        }
+    };
+</script>
