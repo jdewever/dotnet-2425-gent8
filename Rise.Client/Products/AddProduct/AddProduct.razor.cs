@@ -33,8 +33,12 @@ namespace Rise.Client.Products.AddProduct
 
         private void AddCategory()
         {
-            SelectedCategories.Add("");
+            if (SelectedCategories.Count < 3)
+            {
+                SelectedCategories.Add("");
+            }
         }
+
 
         private void RemoveCategory(int index)
         {

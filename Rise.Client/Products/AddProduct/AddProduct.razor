@@ -28,36 +28,49 @@
                 </div>
             </div>
 
-            <label for="barcode" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
-            <InputText @bind-Value="newProduct.Barcode" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="barcode" />
-            <ValidationMessage For="@(() => newProduct.Barcode)" class="text-xs text-red-500 mt-0 p-0" />
+            <div class="grid md:grid-cols-2 md:gap-6 mt-5">
+                <div>
+                    <label for="barcode" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
+                    <InputText @bind-Value="newProduct.Barcode" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="barcode" />
+                    <ValidationMessage For="@(() => newProduct.Barcode)" class="text-xs text-red-500 mt-0 p-0" />
 
-            <div class="flex items-center mb-4">
-                <InputCheckbox @bind-Value="newProduct.IsReservable" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-                <label for="checkbox-3" class="ms-2 text-sm font-medium">Product is reserveerbaar</label>
-            </div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 mt-5" for="user_avatar">Foto</label>
+                    <InputFile OnChange="HandleFileSelected" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer" />
 
-            <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Categorieën</label>
-            <div>
-                @for (int i = 0; i < SelectedCategories.Count; i++)
-                {
-                    <div class="flex items-center space-x-2 mb-2">
-                        <select class="block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5" @bind="SelectedCategories[i]">
-                            @foreach (var option in CategoryOptions)
-                            {
-                                <option value="@option">@option</option>
-                            }
-                        </select>
-                        <button type="button" @onclick="() => RemoveCategory(i)" class="text-red-600 hover:text-red-800 font-medium">-</button>
+                    <div class="flex items-center mb-4 mt-5">
+                        <InputCheckbox @bind-Value="newProduct.IsReservable" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                        <label for="checkbox-3" class="ms-2 text-sm font-medium">Product is reserveerbaar</label>
                     </div>
-                }
-                <button type="button" @onclick="AddCategory" class="text-blue-600 hover:text-blue-800 font-medium">+ Categorie toevoegen</button>
+
+
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 mt-5">Bevestig</button>
+                </div>
+                <div>
+                    <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Categorieën</label>
+                    <div class="space-y-2">
+                        @for (int i = 0; i < SelectedCategories.Count; i++)
+                        {
+                            <div class="flex items-center space-x-2 mb-2">
+                                <select class="block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5" @bind="SelectedCategories[i]">
+                                    @foreach (var option in CategoryOptions)
+                                    {
+                                        <option value="@option">@option</option>
+                                    }
+                                </select>
+                                <button type="button" @onclick="() => RemoveCategory(i)" class="text-red-600 hover:text-red-800 font-medium">-</button>
+                            </div>
+                        }
+                        @if (SelectedCategories.Count < 3)
+                        {
+                            <button type="button" @onclick="AddCategory" class="text-blue-600 hover:text-blue-800 font-medium">+ Categorie toevoegen</button>
+                        }
+                        else
+                        {
+                            <p class="text-xs text-red-500 mt-2">You can only add up to 3 categories.</p>
+                        }
+                    </div>
+                </div>
             </div>
-
-            <label class="block mb-2 text-sm font-medium text-gray-900" for="user_avatar">Foto</label>
-            <InputFile OnChange="HandleFileSelected" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5">Submit</button>
         </EditForm>
     </div>
 </div>
