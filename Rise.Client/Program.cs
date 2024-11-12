@@ -27,6 +27,9 @@ builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", clien
 builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
         .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
+builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+       .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
        .CreateClient("360zorg"));
 

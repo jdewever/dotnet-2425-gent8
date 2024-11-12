@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
+using Rise.Persistence.Configurations;
 
 namespace Rise.Persistence;
 
@@ -13,6 +14,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserTransaction> Transaction => Set<UserTransaction>();
 
     public DbSet<TransactionItem> TransactionItems => Set<TransactionItem>();
+
+    public DbSet<Booking> Booking => Set<Booking>();
 
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
@@ -33,6 +36,7 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfiguration(new BookingConfiguration());
 
         modelBuilder.Entity<UserTransaction>(entity =>
         {
