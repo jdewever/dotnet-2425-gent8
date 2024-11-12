@@ -7,8 +7,21 @@ namespace Rise.Client.Products.AddProduct
 {
     public partial class AddProduct
     {
+        private ProductDTO newProduct = new ProductDTO
+        {
+            Id = 0, 
+            Name = string.Empty,
+            Description = string.Empty,
+            Barcode = string.Empty,
+            QuantityInStock = 0,
+            QuantityOnOrder = 0,
+            LowStock = 0,
+            ClassRoomCode = string.Empty,
+            IsReservable = false,
+            Categories = new List<CategoryDTO>()
+        };
+
         [Inject] public required ICategoryService CategoryService { get; set; }
-       // private ProductDTO ProductModel { get; set; } = new ProductDTO();
         private List<string> SelectedCategories = new List<string> { "" };
         private List<string> CategoryOptions = new List<string>();
 
@@ -32,6 +45,10 @@ namespace Rise.Client.Products.AddProduct
         }
 
         private async Task HandleValidSubmit()
+        {
+
+        }
+        private async Task HandleFileSelected()
         {
 
         }
