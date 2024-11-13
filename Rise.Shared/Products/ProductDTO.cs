@@ -25,7 +25,7 @@ public class ProductCreationDTO
 {
     public required string Name { get; set; }
     public required string Description { get; set; }
-
+    public required string Barcode { get; set; }
     public required int QuantityInStock { get; set; }
     public required int QuantityOnOrder { get; set; }
     public required int LowStock { get; set; }
