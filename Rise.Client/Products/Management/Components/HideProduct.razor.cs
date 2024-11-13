@@ -13,7 +13,7 @@ namespace Rise.Client.Products.Management.Components
 
         private async Task HideProductHandler()
         {
-            await ProductService.HideProduct("123456789012"); // TODO: Implement barcode input
+            await ProductService.ToggleHideProduct("123456789012"); // TODO: Implement barcode input
             ToastService.ShowSuccess("Producten succesvol uitgescand"); // TODO: Catch error
         }
     }
