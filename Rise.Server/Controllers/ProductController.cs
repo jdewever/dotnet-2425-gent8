@@ -16,6 +16,7 @@ public class ProductController : ControllerBase
         this.productService = productService;
     }
 
+    // get all products
     [HttpGet]
     public async Task<ProductResponse> Get([FromQuery] ProductRequest.Index request)
     {
@@ -23,24 +24,21 @@ public class ProductController : ControllerBase
         return productResponse;
     }
 
+    // get all locations
     [HttpGet("location")]
     public async Task<IEnumerable<string>> GetLocations()
     {
         return await productService.GetAllLocations();
     }
 
-    [HttpGet("barcode")]
-    public async Task<ProductDTO> GetProductByBarcode([FromQuery] string? barcode = null)
-    {
-        return await productService.GetProductByBarcode(barcode);
-    }
-
+    // get products with low stock
     [HttpGet("lowstock")]
     public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
     {
         return await productService.GetProductsHavingLowStock();
     }
 
+    // add a product
     [HttpPost]
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task AddProduct([FromBody] ProductCreationDTO product)
@@ -48,17 +46,26 @@ public class ProductController : ControllerBase
         await productService.AddProduct(product);
     }
 
-    [HttpPost("{barcode}/hide")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
-    public async Task ToggleHideProduct(string barcode)
+    // get product by barcode
+    [HttpGet("{barcode}")]
+    public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
-        await productService.ToggleHideProduct(barcode);
+        return await productService.GetProductByBarcode(barcode);
     }
-
+    
+    // delete a product by barcode
     [HttpDelete("{barcode}")]
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task DeleteProduct(string barcode)
     {
         await productService.DeleteProduct(barcode);
+    }
+
+    // hide/unhide a product by barcode
+    [HttpPost("{barcode}/hide")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task ToggleHideProduct(string barcode)
+    {
+        await productService.ToggleHideProduct(barcode);
     }
 }

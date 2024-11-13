@@ -38,7 +38,7 @@ public class ProductService : IProductService
     {
         try
         {
-            var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/barcode?barcode={barcode}");
+            var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/{barcode}");
             return product!;
         }
         catch (Exception e)
