@@ -1,8 +1,10 @@
-using Ardalis.GuardClauses;
+using System.Text;
+using BarcodeStandard;
 using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
+using SkiaSharp;
 
 namespace Rise.Services.Products;
 
@@ -277,5 +279,22 @@ public class ProductService : IProductService
             barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
         }
         return new BarcodeResponse { Barcode = barcode };
+    }
+
+    public Task<string> GetBarcodeImage(string barcode)
+    {
+        var b = new Barcode(barcode, BarcodeStandard.Type.Code93);
+        b.ImageFormat = SKEncodedImageFormat.Png;
+        b.IncludeLabel = true;
+        b.LabelFont = new SKFont{
+            Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Normal),
+            Size = 14,
+        };
+        b.Encode(BarcodeStandard.Type.Code93, barcode, 300, 90).ToString();
+
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(b.ToJson()));
+        SaveData saveData = Barcode.FromJson(stream);
+
+        return Task.FromResult(saveData.Image);
     }
 }

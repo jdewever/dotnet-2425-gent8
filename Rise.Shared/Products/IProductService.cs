@@ -8,6 +8,7 @@ public interface IProductService
     Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock();
     Task AddProduct(ProductCreationDTO product);
     Task<BarcodeResponse> GetNewBarcode();
+    Task<string> GetBarcodeImage(string barcode);
     Task ToggleHideProduct(string barcode);
     Task DeleteProduct(string barcode);
 }

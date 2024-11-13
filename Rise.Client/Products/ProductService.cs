@@ -66,4 +66,10 @@ public class ProductService : IProductService
         var barcode = await httpClient.GetFromJsonAsync<BarcodeResponse>("product/barcode");
         return barcode!;
     }
+
+    public async Task<string> GetBarcodeImage(string barcode)
+    {
+        var image = await httpClient.GetStringAsync($"product/{barcode}/image");
+        return image;
+    }
 }
