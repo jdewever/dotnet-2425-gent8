@@ -1,11 +1,11 @@
 @page "/products/add"
 
-<div class="max-w-5xl mx-auto flex relative">
-    <div class="w-full md:w-3/4">
+<div class="max-w-5xl mx-auto flex relative mt-5">
+    <div>
         <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
 
-            <div class="grid md:grid-cols-2 md:gap-6">
+            <div class="grid md:grid-cols-4 md:gap-6">
                 <div class="grid md:grid-cols-1 md:gap-6">
                     <div>
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Naam</label>
@@ -16,34 +16,15 @@
                         <InputText @bind-Value="newProduct.ClassRoomCode" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="lokaal" />
                         <ValidationMessage For="@(() => newProduct.ClassRoomCode)" class="text-xs text-red-500 mt-0 p-0" />
 
-                        <label for="lowStock" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Minimum gewenste voorraad</label>
+                        <label for="lowStock" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Aantal toevoegen in stock</label>
                         <InputNumber @bind-Value="newProduct.LowStock" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="aantal" />
-                        <ValidationMessage For="@(() => newProduct.LowStock)" class="text-xs text-red-500 mt-0 p-0" />
+                        <ValidationMessage For="@(() => newProduct.QuantityInStock)" class="text-xs text-red-500 mt-0 p-0" />
                     </div>
                 </div>
                 <div>
                     <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Omschrijving</label>
                     <InputTextArea @bind-Value="newProduct.Description" rows="4" class="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 h-[220px]" placeholder="omschrijving..." />
                     <ValidationMessage For="@(() => newProduct.Description)" class="text-xs text-red-500 mt-0 p-0" />
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 md:gap-6 mt-5">
-                <div>
-                    <label for="barcode" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
-                    <InputText @bind-Value="newProduct.Barcode" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="barcode" />
-                    <ValidationMessage For="@(() => newProduct.Barcode)" class="text-xs text-red-500 mt-0 p-0" />
-
-                    <label class="block mb-2 text-sm font-medium text-gray-900 mt-5" for="user_avatar">Foto</label>
-                    <InputFile OnChange="HandleFileSelected" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer" />
-
-                    <div class="flex items-center mb-4 mt-5">
-                        <InputCheckbox @bind-Value="newProduct.IsReservable" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
-                        <label for="checkbox-3" class="ms-2 text-sm font-medium">Product is reserveerbaar</label>
-                    </div>
-
-
-                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 mt-5">Bevestig</button>
                 </div>
                 <div>
                     <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Categorieën</label>
@@ -52,12 +33,20 @@
                         {
                             <div class="flex items-center space-x-2 mb-2">
                                 <select class="block w-full bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5" @bind="SelectedCategories[i]">
+                                    <option value="">Geen categorie</option>
                                     @foreach (var option in CategoryOptions)
                                     {
                                         <option value="@option">@option</option>
                                     }
                                 </select>
-                                <button type="button" @onclick="() => RemoveCategory(i)" class="text-red-600 hover:text-red-800 font-medium">-</button>
+                                @if (SelectedCategories.Count > 1)
+                                {
+                                    <button type="button" @onclick="() => RemoveCategory(i)" class="text-red-600 hover:text-red-800 font-medium">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+                                    </button>
+                                }
                             </div>
                         }
                         @if (SelectedCategories.Count < 3)
@@ -66,11 +55,38 @@
                         }
                         else
                         {
-                            <p class="text-xs text-red-500 mt-2">You can only add up to 3 categories.</p>
+                            <p class="text-xs text-red-500 mt-2">Je kan maximaal 3 categorieën toekennen</p>
                         }
                     </div>
                 </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900" for="user_avatar">Foto</label>
+                    <InputFile OnChange="HandleFileSelected" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer" />
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-4 md:gap-6 mt-5">
+                <div>
+                    <label for="lowStock" class="block mb-2 text-sm font-medium text-gray-900">Aantal nog op bestelling</label>
+                    <InputNumber @bind-Value="newProduct.LowStock" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="aantal" />
+                    <ValidationMessage For="@(() => newProduct.QuantityOnOrder)" class="text-xs text-red-500 mt-0 p-0" />
+
+                    <label for="lowStock" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Minimum gewenste voorraad</label>
+                    <InputNumber @bind-Value="newProduct.LowStock" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="aantal" />
+                    <ValidationMessage For="@(() => newProduct.LowStock)" class="text-xs text-red-500 mt-0 p-0" />
+
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 mt-5">Bevestig</button>
+                </div>
+                <div>
+                    <InputCheckbox @bind-Value="newProduct.IsReservable" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 mt-8" />
+                    <label for="checkbox-3" class="ms-2 text-sm font-medium mt-10">Product is reserveerbaar</label>
+                </div>
+                <div>
+                    <label for="barcode" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
+                    <InputText @bind-Value="newProduct.Barcode" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="barcode" />
+                    <ValidationMessage For="@(() => newProduct.Barcode)" class="text-xs text-red-500 mt-0 p-0" />
+                </div>
             </div>
         </EditForm>
-    </div>
-</div>
+    </div>  
+</div>  

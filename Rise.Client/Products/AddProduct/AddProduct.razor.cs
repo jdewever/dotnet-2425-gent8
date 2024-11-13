@@ -39,12 +39,11 @@ namespace Rise.Client.Products.AddProduct
             }
         }
 
-
         private void RemoveCategory(int index)
         {
-            if (index >= 0 && index < SelectedCategories.Count)
+            if (index >= 0 && index <= SelectedCategories.Count)
             {
-                SelectedCategories.RemoveAt(index);
+                SelectedCategories.RemoveAt(index-1);
             }
         }
 
