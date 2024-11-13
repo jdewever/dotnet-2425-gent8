@@ -99,7 +99,7 @@ public partial class Agenda : ComponentBase
                 EndDate = endDate,
                 UserId = "TestId"
             };
-
+            BarcodeService.Barcode = string.Empty;
             await BookingService.AddBookingAsync(booking);
             ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
             NavigationManager?.NavigateTo("/products");
