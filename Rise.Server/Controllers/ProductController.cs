@@ -6,7 +6,7 @@ namespace Rise.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-// [Authorize]
+[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductService productService;
@@ -42,7 +42,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    // [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task AddProduct([FromBody] ProductCreationDTO product)
     {
         await productService.AddProduct(product);
