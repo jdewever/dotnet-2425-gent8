@@ -38,6 +38,7 @@ public class Seeder
         LowStock = 5,
         ClassRoomCode = "A101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -49,6 +50,7 @@ public class Seeder
         LowStock = 10,
         ClassRoomCode = "B202",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -60,6 +62,7 @@ public class Seeder
         LowStock = 5,
         ClassRoomCode = "C303",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -71,6 +74,7 @@ public class Seeder
         LowStock = 100,
         ClassRoomCode = "D404",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -82,6 +86,7 @@ public class Seeder
         LowStock = 3,
         ClassRoomCode = "E505",
         IsReservable = false,
+        IsHidden = true,
     },
     new Product
     {
@@ -92,6 +97,7 @@ public class Seeder
         QuantityOnOrder = 200,
         ClassRoomCode = "S101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -103,6 +109,7 @@ public class Seeder
         LowStock = 250,
         ClassRoomCode = "S102",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -114,6 +121,7 @@ public class Seeder
         LowStock = 250,
         ClassRoomCode = "S103",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -125,6 +133,7 @@ public class Seeder
         LowStock = 500,
         ClassRoomCode = "F101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -136,6 +145,7 @@ public class Seeder
         LowStock = 200,
         ClassRoomCode = "F102",
         IsReservable = false,
+        IsHidden = false,
     },
 
     new Product
@@ -148,6 +158,7 @@ public class Seeder
         LowStock = 50,
         ClassRoomCode = "O101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -159,6 +170,7 @@ public class Seeder
         LowStock = 3,
         ClassRoomCode = "M101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -170,6 +182,7 @@ public class Seeder
         LowStock = 25,
         ClassRoomCode = "M102",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -181,6 +194,7 @@ public class Seeder
         LowStock = 50,
         ClassRoomCode = "I101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -192,6 +206,7 @@ public class Seeder
         LowStock = 10,
         ClassRoomCode = "N101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -203,6 +218,7 @@ public class Seeder
         LowStock = 30,
         ClassRoomCode = "G101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -214,6 +230,7 @@ public class Seeder
         LowStock = 10,
         ClassRoomCode = "S104",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -225,6 +242,7 @@ public class Seeder
         LowStock = 2,
         ClassRoomCode = "D101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -236,6 +254,7 @@ public class Seeder
         LowStock = 250,
         ClassRoomCode = "S105",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -247,6 +266,7 @@ public class Seeder
         LowStock = 500,
         ClassRoomCode = "W101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -258,6 +278,7 @@ public class Seeder
         LowStock = 500,
         ClassRoomCode = "B101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -269,6 +290,7 @@ public class Seeder
         LowStock = 100,
         ClassRoomCode = "K101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -280,6 +302,7 @@ public class Seeder
         LowStock = 5,
         ClassRoomCode = "C101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -291,6 +314,7 @@ public class Seeder
         LowStock = 25,
         ClassRoomCode = "H101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -302,6 +326,7 @@ public class Seeder
         LowStock = 10,
         ClassRoomCode = "P101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -313,6 +338,7 @@ public class Seeder
         LowStock = 500,
         ClassRoomCode = "A101",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -324,6 +350,7 @@ public class Seeder
         LowStock = 5,
         ClassRoomCode = "C102",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -335,6 +362,7 @@ public class Seeder
         LowStock = 250,
         ClassRoomCode = "I102",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -346,6 +374,7 @@ public class Seeder
         LowStock = 50,
         ClassRoomCode = "B102",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
     {
@@ -357,117 +386,128 @@ public class Seeder
         LowStock = 20,
         ClassRoomCode = "H102",
         IsReservable = false,
+        IsHidden = false,
     },
     new Product
-        {
-            Name = "Portable Ultrasound Machine",
-            Description = "A compact device for ultrasound imaging.",
-            Barcode = "888800000030",
-            QuantityInStock = 5,
-            QuantityOnOrder = 2,
-            LowStock = 1,
-            ClassRoomCode = "U101",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Rehabilitation Treadmill",
-            Description = "Treadmill for physical rehabilitation exercises.",
-            Barcode = "888800000031",
-            QuantityInStock = 3,
-            QuantityOnOrder = 1,
-            LowStock = 1,
-            ClassRoomCode = "R101",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Mobile X-Ray Unit",
-            Description = "A portable X-ray machine for mobile imaging.",
-            Barcode = "888800000032",
-            QuantityInStock = 2,
-            QuantityOnOrder = 1,
-            LowStock = 1,
-            ClassRoomCode = "X101",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Patient Monitor",
-            Description = "Device to monitor vital signs of patients.",
-            Barcode = "888800000033",
-            QuantityInStock = 6,
-            QuantityOnOrder = 2,
-            LowStock = 1,
-            ClassRoomCode = "P102",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Bone Densitometer",
-            Description = "Device to measure bone density.",
-            Barcode = "888800000034",
-            QuantityInStock = 4,
-            QuantityOnOrder = 2,
-            LowStock = 1,
-            ClassRoomCode = "B103",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Electric Patient Bed",
-            Description = "Adjustable electric bed for patient comfort.",
-            Barcode = "888800000035",
-            QuantityInStock = 8,
-            QuantityOnOrder = 4,
-            LowStock = 2,
-            ClassRoomCode = "E506",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Respirator",
-            Description = "Device for artificial respiration.",
-            Barcode = "888800000036",
-            QuantityInStock = 5,
-            QuantityOnOrder = 3,
-            LowStock = 2,
-            ClassRoomCode = "R102",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Portable ECG Device",
-            Description = "ECG machine for mobile use.",
-            Barcode = "888800000037",
-            QuantityInStock = 10,
-            QuantityOnOrder = 5,
-            LowStock = 2,
-            ClassRoomCode = "E102",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Dialysis Machine",
-            Description = "Machine for blood purification (dialysis).",
-            Barcode = "888800000038",
-            QuantityInStock = 3,
-            QuantityOnOrder = 1,
-            LowStock = 1,
-            ClassRoomCode = "D102",
-            IsReservable = true,
-        },
-        new Product
-        {
-            Name = "Infusion Pump",
-            Description = "Device for controlled infusion of fluids.",
-            Barcode = "888800000039",
-            QuantityInStock = 12,
-            QuantityOnOrder = 4,
-            LowStock = 3,
-            ClassRoomCode = "I103",
-            IsReservable = true,
-        }
+    {
+        Name = "Portable Ultrasound Machine",
+        Description = "A compact device for ultrasound imaging.",
+        Barcode = "888800000030",
+        QuantityInStock = 5,
+        QuantityOnOrder = 2,
+        LowStock = 1,
+        ClassRoomCode = "U101",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Rehabilitation Treadmill",
+        Description = "Treadmill for physical rehabilitation exercises.",
+        Barcode = "888800000031",
+        QuantityInStock = 3,
+        QuantityOnOrder = 1,
+        LowStock = 1,
+        ClassRoomCode = "R101",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Mobile X-Ray Unit",
+        Description = "A portable X-ray machine for mobile imaging.",
+        Barcode = "888800000032",
+        QuantityInStock = 2,
+        QuantityOnOrder = 1,
+        LowStock = 1,
+        ClassRoomCode = "X101",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Patient Monitor",
+        Description = "Device to monitor vital signs of patients.",
+        Barcode = "888800000033",
+        QuantityInStock = 6,
+        QuantityOnOrder = 2,
+        LowStock = 1,
+        ClassRoomCode = "P102",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Bone Densitometer",
+        Description = "Device to measure bone density.",
+        Barcode = "888800000034",
+        QuantityInStock = 4,
+        QuantityOnOrder = 2,
+        LowStock = 1,
+        ClassRoomCode = "B103",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Electric Patient Bed",
+        Description = "Adjustable electric bed for patient comfort.",
+        Barcode = "888800000035",
+        QuantityInStock = 8,
+        QuantityOnOrder = 4,
+        LowStock = 2,
+        ClassRoomCode = "E506",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Respirator",
+        Description = "Device for artificial respiration.",
+        Barcode = "888800000036",
+        QuantityInStock = 5,
+        QuantityOnOrder = 3,
+        LowStock = 2,
+        ClassRoomCode = "R102",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Portable ECG Device",
+        Description = "ECG machine for mobile use.",
+        Barcode = "888800000037",
+        QuantityInStock = 10,
+        QuantityOnOrder = 5,
+        LowStock = 2,
+        ClassRoomCode = "E102",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Dialysis Machine",
+        Description = "Machine for blood purification (dialysis).",
+        Barcode = "888800000038",
+        QuantityInStock = 3,
+        QuantityOnOrder = 1,
+        LowStock = 1,
+        ClassRoomCode = "D102",
+        IsReservable = true,
+        IsHidden = false,
+    },
+    new Product
+    {
+        Name = "Infusion Pump",
+        Description = "Device for controlled infusion of fluids.",
+        Barcode = "888800000039",
+        QuantityInStock = 12,
+        QuantityOnOrder = 4,
+        LowStock = 3,
+        ClassRoomCode = "I103",
+        IsReservable = true,
+        IsHidden = false,
+    }
 };
 
     var categories = new List<Category>
