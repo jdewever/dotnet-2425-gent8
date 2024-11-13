@@ -6,7 +6,7 @@ namespace Rise.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+// [Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductService productService;
@@ -41,10 +41,24 @@ public class ProductController : ControllerBase
         return await productService.GetProductsHavingLowStock();
     }
 
+    [HttpPost]
+    // [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task AddProduct([FromBody] ProductCreationDTO product)
+    {
+        await productService.AddProduct(product);
+    }
+
+    [HttpPost("{barcode}/hide")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task ToggleHideProduct(string barcode)
+    {
+        await productService.ToggleHideProduct(barcode);
+    }
+
     [HttpDelete("{barcode}")]
     [Authorize(Roles = "Administrator, InventoryManager")]
-    public async Task HideProduct(string barcode)
+    public async Task DeleteProduct(string barcode)
     {
-        await productService.HideProduct(barcode);
+        await productService.DeleteProduct(barcode);
     }
 }

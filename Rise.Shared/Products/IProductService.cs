@@ -6,5 +6,7 @@ public interface IProductService
     Task<IEnumerable<string>> GetAllLocations();
     Task<ProductDTO> GetProductByBarcode(string? barcode = null);
     Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock();
-    Task HideProduct(string barcode);
+    Task AddProduct(ProductCreationDTO product);
+    Task ToggleHideProduct(string barcode);
+    Task DeleteProduct(string barcode);
 }
