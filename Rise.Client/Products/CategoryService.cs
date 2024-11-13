@@ -16,4 +16,15 @@ public class CategoryService : ICategoryService
         var result = await _httpClient.GetFromJsonAsync<IEnumerable<CategoryDTO>>("category");
         return result!;
     }
+
+    public async Task AddCategory(CategoryDTO category)
+    {
+        // todo: add validation
+        await _httpClient.PostAsJsonAsync("category", category);
+    }
+
+    public async Task DeleteCategory(int id)
+    {
+        await _httpClient.DeleteAsync($"category/{id}");
+    }
 }
