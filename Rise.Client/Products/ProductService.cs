@@ -1,6 +1,9 @@
 ﻿using Rise.Shared.Products;
 using System.Net.Http.Json;
 using Rise.Client.Extensions;
+using System.IO.Pipelines;
+using System.Net.Http.Headers;
+using System.Net;
 
 namespace Rise.Client.Products;
 
@@ -56,6 +59,13 @@ public class ProductService : IProductService
 
     public async Task HideProduct(string barcode)
     {
-        await httpClient.DeleteAsync($"product/{barcode}");
+        try
+        {
+            var result = await httpClient.DeleteAsync($"product/{barcode}");
+        }
+        catch (Exception e)
+        {
+            // Log error
+        }
     }
 }
