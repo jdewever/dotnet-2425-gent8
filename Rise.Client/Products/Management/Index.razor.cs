@@ -5,9 +5,11 @@ namespace Rise.Client.Products.Management;
 
 public partial class Index
 {
-    [Inject] private NavigationManager Navigation { get; set; } = default!;
+    public string Barcode { get; set; } = default!;
 
-    private string selectedButton = "Toevoegen";
+    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+
+    private string selectedButton = "Wijzigen";
     public void SelectButton(string page)
     {
         selectedButton = page;
@@ -16,5 +18,11 @@ public partial class Index
     private string GetButtonClass(string buttonName)
     {
         return $"px-3 text-gray-600 rounded-lg {(selectedButton == buttonName ? "bg-gray-300 rounded-lg" : "")}";
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        BarcodeService.Barcode = Barcode;
+        return Task.CompletedTask;
     }
 }
