@@ -7,6 +7,8 @@ public partial class ReservationModal : ComponentBase {
   [Parameter] public required EventCallback HideModal { get; set; }
   [Parameter] public required EventCallback Reserve { get; set; }
 
+  [Parameter] public string? ProductName { get; set; }
+
 }
 
 

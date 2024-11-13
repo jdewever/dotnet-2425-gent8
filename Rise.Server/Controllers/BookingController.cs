@@ -21,4 +21,10 @@ public class BookingController : ControllerBase
     {
         return await bookingService.GetBookingsByProductIdAsync(productId);
     }
+
+    [HttpPost]
+    public async Task AddBooking(BookingDTO booking)
+    {
+        await bookingService.AddBookingAsync(booking);
+    }
 }

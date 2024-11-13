@@ -31,5 +31,18 @@ namespace Rise.Services.Products
                 })
                 .ToListAsync();
         }
+
+        public async Task AddBookingAsync(BookingDTO booking)
+        {
+            var newBooking = new Booking(
+                booking.ProductId,
+                booking.UserId,
+                booking.StartDate,
+                booking.EndDate
+            );
+
+            _dbContext.Booking.Add(newBooking);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

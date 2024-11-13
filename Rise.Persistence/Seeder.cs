@@ -545,9 +545,9 @@ public class Seeder
         {
             var bookings = new List<Booking>
             {
-                new Booking(firstReservableProduct.Id, "user1", DateTime.UtcNow.AddDays(-10), DateTime.UtcNow.AddDays(-5)),
-                new Booking(firstReservableProduct.Id, "user2", DateTime.UtcNow.AddDays(-8), DateTime.UtcNow.AddDays(-3)),
-                new Booking(firstReservableProduct.Id, "user3", DateTime.UtcNow.AddDays(-6), DateTime.UtcNow.AddDays(-1))
+                new Booking(firstReservableProduct.Id, "user1", DateTime.UtcNow.AddDays(+10), DateTime.UtcNow.AddDays(+15)),
+                new Booking(firstReservableProduct.Id, "user2", DateTime.UtcNow.AddDays(+18), DateTime.UtcNow.AddDays(+21)),
+                new Booking(firstReservableProduct.Id, "user3", DateTime.UtcNow.AddDays(+23), DateTime.UtcNow.AddDays(+24))
             };
 
             dbContext.Booking.AddRange(bookings);

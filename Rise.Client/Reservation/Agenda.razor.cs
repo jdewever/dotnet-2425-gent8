@@ -2,6 +2,7 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Web;
+using Rise.Shared.Products;
 
 
 namespace Rise.Client.Reservation;
@@ -15,6 +16,10 @@ public partial class Agenda : ComponentBase
 
     [Inject] IJSRuntime? JSRuntime {get; set;}
 
+    [Inject] IProductService ProductService { get; set; } = null!;
+    [Inject] IBookingService BookingService { get; set; } = null!;
+    [Inject] BarcodeService BarcodeService { get; set; } = null!;
+
 
     public DateTime currentMonth = DateTime.Now;
     public bool isSelecting = false;
@@ -22,6 +27,18 @@ public partial class Agenda : ComponentBase
     public int? firstSelectedDay = null;
     public int? lastSelectedDay = null;
     public bool isModalVisible = false;
+
+    private ProductDTO? product;
+    private List<BookingDTO>? bookings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductService.GetProductByBarcode(BarcodeService.Barcode);
+        if (product != null)
+        {
+            bookings = await BookingService.GetBookingsByProductIdAsync(product.Id);
+        }
+    }
     
     
 
@@ -68,12 +85,27 @@ public partial class Agenda : ComponentBase
     {
         isModalVisible = false;
     }
-
-    private void Reserve()
+    private async Task Reserve()
     {
-        ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
-        NavigationManager?.NavigateTo("/products");
-        HideModal();
+        if (firstSelectedDay.HasValue && lastSelectedDay.HasValue && product != null)
+        {
+            var startDate = new DateTime(currentMonth.Year, currentMonth.Month, firstSelectedDay.Value);
+            var endDate = new DateTime(currentMonth.Year, currentMonth.Month, lastSelectedDay.Value);
+
+            var booking = new BookingDTO
+            {
+                ProductId = product.Id,
+                StartDate = startDate,
+                EndDate = endDate,
+                UserId = "TestId"
+            };
+
+            await BookingService.AddBookingAsync(booking);
+            ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
+            NavigationManager?.NavigateTo("/products");
+            HideModal();
+            await OnInitializedAsync(); 
+        }
     }
     private string GetSelectedDateRange()
     {
@@ -92,24 +124,78 @@ public partial class Agenda : ComponentBase
 
     private void SelectDay(int day)
     {
-        var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
-        if (isSelecting && !isPastDate)
+        if (!IsValidDay(day))
+        {
+            return;
+        }
+
+        if (isSelecting && !IsPastDate(day))
         {
             if (!firstSelectedDay.HasValue)
             {
-                firstSelectedDay = day;
+                firstSelectedDay = FindNextAvailableDay(day);
+                if (!firstSelectedDay.HasValue)
+                {
+                    return;
+                }
             }
+
             lastSelectedDay = day;
 
             selectedDays.Clear();
+            bool encounteredBookedDate = false;
             for (int i = Math.Min(firstSelectedDay.Value, lastSelectedDay.Value); i <= Math.Max(firstSelectedDay.Value, lastSelectedDay.Value); i++)
             {
+                if (IsBookedDay(i))
+                {
+                    encounteredBookedDate = true;
+                    break;
+                }
                 selectedDays.Add(i);
             }
 
-            StateHasChanged(); 
+            if (encounteredBookedDate)
+            {
+                ResetSelectionToFirstDay();
+            }
+
+            StateHasChanged();
         }
     }
+
+    private bool IsValidDay(int day)
+    {
+        return day >= 1 && day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month);
+    }
+
+    private bool IsPastDate(int day)
+    {
+        return currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
+    }
+
+    private bool IsBookedDay(int day)
+    {
+        var date = new DateTime(currentMonth.Year, currentMonth.Month, day);
+        return bookings != null && bookings.Any(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date);
+    }
+
+    private int? FindNextAvailableDay(int day)
+    {
+        while (IsBookedDay(day) && day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month))
+        {
+            day++;
+        }
+
+        return day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month) ? day : (int?)null;
+    }
+
+    private void ResetSelectionToFirstDay()
+    {
+        lastSelectedDay = firstSelectedDay;
+        selectedDays.Clear();
+        selectedDays.Add(firstSelectedDay!.Value);
+    }
+
 
     [JSInvokable]
     public void UpdateSelection(int day)
@@ -124,4 +210,6 @@ public partial class Agenda : ComponentBase
             await JSRuntime!.InvokeVoidAsync("dragSelection.startSelection", DotNetObjectReference.Create(this));
         }
     }
+
+    
 }

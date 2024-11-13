@@ -1,7 +1,7 @@
 <div>
     <div class="flex justify-center items-center space-x-8 mb-8">
         <span class="bg-gray-500 rounded-full px-4 py-2">Niet Beschikbaar</span>
-        <span class="bg-gray-200 rounded-full px-4 py-2">Gereserveerd</span>
+        <span class="bg-gray-300 rounded-full px-4 py-2">Gereserveerd</span>
     </div>
     
     <div class="w-full max-w-lg mx-auto">
@@ -25,14 +25,22 @@
             <span class="font-semibold">Za</span>
             <span class="font-semibold">Zo</span>
             
-            @for (int day = 1; day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month); day++)
+           @for (int day = 1; day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month); day++)
             {
                 var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
                 var isInRange = firstSelectedDay.HasValue && lastSelectedDay.HasValue && day >= Math.Min(firstSelectedDay.Value, lastSelectedDay.Value) && day <= Math.Max(firstSelectedDay.Value, lastSelectedDay.Value);
                 var isFirstInRange = firstSelectedDay.HasValue && day == firstSelectedDay.Value;
                 var isLastInRange = lastSelectedDay.HasValue && day == lastSelectedDay.Value;
                 var isFirstAfterLast = firstSelectedDay.HasValue && lastSelectedDay.HasValue && firstSelectedDay.Value > lastSelectedDay.Value;
-                <div class="relative p-2 border rounded h-20 day-cell @(isPastDate ? "bg-gray-100" : "")" data-day="@day" @onmouseover="() => SelectDay(day)" style="@(isPastDate ? "pointer-events: none;" : "")">
+                var currentDate = new DateTime(currentMonth.Year, currentMonth.Month, day);
+                var isBooked = bookings != null && bookings.Any(b => b.StartDate.Date <= currentDate.Date && b.EndDate.Date >= currentDate.Date);
+                var isFirstBookedDay = bookings != null && bookings.Any(b => b.StartDate.Date == currentDate.Date);
+                var isLastBookedDay = bookings != null && bookings.Any(b => b.EndDate.Date == currentDate.Date);
+                <div class="relative p-2 border rounded h-20 day-cell @(isPastDate ? "bg-gray-50" : "") @(isBooked ? "non-selectable" : "")" data-day="@day" @onmouseover="() => SelectDay(day)" style="@(isPastDate ? "pointer-events: none;" : "")">
+                    @if (isBooked)
+                    {
+                        <div class="absolute mt-2 left-0 right-0 mx-auto bg-gray-300 @(isFirstBookedDay ? "rounded-l ml-2" : "") @(isLastBookedDay ? "rounded-r mr-2" : "")" style="height: 10px; top: 15px;"></div>
+                    }
                     <div class="absolute mt-2 left-0 right-0 mx-auto bg-green-500 @(isFirstInRange ? (isFirstAfterLast ? "rounded-r mr-2" : "rounded-l ml-2") : "") @(isLastInRange ? (isFirstAfterLast ? "rounded-l ml-2" : "rounded-r mr-2") : "")" style="height: 10px; top: 15px;" hidden="@(isInRange ? false : true)"></div>
                     <span class="absolute top-1 left-1 text-xs select-none pointer-events-none">@day</span>
                 </div>
@@ -47,5 +55,5 @@
 
 @if (isModalVisible)
 {
-    <ReservationModal GetSelectedDateRange="GetSelectedDateRange" HideModal="HideModal" Reserve="Reserve" />
+    <ReservationModal GetSelectedDateRange="GetSelectedDateRange" HideModal="HideModal" Reserve="Reserve" ProductName="@product?.Name"/>
 }

@@ -23,6 +23,6 @@ public partial class ProductView : ComponentBase
     private void OnReserverenClick()
     {
         BarcodeService.Barcode = Product.Barcode;
-        Navigation.NavigateTo("/tempres");
+        Navigation.NavigateTo("/agenda");
     }
 }

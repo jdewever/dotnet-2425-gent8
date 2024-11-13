@@ -17,5 +17,10 @@ namespace Rise.Client.Products
             var bookings = await _httpClient.GetFromJsonAsync<List<BookingDTO>>($"booking/{productId}");
             return bookings ?? new List<BookingDTO>();
         }
+
+        public async Task AddBookingAsync(BookingDTO booking)
+        {
+            await _httpClient.PostAsJsonAsync("booking", booking);
+        }
     }
 }

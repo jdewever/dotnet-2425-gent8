@@ -29,7 +29,7 @@ public partial class NavMenu : ComponentBase
             },
         },
         new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
-        new NavItem { Label = "Reserveringen", Href = "agenda", Icon = "reservation" },
+        new NavItem { Label = "Reserveringen", Href = "reserveringen", Icon = "reservation" },
     };
 
     private void ToggleNavMenu() {
