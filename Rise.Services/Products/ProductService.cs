@@ -161,7 +161,7 @@ public class ProductService : IProductService
         return categoriesDto;
     }
 
-    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
         // todo: check admin / inv mgr to show in case of hidden products
         IQueryable<ProductDTO> query = dbContext.Products
@@ -247,19 +247,13 @@ public class ProductService : IProductService
                                     .Where(c => product.CategoryIds.Contains(c.Id))
                                     .ToListAsync();
 
-        // creer unique barcode
-        var barcode = GenerateBarcode();
-        while (await dbContext.Products.AnyAsync(p => p.Barcode == barcode))
-        {
-            barcode = GenerateBarcode();
-        }
-
         // todo: validate categories & product
+        // todo: check unique barcode
         var newProduct = new Product
         {
             Name = product.Name,
             Description = product.Description,
-            Barcode = barcode,
+            Barcode = product.Barcode,
             QuantityInStock = product.QuantityInStock,
             QuantityOnOrder = product.QuantityOnOrder,
             LowStock = product.LowStock,
@@ -273,10 +267,15 @@ public class ProductService : IProductService
         await dbContext.SaveChangesAsync();
     }
 
-    private static string GenerateBarcode()
+    public async Task<BarcodeResponse> GetNewBarcode()
     {
         var random = new Random();
         var barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
-        return barcode;
+
+        while (await dbContext.Products.AnyAsync(p => p.Barcode == barcode))
+        {
+            barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
+        }
+        return new BarcodeResponse { Barcode = barcode };
     }
 }

@@ -46,6 +46,14 @@ public class ProductController : ControllerBase
         await productService.AddProduct(product);
     }
 
+    // get a new barcode that's not in use
+    [HttpGet("barcode")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task<BarcodeResponse> GetNewBarcode()
+    {
+        return await productService.GetNewBarcode();
+    }
+
     // get product by barcode
     [HttpGet("{barcode}")]
     public async Task<ProductDTO> GetProductByBarcode(string barcode)
