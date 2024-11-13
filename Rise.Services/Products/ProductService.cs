@@ -30,6 +30,7 @@ public class ProductService : IProductService
         {
             query = from p in dbContext.Products
                     from c in p.Categories
+                    where !p.IsDeleted
                     where request.CategoryIds.Contains(c.Id)
                     select new ProductDTO
                     {
@@ -43,23 +44,30 @@ public class ProductService : IProductService
                         ClassRoomCode = p.ClassRoomCode,
                         Categories = CategoryEntityToDto(p.Categories),
                         IsReservable = p.IsReservable,
+                        IsHidden = p.IsHidden,
                     };
         }
         else
         {
-            query = dbContext.Products.Select(x => new ProductDTO
+            query = dbContext.Products.Where(p => !p.IsDeleted).Select(p => new ProductDTO
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                Barcode = x.Barcode,
-                QuantityInStock = x.QuantityInStock,
-                QuantityOnOrder = x.QuantityOnOrder,
-                LowStock = x.LowStock,
-                ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories),
-                IsReservable = x.IsReservable,
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Barcode = p.Barcode,
+                QuantityInStock = p.QuantityInStock,
+                QuantityOnOrder = p.QuantityOnOrder,
+                LowStock = p.LowStock,
+                ClassRoomCode = p.ClassRoomCode,
+                Categories = CategoryEntityToDto(p.Categories),
+                IsReservable = p.IsReservable,
+                IsHidden = p.IsHidden,
             });
+        }
+
+        if (request.IncludeHidden != true)
+        {
+            query = query.Where(x => !x.IsHidden);
         }
 
         //by default only get the non-reservable products
@@ -119,11 +127,30 @@ public class ProductService : IProductService
         };
     }
 
+    // start using this helper
+    private static ProductDTO CreateProductDTO(Product product)
+    {
+        return new ProductDTO
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Description = product.Description,
+            Barcode = product.Barcode,
+            QuantityInStock = product.QuantityInStock,
+            QuantityOnOrder = product.QuantityOnOrder,
+            LowStock = product.LowStock,
+            ClassRoomCode = product.ClassRoomCode,
+            Categories = CategoryEntityToDto(product.Categories),
+            IsReservable = product.IsReservable,
+            IsHidden = product.IsHidden,
+        };
+    }
     private static List<CategoryDTO> CategoryEntityToDto(List<Category> categories)
     {
         var categoriesDto = new List<CategoryDTO>();
         categories.ForEach(category =>
         {
+            if (category.IsDeleted) return;
             categoriesDto.Add(new CategoryDTO
             {
                 Id = category.Id,
@@ -136,20 +163,22 @@ public class ProductService : IProductService
 
     public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
     {
+        // todo: check admin / inv mgr to show in case of hidden products
         IQueryable<ProductDTO> query = dbContext.Products
-            .Where(x => x.Barcode == barcode)
-            .Select(x => new ProductDTO
+            .Where(p => p.Barcode == barcode && !p.IsDeleted)
+            .Select(p => new ProductDTO
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                Barcode = x.Barcode,
-                QuantityInStock = x.QuantityInStock,
-                QuantityOnOrder = x.QuantityOnOrder,
-                LowStock = x.LowStock,
-                ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories),
-                IsReservable = x.IsReservable, 
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Barcode = p.Barcode,
+                QuantityInStock = p.QuantityInStock,
+                QuantityOnOrder = p.QuantityOnOrder,
+                LowStock = p.LowStock,
+                ClassRoomCode = p.ClassRoomCode,
+                Categories = CategoryEntityToDto(p.Categories),
+                IsReservable = p.IsReservable,
+                IsHidden = p.IsHidden,
             });
 
         var product = await query.FirstOrDefaultAsync();
@@ -163,36 +192,91 @@ public class ProductService : IProductService
 
     public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
     {
+        // todo: decide if we want to show hidden products
         IQueryable<ProductDTO> query = dbContext.Products
-            .Where(x => x.QuantityInStock + x.QuantityOnOrder < x.LowStock)
-            .Select(x => new ProductDTO
+            .Where(p => p.QuantityInStock + p.QuantityOnOrder < p.LowStock && !p.IsDeleted)
+            .Select(p => new ProductDTO
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                Barcode = x.Barcode,
-                QuantityInStock = x.QuantityInStock,
-                QuantityOnOrder = x.QuantityOnOrder,
-                LowStock = x.LowStock,
-                ClassRoomCode = x.ClassRoomCode,
-                Categories = CategoryEntityToDto(x.Categories),
-                IsReservable = x.IsReservable,  
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Barcode = p.Barcode,
+                QuantityInStock = p.QuantityInStock,
+                QuantityOnOrder = p.QuantityOnOrder,
+                LowStock = p.LowStock,
+                ClassRoomCode = p.ClassRoomCode,
+                Categories = CategoryEntityToDto(p.Categories),
+                IsReservable = p.IsReservable,
+                IsHidden = p.IsHidden,
             });
 
         return await query.ToListAsync();
     }
 
-    public async Task HideProduct(string barcode)
+    public async Task ToggleHideProduct(string barcode)
     {
-        var product = await dbContext.Products.Where(x => x.Barcode == barcode).FirstOrDefaultAsync();
+        var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync();
         if (product is not null)
         {
-            product.IsDeleted = true;
+            product.IsHidden = !product.IsHidden;
+            await dbContext.SaveChangesAsync();
         }
         else
         {
             throw new Exception($"Product with barcode {barcode} not found.");
         }
+    }
+
+    public async Task DeleteProduct(string barcode)
+    {
+        var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync();
+        if (product is not null)
+        {
+            dbContext.Products.Remove(product);
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception($"Product with barcode {barcode} not found.");
+        }
+    }
+
+    public async Task AddProduct(ProductCreationDTO product)
+    {
+        var categories = await dbContext.Categories
+                                    .Where(c => product.CategoryIds.Contains(c.Id))
+                                    .ToListAsync();
+
+        // creer unique barcode
+        var barcode = GenerateBarcode();
+        while (await dbContext.Products.AnyAsync(p => p.Barcode == barcode))
+        {
+            barcode = GenerateBarcode();
+        }
+
+        // todo: validate categories & product
+        var newProduct = new Product
+        {
+            Name = product.Name,
+            Description = product.Description,
+            Barcode = barcode,
+            QuantityInStock = product.QuantityInStock,
+            QuantityOnOrder = product.QuantityOnOrder,
+            LowStock = product.LowStock,
+            ClassRoomCode = product.ClassRoomCode,
+            IsReservable = product.IsReservable,
+            IsHidden = false,
+            Categories = categories
+        };
+
+        dbContext.Products.Add(newProduct);
         await dbContext.SaveChangesAsync();
+    }
+
+    private static string GenerateBarcode()
+    {
+        var random = new Random();
+        var barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
+        return barcode;
     }
 }

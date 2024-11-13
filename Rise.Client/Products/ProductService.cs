@@ -54,8 +54,19 @@ public class ProductService : IProductService
         return products!;
     }
 
-    public async Task HideProduct(string barcode)
+    public async Task AddProduct(ProductCreationDTO product)
+    {
+        await httpClient.PostAsJsonAsync("product", product);
+    }
+
+    public async Task ToggleHideProduct(string barcode)
+    {
+        await httpClient.PostAsync($"product/{barcode}/hide", null);
+    }
+
+    public async Task DeleteProduct(string barcode)
     {
         await httpClient.DeleteAsync($"product/{barcode}");
     }
+
 }
