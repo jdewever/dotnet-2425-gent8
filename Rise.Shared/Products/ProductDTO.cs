@@ -29,7 +29,8 @@ public class ProductDTO
 
     [Required(ErrorMessage = "Reservable is required.")]
     public required bool IsReservable { get; set; }
-    public required bool IsHidden { get; set; }
+
+    public bool IsHidden { get; set; }
 
     [Required(ErrorMessage = "Category is required.")]
     public required List<CategoryDTO>? Categories { get; set; }

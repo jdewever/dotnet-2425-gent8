@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text;
+using BarcodeStandard;
+using SkiaSharp;
 
 namespace Rise.Client.Products.AddProduct
 {
@@ -9,7 +12,7 @@ namespace Rise.Client.Products.AddProduct
     {
         private ProductDTO newProduct = new ProductDTO
         {
-            Id = 0, 
+            Id = 0,
             Name = string.Empty,
             Description = string.Empty,
             Barcode = string.Empty,
@@ -21,7 +24,12 @@ namespace Rise.Client.Products.AddProduct
             Categories = new List<CategoryDTO>()
         };
 
+        private BarcodeResponse barcode = null!; 
+        private string image = string.Empty; 
+
         [Inject] public required ICategoryService CategoryService { get; set; }
+        [Inject] public required IProductService ProductService { get; set; } 
+
         private List<string> SelectedCategories = new List<string> { "" };
         private List<string> CategoryOptions = new List<string>();
 
@@ -29,6 +37,9 @@ namespace Rise.Client.Products.AddProduct
         {
             var categories = await CategoryService.GetAllCategories();
             CategoryOptions = categories.Select(c => c.Name).ToList();
+
+            barcode = await ProductService.GetNewBarcode();
+            image = await ProductService.GetBarcodeImage(barcode.Barcode);
         }
 
         private void AddCategory()
@@ -51,9 +62,10 @@ namespace Rise.Client.Products.AddProduct
         {
 
         }
+
         private async Task HandleFileSelected()
         {
-
+            
         }
     }
 }
