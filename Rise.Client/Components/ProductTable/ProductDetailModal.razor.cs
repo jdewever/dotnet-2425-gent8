@@ -25,6 +25,6 @@ public partial class ProductDetailModal : ComponentBase
 
     private void ProductManagement()
     {
-        Navigation.NavigateTo("/products/management");
+        Navigation.NavigateTo($"/products/management/?barcode={SelectedProduct.Barcode}");
     }
 }

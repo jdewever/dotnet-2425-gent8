@@ -1,13 +1,24 @@
 
 using Microsoft.AspNetCore.Components;
+using Rise.Shared.Products;
 
 namespace Rise.Client.Products.Management;
 
 public partial class Index
 {
-    [Inject] private NavigationManager Navigation { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    public ProductDTO SelectedProduct { get; set; } = null!;
+    [Inject] private IProductService ProductService { get; set; } = null!;
 
-    private string selectedButton = "Toevoegen";
+    private string GetQueryParm(string parmName)
+    {
+        var uriBuilder = new UriBuilder(NavigationManager.Uri);
+        var q = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+        return q[parmName] ?? "";
+    }
+
+
+    private string selectedButton = "Wijzigen";
     public void SelectButton(string page)
     {
         selectedButton = page;
@@ -16,5 +27,10 @@ public partial class Index
     private string GetButtonClass(string buttonName)
     {
         return $"px-3 text-gray-600 rounded-lg {(selectedButton == buttonName ? "bg-gray-300 rounded-lg" : "")}";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SelectedProduct = await ProductService.GetProductByBarcode(GetQueryParm("barcode"));
     }
 }
