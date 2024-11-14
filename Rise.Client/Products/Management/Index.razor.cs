@@ -7,7 +7,7 @@ namespace Rise.Client.Products.Management;
 public partial class Index
 {
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-    public ProductDTO SelectedProduct { get; set; } = default!;
+    public ProductDTO SelectedProduct { get; set; } = null!;
     [Inject] private IProductService ProductService { get; set; } = null!;
 
     private string GetQueryParm(string parmName)
@@ -29,7 +29,7 @@ public partial class Index
         return $"px-3 text-gray-600 rounded-lg {(selectedButton == buttonName ? "bg-gray-300 rounded-lg" : "")}";
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         SelectedProduct = await ProductService.GetProductByBarcode(GetQueryParm("barcode"));
     }

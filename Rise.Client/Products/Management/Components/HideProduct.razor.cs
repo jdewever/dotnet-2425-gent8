@@ -13,6 +13,11 @@ namespace Rise.Client.Products.Management.Components
 
         private async Task HideProductHandler()
         {
+            if (SelectedProduct.IsHidden)
+            {
+                ToastService.ShowError("Product is al verborgen");
+                return;
+            }
             await ProductService.ToggleHideProduct(SelectedProduct.Barcode);
             ToastService.ShowSuccess($"Product {SelectedProduct.Name} succesvol verborgen"); // TODO: Catch error
         }

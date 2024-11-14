@@ -14,17 +14,26 @@
         }
     </div>
     <main>
-        @switch (selectedButton)
+        @if (SelectedProduct == null)
         {
-            case "Wijzigen":
-                <EditProduct />
-                break;
-            case "Verbergen":
-                <HideProduct />
-                break;
-            case "Verwijderen":
-                <DeleteProduct />
-                break;
+            <div class="flex flex-col w-full items-center p-4">
+                <p class="text-center text-gray-900">Geen product geselecteerd</p>
+            </div>
+        }
+        else
+        {
+            @switch (selectedButton)
+            {
+                case "Wijzigen":
+                    <EditProduct />
+                    break;
+                case "Verbergen":
+                    <HideProduct />
+                    break;
+                case "Verwijderen":
+                    <DeleteProduct />
+                    break;
+            }
         }
     </main>
 </CascadingValue>
