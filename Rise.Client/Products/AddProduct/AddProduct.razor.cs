@@ -10,9 +10,8 @@ namespace Rise.Client.Products.AddProduct
 {
     public partial class AddProduct
     {
-        private ProductDTO newProduct = new ProductDTO
+        private ProductCreationDTO newProduct = new ProductCreationDTO
         {
-            Id = 0,
             Name = string.Empty,
             Description = string.Empty,
             Barcode = string.Empty,
@@ -21,7 +20,8 @@ namespace Rise.Client.Products.AddProduct
             LowStock = 0,
             ClassRoomCode = string.Empty,
             IsReservable = false,
-            Categories = new List<CategoryDTO>()
+            IsHidden = false,
+            CategoryIds = new List<int>()
         };
 
         private BarcodeResponse barcode = null!; 
@@ -37,6 +37,7 @@ namespace Rise.Client.Products.AddProduct
         {
             var categories = await CategoryService.GetAllCategories();
             CategoryOptions = categories.Select(c => c.Name).ToList();
+            CategoryOptions.Add("Andere");
 
             barcode = await ProductService.GetNewBarcode();
             image = await ProductService.GetBarcodeImage(barcode.Barcode);
@@ -60,7 +61,16 @@ namespace Rise.Client.Products.AddProduct
 
         private async Task HandleValidSubmit()
         {
-
+            Console.WriteLine(newProduct.Name);
+            Console.WriteLine(newProduct.Barcode);
+            Console.WriteLine(newProduct.QuantityInStock);
+            Console.WriteLine(newProduct.QuantityOnOrder);
+            Console.WriteLine(newProduct.LowStock);
+            Console.WriteLine(newProduct.IsHidden);
+            Console.WriteLine(newProduct.IsReservable);
+            Console.WriteLine(newProduct.ClassRoomCode);
+            Console.WriteLine(newProduct.Description);
+            await ProductService.AddProduct(newProduct);
         }
 
         private async Task HandleFileSelected()
