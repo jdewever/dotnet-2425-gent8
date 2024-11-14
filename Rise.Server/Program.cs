@@ -12,6 +12,7 @@ using Rise.Shared.Cart;
 using Rise.Services.Cart;
 using Rise.Shared.Transaction;
 using Rise.Services.Transaction;
+using Auth0Net.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +76,14 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<ITransactionItemService, TransactionItemService>();
+
+builder.Services.AddAuth0AuthenticationClient(config =>
+{
+    config.Domain = builder.Configuration["Auth0:Authority"]!;
+    config.ClientId = builder.Configuration["Auth0:M2MClientId"];
+    config.ClientSecret = builder.Configuration["Auth0:M2MClientSecret"];
+});
+builder.Services.AddAuth0ManagementClient().AddManagementAccessToken();
 
 var app = builder.Build();
 
