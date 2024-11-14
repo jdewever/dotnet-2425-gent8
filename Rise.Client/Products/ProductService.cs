@@ -34,18 +34,10 @@ public class ProductService : IProductService
         return locations!;
     }
 
-    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
-        try
-        {
-            var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/barcode?barcode={barcode}");
-            return product!;
-        }
-        catch (Exception e)
-        {
-            // Log error
-        }
-        return null;
+        var product = await httpClient.GetFromJsonAsync<ProductDTO>($"product/{barcode}");
+        return product!;
     }
 
     public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
@@ -69,4 +61,15 @@ public class ProductService : IProductService
         await httpClient.DeleteAsync($"product/{barcode}");
     }
 
+    public async Task<BarcodeResponse> GetNewBarcode()
+    {
+        var barcode = await httpClient.GetFromJsonAsync<BarcodeResponse>("product/barcode");
+        return barcode!;
+    }
+
+    public async Task<string> GetBarcodeImage(string barcode)
+    {
+        var image = await httpClient.GetStringAsync($"product/{barcode}/image");
+        return image;
+    }
 }
