@@ -26,7 +26,6 @@ namespace Rise.Client.Products.AddProduct
         };
 
         private BarcodeResponse barcode = null!; 
-        private string image = string.Empty; 
 
         [Inject] public required ICategoryService CategoryService { get; set; }
         [Inject] public required IProductService ProductService { get; set; }
@@ -41,27 +40,11 @@ namespace Rise.Client.Products.AddProduct
             CategoryOptions = categories.ToList();
 
             barcode = await ProductService.GetNewBarcode();
-            image = await ProductService.GetBarcodeImage(barcode.Barcode);
+            newProduct.Barcode = barcode.Barcode;
         }
 
         private async Task HandleValidSubmit()
         {
-            Console.WriteLine(newProduct.Name);
-            Console.WriteLine(newProduct.ClassRoomCode);
-            Console.WriteLine(newProduct.Description);
-            Console.WriteLine(newProduct.Barcode);
-            Console.WriteLine(newProduct.QuantityInStock);
-            Console.WriteLine(newProduct.QuantityOnOrder);
-            Console.WriteLine(newProduct.LowStock);
-            Console.WriteLine(newProduct.IsReservable);
-            Console.WriteLine(newProduct.IsHidden);
-
-            Console.WriteLine("Category IDs:");
-            foreach (var categoryId in newProduct.CategoryIds)
-            {
-                Console.WriteLine(categoryId);
-            }
-
             await ProductService.AddProduct(newProduct);
         }
 

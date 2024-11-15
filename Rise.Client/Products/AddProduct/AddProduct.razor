@@ -1,7 +1,7 @@
 @page "/products/add"
 
 <body class="flex items-center justify-center min-h-screen">
-    <div class="max-w-2xl mt-5">
+    <div class="max-w-3xl mt-5">
         <div>
             <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
@@ -25,9 +25,9 @@
 
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div>
-                            <div class="mt-5">
+                            <div>
                                 <label for="barcodeImage" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
-                                @if (!string.IsNullOrEmpty(image))
+                                @if (!string.IsNullOrEmpty(newProduct.Barcode))
                                 {
                                     <img src="https://localhost:5001/api/Product/@barcode.Barcode/image" alt="Barcode" class="w-full h-auto" />
                                 }
@@ -37,14 +37,16 @@
                                 }
                             </div>
                         </div>
-                        <div class="mt-5">
+                        <div>
                             <label class="block mb-2 text-sm font-medium text-gray-900" for="user_avatar">Foto</label>
                             <InputFile OnChange="HandleFileSelected" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-pointer" />
                         </div>
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-3 md:gap-6 mt-5">
+                <hr class="my-12 h-0.5 border-t-0 bg-neutral-200" />
+
+                <div class="grid md:grid-cols-3 md:gap-6">
                     <div>
                         <label for="lowStock" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Aantal toevoegen in stock</label>
                         <InputNumber @bind-Value="newProduct.QuantityInStock" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="aantal" />
@@ -65,11 +67,11 @@
                 <div class="grid md:grid-cols-3 md:gap-6 mt-5">
                     <div>
                         <div>
-                            <InputCheckbox @bind-Value="newProduct.IsReservable" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 mt-8" />
+                            <InputCheckbox @bind-Value="newProduct.IsReservable" class="peer w-4 h-4 text-gray-300 bg-gray-100 border-gray-300 rounded focus:ring-gray-3000 mt-8 peer-checked:bg-gray-300 peer-checked:border-gray-300" />
                             <label for="checkbox-3" class="ms-2 text-sm font-medium mt-10">Product is reserveerbaar</label>
                         </div>
                         <div>
-                            <InputCheckbox @bind-Value="newProduct.IsHidden" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 mt-8" />
+                            <InputCheckbox @bind-Value="newProduct.IsHidden" class="peer w-4 h-4 text-gray-300 bg-gray-100 border-gray-300 rounded focus:ring-gray-300 mt-8 peer-checked:bg-gray-300 peer-checked:border-gray-300" />
                             <label for="checkbox-3" class="ms-2 text-sm font-medium mt-10">Product verbergen</label>
                         </div>
                     </div>
@@ -90,25 +92,31 @@
                                 </svg>
                             </button>
                         </div>
-                        @if (newProduct.CategoryIds.Count >= 3)
-                        {
-                            <p class="text-xs text-red-500 mt-2">Je kan maximaal 3 categorieën toekennen</p>
-                        }
+                            @if (newProduct.CategoryIds.Count >= 3)
+                            {
+                                <p class="text-xs text-red-500 mt-2">Je kan maximaal 3 categorieën toekennen</p>
+                            }
                     </div>
 
                     <div class="flex-wrap gap-2 mt-4">
                         @foreach (var selectedCategory in newProduct.CategoryIds)
                         {
-                            <div class="flex items-center bg-gray-200 px-3 py-1 rounded-full justify-between w-full">
+                            <div class="flex items-center bg-gray-200 px-3 py-1 rounded-full justify-between w-full mb-2">
                                 <span>@CategoryOptions.FirstOrDefault(c => c.Id == selectedCategory)?.Name</span>
-                                <button type="button" class="text-red-500" @onclick="() => RemoveCategory(selectedCategory)">x</button>
+                                <button type="button" class="text-red-500" @onclick="() => RemoveCategory(selectedCategory)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM6.75 9.25a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         }
                     </div>
                 </div>
 
-                <div class="flex justify-center mb-5 mt-6">
-                    <button type="submit" class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600">Opslaan</button>
+                <hr class="my-12 h-0.5 border-t-0 bg-neutral-200" />
+
+                <div class="flex justify-center mb-5">
+                    <button type="submit" class="bg-gray-200 text-gray-700 px-5 py-2 rounded-lg hover:bg-gray-300">Opslaan</button>
                 </div>
             </EditForm>
         </div>
