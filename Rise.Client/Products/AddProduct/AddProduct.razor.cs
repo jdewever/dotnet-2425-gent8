@@ -29,35 +29,19 @@ namespace Rise.Client.Products.AddProduct
         private string image = string.Empty; 
 
         [Inject] public required ICategoryService CategoryService { get; set; }
-        [Inject] public required IProductService ProductService { get; set; } 
+        [Inject] public required IProductService ProductService { get; set; }
 
-        private List<string> SelectedCategories = new List<string> { "" };
-        private List<string> CategoryOptions = new List<string>();
+        private int selectedCategory;
+        private bool isAddButtonClicked = false;
+        private List<CategoryDTO> CategoryOptions = new List<CategoryDTO>();
 
         protected override async Task OnInitializedAsync()
         {
             var categories = await CategoryService.GetAllCategories();
-            CategoryOptions = categories.Select(c => c.Name).ToList();
-            CategoryOptions.Add("Andere");
+            CategoryOptions = categories.ToList();
 
             barcode = await ProductService.GetNewBarcode();
             image = await ProductService.GetBarcodeImage(barcode.Barcode);
-        }
-
-        private void AddCategory()
-        {
-            if (SelectedCategories.Count < 3)
-            {
-                SelectedCategories.Add("");
-            }
-        }
-
-        private void RemoveCategory(int index)
-        {
-            if (index >= 0 && index <= SelectedCategories.Count)
-            {
-                SelectedCategories.RemoveAt(index-1);
-            }
         }
 
         private async Task HandleValidSubmit()
@@ -72,7 +56,27 @@ namespace Rise.Client.Products.AddProduct
             Console.WriteLine(newProduct.IsReservable);
             Console.WriteLine(newProduct.IsHidden);
 
+            Console.WriteLine("Category IDs:");
+            foreach (var categoryId in newProduct.CategoryIds)
+            {
+                Console.WriteLine(categoryId);
+            }
+
             await ProductService.AddProduct(newProduct);
+        }
+
+        private void AddCategory()
+        {
+            if (newProduct.CategoryIds.Count < 3 && selectedCategory > 0)
+            {
+                newProduct.CategoryIds.Add(selectedCategory);
+                selectedCategory = 0; 
+            }
+        }
+
+        private void RemoveCategory(int categoryId)
+        {
+            newProduct.CategoryIds.Remove(categoryId);
         }
 
         private async Task HandleFileSelected()
