@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using BarcodeStandard;
 using SkiaSharp;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Rise.Client.Products.AddProduct
 {
@@ -62,20 +63,21 @@ namespace Rise.Client.Products.AddProduct
         private async Task HandleValidSubmit()
         {
             Console.WriteLine(newProduct.Name);
+            Console.WriteLine(newProduct.ClassRoomCode);
+            Console.WriteLine(newProduct.Description);
             Console.WriteLine(newProduct.Barcode);
             Console.WriteLine(newProduct.QuantityInStock);
             Console.WriteLine(newProduct.QuantityOnOrder);
             Console.WriteLine(newProduct.LowStock);
-            Console.WriteLine(newProduct.IsHidden);
             Console.WriteLine(newProduct.IsReservable);
-            Console.WriteLine(newProduct.ClassRoomCode);
-            Console.WriteLine(newProduct.Description);
+            Console.WriteLine(newProduct.IsHidden);
+
             await ProductService.AddProduct(newProduct);
         }
 
         private async Task HandleFileSelected()
         {
-            
+
         }
     }
 }
