@@ -23,15 +23,48 @@
             document.addEventListener('mousemove', function (event) {
                 if (event.buttons === 1) { 
                     let element = document.elementFromPoint(event.clientX, event.clientY);
-                    if (element && !element.classList.contains('day-cell')) {
-                        element = element.closest('.day-cell');
+                    if (element && !element.classList.contains('hour-cell')) {
+                        element = element.closest('.hour-cell');
                     }
-                    if (element && element.classList.contains('day-cell')) {
-                        const day = element.getAttribute('data-day');
-                        dotNetHelper.invokeMethodAsync('UpdateSelection', parseInt(day));
+                    if (element && element.classList.contains('hour-cell')) {
+                        const hour = element.getAttribute('data-hour');
+                        dotNetHelper.invokeMethodAsync('UpdateSelection', parseInt(hour));
                     }
                 }
             });
         }
     };
+    window.dragSelectDays = {
+    initialize: function (dotNetHelper) {
+        const calendarElement = document.getElementById('calendarGrid');
+        if (!calendarElement) {
+            console.error('Calendar grid element not found');
+            return;
+        }
+
+        let isMouseDown = false;
+        let startCell = null;
+
+        calendarElement.addEventListener('mousedown', (event) => {
+            if (event.target.classList.contains('day-cell')) {
+                isMouseDown = true;
+                startCell = event.target;
+                dotNetHelper.invokeMethodAsync('StartDaySelection', parseInt(startCell.getAttribute('data-day')));
+            }
+        });
+
+        calendarElement.addEventListener('mouseover', (event) => {
+            if (isMouseDown && event.target.classList.contains('day-cell')) {
+                dotNetHelper.invokeMethodAsync('UpdateDaySelection', parseInt(event.target.getAttribute('data-day')));
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isMouseDown) {
+                isMouseDown = false;
+                dotNetHelper.invokeMethodAsync('EndDaySelection');
+            }
+        });
+    }
+};
 </script>

@@ -1,59 +1,263 @@
-<div>
-    <div class="flex justify-center items-center space-x-8 mb-8">
-        <span class="bg-gray-500 rounded-full px-4 py-2">Niet Beschikbaar</span>
-        <span class="bg-gray-300 rounded-full px-4 py-2">Gereserveerd</span>
-    </div>
-    
-    <div class="w-full max-w-lg mx-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-semibold">@currentMonth.ToString("MMMM yyyy")</h2>
-            <div class="space-x-2">
-                @if (!IsPreviousMonthDisabled)
+@inject IJSRuntime JSRuntime
+
+<div class="flex">
+    <div class="p-5 w-1/2">
+        <div class="flex justify-between mb-4">
+            <h2 class="text-xl font-semibold mx-4">@currentDate.ToString("d MMMM yyyy")</h2>
+            <div class="text-xl">
+                @if(currentDate.Date > DateTime.Now.Date)
                 {
-                    <button class="px-2 py-1 bg-gray-200 rounded" @onclick="PreviousMonth">&lt;</button>
+                    <button class="px-2 py-1" @onclick="PreviousDate">&lt;</button>
                 }
-                <button class="px-2 py-1 bg-gray-200 rounded" @onclick="NextMonth">&gt;</button>
+                <button class="px-2 py-1" @onclick="NextDate">&gt;</button>
             </div>
         </div>
-
-        <div class="grid grid-cols-7 text-center select-none" @onmousedown="StartSelection" @onmouseup="EndSelection" @onmousemove="(e) => UpdateSelection(e)">
-            <span class="font-semibold">Ma</span>
-            <span class="font-semibold">Di</span>
-            <span class="font-semibold">Wo</span>
-            <span class="font-semibold">Do</span>
-            <span class="font-semibold">Vr</span>
-            <span class="font-semibold">Za</span>
-            <span class="font-semibold">Zo</span>
-            
-           @for (int day = 1; day <= DateTime.DaysInMonth(currentMonth.Year, currentMonth.Month); day++)
-            {
-                var isPastDate = currentMonth.Year == DateTime.Now.Year && currentMonth.Month == DateTime.Now.Month && day < DateTime.Now.Day;
-                var isInRange = firstSelectedDay.HasValue && lastSelectedDay.HasValue && day >= Math.Min(firstSelectedDay.Value, lastSelectedDay.Value) && day <= Math.Max(firstSelectedDay.Value, lastSelectedDay.Value);
-                var isFirstInRange = firstSelectedDay.HasValue && day == firstSelectedDay.Value;
-                var isLastInRange = lastSelectedDay.HasValue && day == lastSelectedDay.Value;
-                var isFirstAfterLast = firstSelectedDay.HasValue && lastSelectedDay.HasValue && firstSelectedDay.Value > lastSelectedDay.Value;
-                var currentDate = new DateTime(currentMonth.Year, currentMonth.Month, day);
-                var isBooked = bookings != null && bookings.Any(b => b.StartDate.Date <= currentDate.Date && b.EndDate.Date >= currentDate.Date);
-                var isFirstBookedDay = bookings != null && bookings.Any(b => b.StartDate.Date == currentDate.Date);
-                var isLastBookedDay = bookings != null && bookings.Any(b => b.EndDate.Date == currentDate.Date);
-                <div class="relative p-2 border rounded h-20 day-cell @(isPastDate ? "bg-gray-50" : "") @(isBooked ? "non-selectable" : "")" data-day="@day" @onmouseover="() => SelectDay(day)" style="@(isPastDate ? "pointer-events: none;" : "")">
-                    @if (isBooked)
+        <div class="h-[calc(100vh-15rem)] overflow-y-auto mt-5 mx-10 no-scrollbar">
+            <div class="grid grid-cols-1">
+                @for (int hour = 0; hour < 24; hour++)
+                {
+                    int capturedHour = hour;
+                    <div class="h-24 flex items-top cursor-pointer hour-cell" data-hour="@capturedHour" @onclick="() => SelectHour(capturedHour)">
+                        <span class="font-bold w-16 select-none">@capturedHour:00</span>
+                        <div class="flex-grow border-t border-gray-300 ml-4 @GetHourClass(capturedHour)"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="p-5 w-1/2">
+        <h2 class="text-xl text-center font-semibold mx-4">@currentDate.ToString("MMMM yyyy")</h2>
+        <div class="h-[calc(100vh-15rem)] overflow-y-auto mt-5 mx-10 no-scrollbar" id="calendarGrid">
+            <div class="grid grid-cols-7 text-center">
+                <span class="font-semibold">Ma</span>
+                <span class="font-semibold">Di</span>
+                <span class="font-semibold">Wo</span>
+                <span class="font-semibold">Do</span>
+                <span class="font-semibold">Vr</span>
+                <span class="font-semibold">Za</span>
+                <span class="font-semibold">Zo</span>
+            </div>
+            <div class="grid grid-cols-7 text-center mt-4">
+                @for (int day = 1; day <= getDaysInMonth() + (7 - getDaysInMonth() % 7); day++)
+                {
+                    int capturedDay = (day - 1) % getDaysInMonth() + 1;
+                    if (day <= getDaysInMonth())
                     {
-                        <div class="absolute mt-2 left-0 right-0 mx-auto bg-gray-300 @(isFirstBookedDay ? "rounded-l ml-2" : "") @(isLastBookedDay ? "rounded-r mr-2" : "")" style="height: 10px; top: 15px;"></div>
+                        <span class="font-bold mt-4 select-none day-cell @GetDayClass(day)" data-day="@day" @onclick="() => SelectDay(capturedDay, false)">@capturedDay</span>
                     }
-                    <div class="absolute mt-2 left-0 right-0 mx-auto bg-green-500 @(isFirstInRange ? (isFirstAfterLast ? "rounded-r mr-2" : "rounded-l ml-2") : "") @(isLastInRange ? (isFirstAfterLast ? "rounded-l ml-2" : "rounded-r mr-2") : "")" style="height: 10px; top: 15px;" hidden="@(isInRange ? false : true)"></div>
-                    <span class="absolute top-1 left-1 text-xs select-none pointer-events-none">@day</span>
-                </div>
-            }
+                    else
+                    {
+                        <span class="font-bold mt-4 text-gray-400 select-none day-cell @GetDayClass(day)" data-day="@day" @onclick="() => SelectDay(capturedDay, true)">@capturedDay</span>
+                    }
+                }
+            </div>
         </div>
-        <div class="flex justify-center items-center">
-            <button class="mt-4 w-1/3 px-4 py-2 bg-gray-300 rounded" @onclick="ShowModal" disabled="@(!selectedDays.Any())">Reserveer</button>
-        </div>
-        
-    </div> 
+    </div>
 </div>
+
 
 @if (isModalVisible)
 {
-    <ReservationModal GetSelectedDateRange="GetSelectedDateRange" HideModal="HideModal" Reserve="Reserve" ProductName="@product?.Name"/>
+    <ReservationModal/>
+}
+
+@code {
+    private bool isModalVisible = false;
+    private DateTime currentDate = DateTime.Now;
+    private int? startHour = null;
+    private int? endHour = null;
+    private bool isSelecting = false;
+    private int? startDay = DateTime.Now.Day;
+    private int? endDay = DateTime.Now.Day;
+    
+    private int getDaysInMonth()
+    {
+        return DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+    }
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HideModal()
+    {
+        isModalVisible = false;
+    }
+
+    private void PreviousDate()
+    {
+        currentDate = currentDate.AddDays(-1);
+        startDay = currentDate.Day;
+        endDay = currentDate.Day;
+    }
+
+    private void NextDate()
+    {
+        currentDate = currentDate.AddDays(1);
+        startDay = currentDate.Day;
+        endDay = currentDate.Day;
+    }
+
+    private string GetHourClass(int hour)
+    {
+        if (startHour == null)
+        {
+            return "";
+        }
+
+        if (endHour == null)
+        {
+            return hour == startHour ? "bg-blue-300 rounded-t-lg rounded-b-lg" : "";
+        }
+
+        int firstHour = Math.Min(startHour.Value, endHour.Value);
+        int lastHour = Math.Max(startHour.Value, endHour.Value);
+
+        if (hour == firstHour && hour == lastHour)
+        {
+            return "bg-blue-300 rounded-t-lg rounded-b-lg";
+        }
+
+        if (hour == firstHour)
+        {
+            return "bg-blue-300 rounded-t-lg";
+        }
+
+        if (hour == lastHour)
+        {
+            return "bg-blue-300 rounded-b-lg";
+        }
+
+        return (hour > firstHour && hour < lastHour) ? "bg-blue-300" : "";
+    }
+    private string GetDayClass(int day)
+    {
+        if (startDay == null)
+        {
+            return "";
+        }
+
+        if (endDay == null)
+        {
+            return day == startDay ? "bg-blue-300 rounded-t-lg rounded-b-lg" : "";
+        }
+
+        int firstDay = Math.Min(startDay.Value, endDay.Value);
+        int lastDay = Math.Max(startDay.Value, endDay.Value);
+
+        if (day == firstDay && day == lastDay)
+        {
+            return "bg-blue-300 rounded-t-lg rounded-b-lg";
+        }
+
+        if (day == firstDay)
+        {
+            return "bg-blue-300 rounded-l-lg";
+        }
+
+        if (day == lastDay)
+        {
+            return "bg-blue-300 rounded-r-lg";
+        }
+
+        return (day > firstDay && day < lastDay) ? "bg-blue-300" : "";
+    }
+    [JSInvokable]
+    public void StartSelection()
+    {
+        isSelecting = true;
+        startHour = null;
+        endHour = null;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void EndSelection()
+    {
+        isSelecting = false;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void UpdateSelection(int hour)
+    {
+        if (isSelecting)
+        {
+            if (startHour == null)
+            {
+                startHour = hour;
+            }
+            else
+            {
+                endHour = hour;
+            }
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("dragSelection.startSelection", DotNetObjectReference.Create(this));
+            await JSRuntime.InvokeVoidAsync("dragSelectDays.initialize", DotNetObjectReference.Create(this));
+        }
+    }
+    private void SelectHour(int hour)
+    {
+        if (startHour == null)
+        {
+            startHour = hour;
+        }
+        else if (endHour == null)
+        {
+            endHour = hour;
+        }
+        else
+        {
+            startHour = hour;
+            endHour = null;
+        }
+        StateHasChanged();
+    }
+    private void SelectDay(int day, bool isNextMonth)
+    {
+        if (isNextMonth)
+        {
+            currentDate = new DateTime(currentDate.Year, currentDate.Month, day).AddMonths(1);
+        }
+        else
+        {
+            currentDate = new DateTime(currentDate.Year, currentDate.Month, day);
+        }
+        startDay = day;
+        endDay = null;
+        StateHasChanged();
+    }
+    
+    [JSInvokable]
+    public void StartDaySelection(int day)
+    {
+        isSelecting = true;
+        startDay = day;
+        endDay = null;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void EndDaySelection()
+    {
+        isSelecting = false;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void UpdateDaySelection(int day)
+    {
+        if (isSelecting)
+        {
+            endDay = day;
+            StateHasChanged();
+        }
+    }
 }

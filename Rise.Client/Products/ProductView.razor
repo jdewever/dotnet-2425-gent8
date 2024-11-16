@@ -1,4 +1,5 @@
 @using Rise.Client.Components
+@using Rise.Client.Components.ProductTable
 
 <div class="product flex flex-col items-center justify-between text-center bg-gray-50 p-4 rounded-lg shadow-md w-36 transition duration-300 ease-in-out hover:bg-gray-200 ">
     <!-- Product Name -->
@@ -17,6 +18,11 @@
     </span>
 
     <!-- Button Uitlenen -->
-    <BigButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@(Reserve ? OnReserverenClick : NavigateToScan)" />
+    <BigButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@(Reserve ? ShowReservableProductsModal : NavigateToScan)" />
     
 </div>
+
+@if (isReservableProductsModalVisible)
+{
+    <ReservableProductsModal HideModal="HideReservableProductsModal" Product="Product" />
+}

@@ -13,16 +13,22 @@ public partial class ProductView : ComponentBase
     [Inject] private BarcodeService BarcodeService { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
 
+    private bool isReservableProductsModalVisible = false;
 
     private void NavigateToScan()
     {
         BarcodeService.Barcode = Product.Barcode;
         Navigation.NavigateTo($"/scan");
     }
-
-    private void OnReserverenClick()
+    
+    private void ShowReservableProductsModal()
     {
-        BarcodeService.Barcode = Product.Barcode;
-        Navigation.NavigateTo("/agenda");
+        isReservableProductsModalVisible = true;
     }
+
+    private void HideReservableProductsModal()
+    {
+        isReservableProductsModalVisible = false;
+    }
+
 }
