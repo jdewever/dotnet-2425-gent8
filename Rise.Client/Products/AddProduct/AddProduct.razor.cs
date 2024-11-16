@@ -11,6 +11,16 @@ namespace Rise.Client.Products.AddProduct
 {
     public partial class AddProduct
     {
+        private BarcodeResponse barcode = null!;
+        [Inject] public required ICategoryService CategoryService { get; set; }
+        [Inject] public required IProductService ProductService { get; set; }
+
+        private int selectedCategory;
+        private bool isAddButtonClicked = false;
+        private bool showCategoryError = false;
+        private string newCategoryName = string.Empty;
+        private List<CategoryDTO> CategoryOptions = new List<CategoryDTO>();
+
         private ProductCreationDTO newProduct = new ProductCreationDTO
         {
             Name = string.Empty,
@@ -24,15 +34,6 @@ namespace Rise.Client.Products.AddProduct
             IsHidden = false,
             CategoryIds = new List<int>()
         };
-
-        private BarcodeResponse barcode = null!; 
-
-        [Inject] public required ICategoryService CategoryService { get; set; }
-        [Inject] public required IProductService ProductService { get; set; }
-
-        private int selectedCategory;
-        private bool isAddButtonClicked = false;
-        private List<CategoryDTO> CategoryOptions = new List<CategoryDTO>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -62,9 +63,30 @@ namespace Rise.Client.Products.AddProduct
             newProduct.CategoryIds.Remove(categoryId);
         }
 
+        private async Task AddNewCategory()
+        {
+            if (string.IsNullOrWhiteSpace(newCategoryName))
+            {
+                showCategoryError = true;
+            }
+            else
+            {
+                showCategoryError = false;
+                CategoryDTO newCategory = new CategoryDTO { Name = newCategoryName, Products = new List<ProductDTO>() };
+                await CategoryService.AddCategory(newCategory);
+
+                var updatedCategories = await CategoryService.GetAllCategories();
+                CategoryOptions = updatedCategories.ToList();
+                    
+                newCategoryName = string.Empty;
+                StateHasChanged();
+            }
+
+        }
+
         private async Task HandleFileSelected()
         {
-
+            //todo -> adding image to product, blob?
         }
     }
 }
