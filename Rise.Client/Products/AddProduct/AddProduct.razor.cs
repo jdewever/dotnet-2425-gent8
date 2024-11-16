@@ -6,6 +6,7 @@ using System.Text;
 using BarcodeStandard;
 using SkiaSharp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Blazored.Toast.Services;
 
 namespace Rise.Client.Products.AddProduct
 {
@@ -14,6 +15,7 @@ namespace Rise.Client.Products.AddProduct
         private BarcodeResponse barcode = null!;
         [Inject] public required ICategoryService CategoryService { get; set; }
         [Inject] public required IProductService ProductService { get; set; }
+        [Inject] private IToastService ToastService { get; set; } = null!;
 
         private int selectedCategory;
         private bool isAddButtonClicked = false;
@@ -47,6 +49,28 @@ namespace Rise.Client.Products.AddProduct
         private async Task HandleValidSubmit()
         {
             await ProductService.AddProduct(newProduct);
+            ToastService.ShowSuccess("Product succesvol toegevoegd!");
+
+            newProduct = new ProductCreationDTO
+            {
+                Name = string.Empty,
+                Description = string.Empty,
+                Barcode = await ProductService.GetNewBarcode().ContinueWith(t => t.Result.Barcode),
+                QuantityInStock = 0,
+                QuantityOnOrder = 0,
+                LowStock = 0,
+                ClassRoomCode = string.Empty,
+                IsReservable = false,
+                IsHidden = false,
+                CategoryIds = new List<int>()
+            };
+
+            selectedCategory = 0;
+            newCategoryName = string.Empty;
+            isAddButtonClicked = false;
+            showCategoryError = false;
+
+            StateHasChanged(); 
         }
 
         private void AddCategory()
@@ -80,6 +104,7 @@ namespace Rise.Client.Products.AddProduct
                     
                 newCategoryName = string.Empty;
                 StateHasChanged();
+                ToastService.ShowSuccess("Categorie succesvol toegevoegd!");
             }
 
         }

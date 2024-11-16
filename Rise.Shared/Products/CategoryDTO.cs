@@ -1,4 +1,4 @@
-﻿namespace Rise.Shared.Products;
+namespace Rise.Shared.Products;
 
 public class CategoryDTO
 {
