@@ -12,16 +12,24 @@
 <script>
     window.dragSelection = {
         startSelection: function (dotNetHelper) {
+            let isSelecting = false;
+
             document.addEventListener('mousedown', function (event) {
-                dotNetHelper.invokeMethodAsync('StartSelection');
+                if (event.target.classList.contains('hour-cell') || event.target.closest('.hour-cell')) {
+                    isSelecting = true;
+                    dotNetHelper.invokeMethodAsync('StartSelection');
+                }
             });
 
             document.addEventListener('mouseup', function (event) {
-                dotNetHelper.invokeMethodAsync('EndSelection');
+                if (isSelecting) {
+                    isSelecting = false;
+                    dotNetHelper.invokeMethodAsync('EndSelection');
+                }
             });
 
             document.addEventListener('mousemove', function (event) {
-                if (event.buttons === 1) { 
+                if (isSelecting && event.buttons === 1) {
                     let element = document.elementFromPoint(event.clientX, event.clientY);
                     if (element && !element.classList.contains('hour-cell')) {
                         element = element.closest('.hour-cell');
