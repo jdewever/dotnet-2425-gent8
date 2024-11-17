@@ -71,9 +71,9 @@
                     </select>
                     <span class="mx-2">-</span>
                     <select @bind="endHour" class="w-16 text-center">
-                        @for (int hour = (startHour ?? 0); hour < 24; hour++)
+                        @for (int hour = (startHour ?? 0) + 1; hour < 24; hour++)
                         {
-                            <option value="@hour">@hour:00</option>
+                            <option value="@(hour- 1)">@hour:00</option>
                         }
                     </select>
                 </div>
