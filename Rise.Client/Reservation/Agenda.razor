@@ -241,7 +241,7 @@
     }
     private string GetHourSelectableClass(int hour)
     {
-        if (bookedHoursByDate.TryGetValue(currentDate.Date, out var bookedHours))
+        if (bookedHoursByDate.TryGetValue(currentDate.Date, out var bookedHours) && DateTime.Compare(startDay.Date, endDay.Date) == 0)
         {
             return bookedHours.Contains(hour) ? "bg-gray-100 rounded cursor-not-allowed" : "cursor-pointer";
         }
