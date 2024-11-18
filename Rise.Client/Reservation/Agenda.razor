@@ -26,7 +26,7 @@
                     int capturedHour = hour;
                     <div class="h-24 flex items-top cursor-pointer hour-cell" data-hour="@capturedHour" @onclick="() => SelectHour(capturedHour)">
                         <span class="font-bold w-16 select-none">@capturedHour:00</span>
-                        <div class="flex-grow border-t border-gray-300 ml-4 @GetHourClass(capturedHour)  @GetHourSelectableClass()"></div>
+                        <div class="flex-grow border-t border-gray-300 ml-4 @GetHourClass(capturedHour)  @GetHourSelectableClass(capturedHour)"></div>
                     </div>
                 }
             </div>
@@ -79,6 +79,8 @@
                 <p>@currentDate.ToString("MMMM d yyyy")</p>
                 <p>@startDay.ToString("MMMM d yyyy")</p>
                 <p>@endDay.ToString("MMMM d yyyy")</p>
+                <p>@startHour</p>
+                <p>@endHour</p>
             </div>
         </div>
     </div>
@@ -100,6 +102,7 @@
     private DateTime endDay = DateTime.Now;
     private ProductDTO? product;
     private List<BookingDTO>? bookings;
+    private Dictionary<DateTime, List<int>> bookedHoursByDate = new Dictionary<DateTime, List<int>>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -107,7 +110,41 @@
         if (product != null)
         {
             bookings = await BookingService.GetBookingsByProductIdAsync(product.Id);
+            InitializeBookedHours();
         }
+    }
+    private void InitializeBookedHours()
+    {
+        if (bookings == null) return;
+
+        foreach (var booking in bookings)
+        {
+            DateTime current = booking.StartDate;
+            while (current <= booking.EndDate)
+            {
+                if (!bookedHoursByDate.ContainsKey(current.Date))
+                {
+                    bookedHoursByDate[current.Date] = new List<int>();
+                }
+
+                int startHour = current.Date == booking.StartDate.Date ? booking.StartDate.Hour : 0;
+                int endHour = current.Date == booking.EndDate.Date ? booking.EndDate.Hour : 23;
+
+                for (int hour = startHour; hour <= endHour; hour++)
+                {
+                    if (!bookedHoursByDate[current.Date].Contains(hour))
+                    {
+                        bookedHoursByDate[current.Date].Add(hour);
+                    }
+                }
+
+                current = current.AddDays(1);
+            }
+        }
+    }
+    private bool HasBooking(DateTime date)
+    {
+        return bookedHoursByDate.ContainsKey(date.Date);
     }
 
     /*private async Task Reserve()
@@ -138,9 +175,9 @@
         }
     }*/
     private bool HasBookings(DateTime date)
-        {
-            return bookings?.Any(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date) ?? false;
-        }
+    {
+        return bookings?.Any(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date) ?? false;
+    }
     
     private int getDaysInMonth()
     {
@@ -202,9 +239,13 @@
 
         return DateTime.Compare(startDay.Date, day.Date) < 0 && DateTime.Compare(endDay.Date, day.Date) > 0 ? "bg-blue-300" : "";
     }
-    private string GetHourSelectableClass()
+    private string GetHourSelectableClass(int hour)
     {
-        return !isSelecting && startDay != endDay ? "bg-gray-100 rounded" : "";
+        if (bookedHoursByDate.TryGetValue(currentDate.Date, out var bookedHours))
+        {
+            return bookedHours.Contains(hour) ? "bg-gray-100 rounded cursor-not-allowed" : "cursor-pointer";
+        }
+        return DateTime.Compare(startDay.Date,endDay.Date) != 0 ? "bg-gray-100 rounded cursor-not-allowed" : "cursor-pointer";
     }
 
     [JSInvokable]
@@ -233,6 +274,11 @@
     {
         if (isSelecting)
         {
+            if (bookedHoursByDate.TryGetValue(currentDate.Date, out var bookedHours) && bookedHours.Contains(hour))
+            {
+                EndSelection();
+                return;
+            }
             if (startHour == null)
             {
                 startHour = hour;
@@ -281,34 +327,6 @@
         currentDate = date;
         startDay = date;
         endDay = date;
-
-        var booking = bookings?.FirstOrDefault(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date);
-        if (booking != null)
-        {
-            if (booking.StartDate.Date < date.Date)
-            {
-                startHour = 0;
-            }
-            else
-            {
-                startHour = booking.StartDate.Hour;
-            }
-
-            if (booking.EndDate.Date > date.Date)
-            {
-                endHour = 23;
-            }
-            else
-            {
-                endHour = booking.EndDate.Hour;
-            }
-        }
-        else
-        {
-            startHour = null;
-            endHour = null;
-        }
-
         StateHasChanged();
     }
     
