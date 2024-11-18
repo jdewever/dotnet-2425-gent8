@@ -47,14 +47,29 @@
             <div class="grid grid-cols-7 text-center mt-4">
                 @for (int day = 1; day <= getDaysInMonth() + (14 - getDaysInMonth() % 7); day++)
                 {
-                    int capturedDay = (day - 1) % getDaysInMonth() + 1;
+                    DateTime date;
                     if (day <= getDaysInMonth())
                     {
-                        <span class="font-bold mt-4 select-none day-cell @GetDayClass(day)" data-day="@day" @onclick="() => SelectDay(capturedDay, false)">@capturedDay</span>
+                        date = new DateTime(currentDate.Year, currentDate.Month, day);
+                        <span class="font-bold mt-4 select-none day-cell @GetDayClass(date)" data-date="@date.ToString("yyyy-MM-dd")" @onclick="() => SelectDay(date, false)">
+                            @date.Day
+                            @if (HasBookings(date))
+                            {
+                                <span class="inline-block w-2 h-2 bg-gray-300 rounded-full ml-1"></span>
+                            }
+                        </span>
                     }
                     else
                     {
-                        <span class="font-bold mt-4 text-gray-400 select-none day-cell @GetDayClass(day)" data-day="@day" @onclick="() => SelectDay(capturedDay, true)">@capturedDay</span>
+                        int nextMonthDay = day - getDaysInMonth();
+                        DateTime nextMonthDate = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1).AddDays(nextMonthDay - 1);
+                        <span class="font-bold mt-4 text-gray-400 select-none day-cell @GetDayClass(nextMonthDate)" data-date="@nextMonthDate.ToString("yyyy-MM-dd")" @onclick="() => SelectDay(nextMonthDate, true)">
+                            @nextMonthDate.Day
+                            @if (HasBookings(nextMonthDate))
+                            {
+                                <span class="inline-block w-2 h-2 bg-gray-200 rounded-full ml-1"></span>
+                            }
+                        </span>
                     }
                 }
             </div>
@@ -62,26 +77,8 @@
         <div class="p-5">
             <div class="flex items-center space-x-4">
                 <p>@currentDate.ToString("MMMM d yyyy")</p>
-                <div class="flex items-center">
-                    <select @bind="startHour" class="w-16 text-center">
-                        @for (int hour = 0; hour < 24; hour++)
-                        {
-                            <option value="@hour">@hour:00</option>
-                        }
-                    </select>
-                    <span class="mx-2">-</span>
-                    <select @bind="endHour" class="w-16 text-center">
-                        @for (int hour = (startHour ?? 0) + 1; hour < 24; hour++)
-                        {
-                            <option value="@(hour- 1)">@hour:00</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <p class="mr-4">@startDay</p>
-            <p class="mr-4">@endDay</p>
-             <div class="flex justify-center items-center">
-                <button class="mt-4 w-1/3 px-4 py-2 bg-gray-300 rounded" @onclick="Reserve">Reserveer</button>
+                <p>@startDay.ToString("MMMM d yyyy")</p>
+                <p>@endDay.ToString("MMMM d yyyy")</p>
             </div>
         </div>
     </div>
@@ -99,8 +96,8 @@
     private int? startHour = null;
     private int? endHour = null;
     private bool isSelecting = false;
-    private int? startDay = DateTime.Now.Day;
-    private int? endDay = DateTime.Now.Day;
+    private DateTime startDay = DateTime.Now;
+    private DateTime endDay = DateTime.Now;
     private ProductDTO? product;
     private List<BookingDTO>? bookings;
 
@@ -113,13 +110,13 @@
         }
     }
 
-    private async Task Reserve()
+    /*private async Task Reserve()
     {
     
         if (startDay.HasValue && endDay.HasValue && product != null)
         {
             var startDate = new DateTime(currentDate.Year, currentDate.Month, startDay.Value, startHour ?? 0, 0, 0);
-            var endDate = new DateTime(currentDate.Year, currentDate.Month, endDay.Value, endHour+1 ?? 0, 0, 0);
+            var endDate = new DateTime(currentDate.Year, currentDate.Month, endDay.Value, endHour ?? 0, 0, 0);
 
             var booking = new BookingDTO
             {
@@ -131,16 +128,19 @@
 
             Console.WriteLine(startDate + " " + endDate);
 
-            /*
+            
             await BookingService.AddBookingAsync(booking);
             ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
             NavigationManager?.NavigateTo("/products");
             HideModal();
             await OnInitializedAsync(); 
-            */
+            
         }
-    }
-
+    }*/
+    private bool HasBookings(DateTime date)
+        {
+            return bookings?.Any(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date) ?? false;
+        }
     
     private int getDaysInMonth()
     {
@@ -161,15 +161,15 @@
         currentDate = currentDate.AddDays(-1);
         endHour = null;
         startHour = null;
-        startDay = currentDate.Day;
-        endDay = currentDate.Day;
+        startDay = currentDate;
+        endDay = currentDate;
     }
 
     private void NextDate()
     {
         currentDate = currentDate.AddDays(1);
-        startDay = currentDate.Day;
-        endDay = currentDate.Day;
+        startDay = currentDate;
+        endDay = currentDate;
         endHour = null;
         startHour = null;
     }
@@ -183,34 +183,24 @@
             hour == endHour ? "bg-blue-300 rounded-b-lg" :
             (hour > startHour && hour < endHour) ? "bg-blue-300" : "";
     }
-    private string GetDayClass(int day)
+    private string GetDayClass(DateTime day)
     {
-        if (startDay == null)
-        {
-            return "";
-        }
-
-        if (endDay == null)
-        {
-            return day == startDay ? "bg-blue-300 rounded-t-lg rounded-b-lg" : "";
-        }
-
-        if (day == startDay && day == endDay)
+        if (DateTime.Compare(startDay.Date, day.Date) == 0 && DateTime.Compare(endDay.Date, day.Date) == 0)
         {
             return "bg-blue-300 rounded-t-lg rounded-b-lg";
         }
 
-        if (day == startDay)
+        if (DateTime.Compare(startDay.Date, day) == 0)
         {
             return "bg-blue-300 rounded-l-lg";
         }
 
-        if (day == endDay)
+        if (DateTime.Compare(endDay.Date, day.Date) == 0)
         {
             return "bg-blue-300 rounded-r-lg";
         }
 
-        return (day > startDay && day < endDay) ? "bg-blue-300" : "";
+        return DateTime.Compare(startDay.Date, day.Date) < 0 && DateTime.Compare(endDay.Date, day.Date) > 0 ? "bg-blue-300" : "";
     }
     private string GetHourSelectableClass()
     {
@@ -286,27 +276,48 @@
         endHour = hour;
         StateHasChanged();
     }
-    private void SelectDay(int day, bool isNextMonth)
+    private void SelectDay(DateTime date, bool isNextMonth)
     {
-        if (isNextMonth)
+        currentDate = date;
+        startDay = date;
+        endDay = date;
+
+        var booking = bookings?.FirstOrDefault(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date);
+        if (booking != null)
         {
-            currentDate = new DateTime(currentDate.Year, currentDate.Month, day).AddMonths(1);
+            if (booking.StartDate.Date < date.Date)
+            {
+                startHour = 0;
+            }
+            else
+            {
+                startHour = booking.StartDate.Hour;
+            }
+
+            if (booking.EndDate.Date > date.Date)
+            {
+                endHour = 23;
+            }
+            else
+            {
+                endHour = booking.EndDate.Hour;
+            }
         }
         else
         {
-            currentDate = new DateTime(currentDate.Year, currentDate.Month, day);
+            startHour = null;
+            endHour = null;
         }
-        startDay = day;
-        endDay = day;
+
         StateHasChanged();
     }
     
     [JSInvokable]
-    public void StartDaySelection(int day)
+    public void StartDaySelection(DateTime day)
     {
         isSelecting = true;
         startDay = day;
-        endDay = null;
+        endDay = startDay;
         startHour = null;
         endHour = null;
         StateHasChanged();
@@ -320,20 +331,13 @@
     }
 
     [JSInvokable]
-    public void UpdateDaySelection(int day)
+    public void UpdateDaySelection(DateTime day)
     {
         if (isSelecting)
         {
             if(day < startDay)
             {
-                if(endDay == null)
-                {
-                    endDay = startDay;
-                    startDay = day;
-                }else
-                {
-                    startDay = day;
-                }
+                startDay = day;
             }else if(day > startDay)
             {
                 endDay = day;

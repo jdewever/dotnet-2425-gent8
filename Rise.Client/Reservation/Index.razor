@@ -43,36 +43,38 @@
         }
     };
     window.dragSelectDays = {
-    initialize: function (dotNetHelper) {
-        const calendarElement = document.getElementById('calendarGrid');
-        if (!calendarElement) {
-            console.error('Calendar grid element not found');
-            return;
+        initialize: function (dotNetHelper) {
+            const calendarElement = document.getElementById('calendarGrid');
+            if (!calendarElement) {
+                console.error('Calendar grid element not found');
+                return;
+            }
+
+            let isMouseDown = false;
+            let startCell = null;
+
+            calendarElement.addEventListener('mousedown', (event) => {
+                if (event.target.classList.contains('day-cell')) {
+                    isMouseDown = true;
+                    startCell = event.target;
+                    const date = startCell.getAttribute('data-date');
+                    dotNetHelper.invokeMethodAsync('StartDaySelection', date);
+                }
+            });
+
+            calendarElement.addEventListener('mouseover', (event) => {
+                if (isMouseDown && event.target.classList.contains('day-cell')) {
+                    const date = event.target.getAttribute('data-date');
+                    dotNetHelper.invokeMethodAsync('UpdateDaySelection', date);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isMouseDown) {
+                    isMouseDown = false;
+                    dotNetHelper.invokeMethodAsync('EndDaySelection');
+                }
+            });
         }
-
-        let isMouseDown = false;
-        let startCell = null;
-
-        calendarElement.addEventListener('mousedown', (event) => {
-            if (event.target.classList.contains('day-cell')) {
-                isMouseDown = true;
-                startCell = event.target;
-                dotNetHelper.invokeMethodAsync('StartDaySelection', parseInt(startCell.getAttribute('data-day')));
-            }
-        });
-
-        calendarElement.addEventListener('mouseover', (event) => {
-            if (isMouseDown && event.target.classList.contains('day-cell')) {
-                dotNetHelper.invokeMethodAsync('UpdateDaySelection', parseInt(event.target.getAttribute('data-day')));
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (isMouseDown) {
-                isMouseDown = false;
-                dotNetHelper.invokeMethodAsync('EndDaySelection');
-            }
-        });
-    }
-};
+    };
 </script>
