@@ -18,8 +18,8 @@ namespace Rise.Client.Products.AddProduct
         [Inject] private IToastService ToastService { get; set; } = null!;
 
         private int selectedCategory;
-        private bool isAddButtonClicked = false;
         private bool showCategoryError = false;
+        private bool showAddCategoryError = false;
         private string newCategoryName = string.Empty;
         private List<CategoryDTO> CategoryOptions = new List<CategoryDTO>();
 
@@ -67,18 +67,25 @@ namespace Rise.Client.Products.AddProduct
 
             selectedCategory = 0;
             newCategoryName = string.Empty;
-            isAddButtonClicked = false;
             showCategoryError = false;
+            showAddCategoryError = false;
 
             StateHasChanged(); 
         }
 
         private void AddCategory()
         {
+            Console.WriteLine(newProduct.CategoryIds.Count);
+            if (newProduct.CategoryIds.Count == 3)
+            {
+                Console.WriteLine("testbruh");
+                showCategoryError = true;
+            }
             if (newProduct.CategoryIds.Count < 3 && selectedCategory > 0)
             {
+                showCategoryError = false;
                 newProduct.CategoryIds.Add(selectedCategory);
-                selectedCategory = 0; 
+                selectedCategory = 0;
             }
         }
 
@@ -91,11 +98,11 @@ namespace Rise.Client.Products.AddProduct
         {
             if (string.IsNullOrWhiteSpace(newCategoryName))
             {
-                showCategoryError = true;
+                showAddCategoryError = true;
             }
             else
             {
-                showCategoryError = false;
+                showAddCategoryError = false;
                 CategoryDTO newCategory = new CategoryDTO { Name = newCategoryName, Products = new List<ProductDTO>() };
                 await CategoryService.AddCategory(newCategory);
 

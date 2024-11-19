@@ -1,4 +1,4 @@
-@attribute [Authorize(Roles = "Administrator") ]
+@attribute [Authorize(Roles = "Administrator")]
 @page "/products/add"
 
 <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Toevoegen nieuw product</h2>
@@ -81,7 +81,7 @@
                     </div>
 
                     <div>
-                        <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">Categorieën</label>
+                        <label for="categories" class="block mb-2 text-sm font-medium text-gray-900">CategorieÃ«n</label>
                         <div class="flex items-center justify-between">
                             <select @bind="selectedCategory" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                 <option value="">Selecteer categorie</option>
@@ -90,16 +90,16 @@
                                     <option value="@category.Id">@category.Name</option>
                                 }
                             </select>
-                            <button type="button" @onclick="AddCategory" class="text-blue-600 hover:text-blue-800 font-medium ml-2" disabled="@(newProduct.CategoryIds.Count >= 3)">
+                            <button type="button" @onclick="AddCategory" class="text-blue-600 hover:text-blue-800 font-medium ml-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-11.25a.75.75 0 0 0-1.5 0v2.5h-2.5a.75.75 0 0 0 0 1.5h2.5v2.5a.75.75 0 0 0 1.5 0v-2.5h2.5a.75.75 0 0 0 0-1.5h-2.5v-2.5Z" clip-rule="evenodd" />
                                 </svg>
                             </button>
                         </div>
-                            @if (newProduct.CategoryIds.Count >= 3)
-                            {
-                                <p class="text-xs text-red-500 mt-2">Je kan maximaal 3 categorieën toekennen</p>
-                            }
+                        @if (newProduct.CategoryIds.Count >= 3 && showCategoryError)
+                        {
+                            <p class="text-xs text-red-500 mt-2">Je kan maximaal 3 categorieÃ«n toekennen</p>
+                        }
                         <label for="newCategory" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Nieuwe categorie toevoegen</label>
                         <div class="flex items-center">
                             <InputText @bind-Value="newCategoryName" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Voer een nieuwe categorie in" />
@@ -109,7 +109,7 @@
                                 </svg>
                             </button>
                         </div>
-                        @if (showCategoryError)
+                        @if (showAddCategoryError)
                         {
                             <p class="text-xs text-red-500 mt-1">Naam is verplicht.</p>
                         }
