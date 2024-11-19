@@ -101,8 +101,9 @@ namespace Rise.Client.Products.AddProduct
 
                 var updatedCategories = await CategoryService.GetAllCategories();
                 CategoryOptions = updatedCategories.ToList();
-                    
+                selectedCategory = CategoryOptions.FirstOrDefault(c => c.Name == newCategoryName)?.Id ?? 0;
                 newCategoryName = string.Empty;
+
                 StateHasChanged();
                 ToastService.ShowSuccess("Categorie succesvol toegevoegd!");
             }
