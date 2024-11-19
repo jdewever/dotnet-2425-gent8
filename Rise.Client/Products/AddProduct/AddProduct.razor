@@ -1,7 +1,10 @@
 @page "/products/add"
 
+<h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Toevoegen nieuw product</h2>
+
+
 <body class="flex items-center justify-center min-h-screen">
-    <div class="max-w-3xl mt-5">
+    <div class="max-w-3xl">
         <div>
             <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
