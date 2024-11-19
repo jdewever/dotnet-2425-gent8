@@ -33,7 +33,19 @@
         </div>
     </div>
     <div class="p-5 w-1/2">
-        <h2 class="text-xl text-center font-semibold mx-4">@currentDate.ToString("MMMM yyyy")</h2>
+        <div class="flex items-center justify-center space-x-4">
+            @if(currentDate.Month > DateTime.Now.Month || currentDate.Year > DateTime.Now.Year)
+            {
+                <button class="px-2 py-1" @onclick="PreviousMonth">&lt;</button>
+            }
+            else
+            {
+                <div class="w-8"></div>
+            }
+            <h2 class="text-xl text-center font-semibold mx-4">@currentDate.ToString("MMMM yyyy")</h2>
+            <button class="px-2 py-1" @onclick="NextMonth">&gt;</button>
+        </div>
+        
         <div class="h-1/3 overflow-y-auto mt-5 mx-10 no-scrollbar" id="calendarGrid">
             <div class="grid grid-cols-7 text-center">
                 <span class="font-semibold">Ma</span>
@@ -76,12 +88,39 @@
         </div>
         <div class="p-5">
             <div class="flex items-center space-x-4">
-                <p>@currentDate.ToString("MMMM d yyyy")</p>
-                <p>@startDay.ToString("MMMM d yyyy")</p>
-                <p>@endDay.ToString("MMMM d yyyy")</p>
+                @if(DateTime.Compare(startDay.Date, endDay.Date) == 0)
+                {
+                    <p>@currentDate.ToString("MMMM d yyyy")</p>
+                    <p>@startHour</p>
+                    <p>@(endHour+1)</p>
+                } else {
+                    <div class="flex flex-col">
+                        <div class="flex items-center space-x-4">
+                            <p>@startDay.ToString("MMMM d yyyy")</p>
+                            <select @bind="startHour" class="w-16 text-center">
+                                @for (int hour = 0; hour < 24; hour++)
+                                {
+                                    <option value="@hour">@hour:00</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-4 mt-2">
+                            <p>@endDay.ToString("MMMM d yyyy")</p>
+                            <select @bind="endHour" class="w-16 text-center">
+                                @for (int hour = 0; hour < 24; hour++)
+                                {
+                                    <option value="@(hour-1)">@hour:00</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                }
                 <p>@startHour</p>
-                <p>@endHour</p>
+                <p>@(endHour+1)</p>
+                
             </div>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4" @onclick="Reserve">Reserveer</button>
         </div>
     </div>
 </div>
@@ -120,16 +159,15 @@
         foreach (var booking in bookings)
         {
             DateTime current = booking.StartDate;
-            while (current <= booking.EndDate)
+            while (current.Day <= booking.EndDate.Day)
             {
                 if (!bookedHoursByDate.ContainsKey(current.Date))
                 {
                     bookedHoursByDate[current.Date] = new List<int>();
                 }
-
+                
                 int startHour = current.Date == booking.StartDate.Date ? booking.StartDate.Hour : 0;
                 int endHour = current.Date == booking.EndDate.Date ? booking.EndDate.Hour : 23;
-
                 for (int hour = startHour; hour <= endHour; hour++)
                 {
                     if (!bookedHoursByDate[current.Date].Contains(hour))
@@ -147,33 +185,64 @@
         return bookedHoursByDate.ContainsKey(date.Date);
     }
 
-    /*private async Task Reserve()
+    private async Task Reserve()
     {
     
-        if (startDay.HasValue && endDay.HasValue && product != null)
+        if (product != null)
         {
-            var startDate = new DateTime(currentDate.Year, currentDate.Month, startDay.Value, startHour ?? 0, 0, 0);
-            var endDate = new DateTime(currentDate.Year, currentDate.Month, endDay.Value, endHour ?? 0, 0, 0);
+            DateTime startDate = new DateTime(startDay.Year, startDay.Month, startDay.Day, startHour ?? 0, 0, 0);
+            DateTime endDate = new DateTime(endDay.Year, endDay.Month, endDay.Day, endHour ?? 0, 0, 0);
+            
+            DateTime current = startDay;
+            bool hasConflict = false;
+            while (current <= endDay)
+            {
+                int startHourToCheck = current == startDay ? startHour ?? 0 : 0;
+                int endHourToCheck = current == endDay ? endHour ?? 23 : 23;
 
+                if (bookedHoursByDate.TryGetValue(current.Date, out var bookedHours))
+                {
+                    for (int hour = startHourToCheck; hour <= endHourToCheck; hour++)
+                    {
+                        if (bookedHours.Contains(hour))
+                        {
+                            hasConflict = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (hasConflict)
+                {
+                    break;
+                }
+
+                current = current.AddDays(1);
+            }
+
+            if (hasConflict)
+            {
+                ToastService?.ShowError("The selected range contains already booked hours.");
+                return;
+            }
             var booking = new BookingDTO
             {
                 ProductId = product.Id,
                 StartDate = startDate,
                 EndDate = endDate,
-                UserId = "TestId"
+                UserId = "Test1"
             };
-
-            Console.WriteLine(startDate + " " + endDate);
-
             
-            await BookingService.AddBookingAsync(booking);
+            //await BookingService.AddBookingAsync(booking);
             ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
-            NavigationManager?.NavigateTo("/products");
-            HideModal();
-            await OnInitializedAsync(); 
+            //NavigationManager?.NavigateTo("/products");
+            //HideModal();
+            await OnInitializedAsync();
+            
+            
             
         }
-    }*/
+    }
     private bool HasBookings(DateTime date)
     {
         return bookings?.Any(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date) ?? false;
@@ -192,7 +261,33 @@
     {
         isModalVisible = false;
     }
+    private void PreviousMonth()
+    {
+        DateTime previousMonthDate = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(-1);
 
+        if (previousMonthDate.Month == DateTime.Now.Month && previousMonthDate.Year == DateTime.Now.Year)
+        {
+            currentDate = DateTime.Now;
+        }
+        else
+        {
+            currentDate = previousMonthDate;
+        }
+
+        startHour = null;
+        endHour = null;
+        startDay = currentDate;
+        endDay = currentDate;
+    }
+
+    private void NextMonth()
+    {
+        currentDate = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1);
+        startHour = null;
+        endHour = null;
+        startDay = currentDate;
+        endDay = currentDate;
+    }
     private void PreviousDate()
     {
         currentDate = currentDate.AddDays(-1);
