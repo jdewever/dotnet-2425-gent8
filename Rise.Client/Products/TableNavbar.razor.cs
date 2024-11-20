@@ -22,6 +22,8 @@ public partial class TableNavbar : ComponentBase
     [Parameter] public int? MaxOnOrder { get; set; }
     [Parameter] public int? MinOnOrder { get; set; }
 
+    [Parameter] public EventCallback OnFilterApplied { get; set; }
+
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
 
     private void ShowModal()
@@ -34,7 +36,8 @@ public partial class TableNavbar : ComponentBase
             .Add(nameof(FilterModal.MaxInStock), MaxInStock)
             .Add(nameof(FilterModal.MinInStock), MinInStock)
             .Add(nameof(FilterModal.MaxOnOrder), MaxOnOrder)
-            .Add(nameof(FilterModal.MinOnOrder), MinOnOrder);
+            .Add(nameof(FilterModal.MinOnOrder), MinOnOrder)
+            .Add("OnFilterApplied", OnFilterApplied);
         Modal.Show<FilterModal>("Filters", parameters);
     }
 

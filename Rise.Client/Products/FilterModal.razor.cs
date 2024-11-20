@@ -16,6 +16,7 @@ public partial class FilterModal : ComponentBase
     [Parameter, EditorRequired] public string? StockStatus { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
+    [Parameter] public EventCallback OnFilterApplied { get; set; }
     private int[] _selectedCategoriesIds = [];
 
     private List<StockStatusOption> StockStatuses = new List<StockStatusOption>
@@ -93,6 +94,8 @@ public partial class FilterModal : ComponentBase
             queryString += $"StockStatus={SelectedStockStatus.Value}";
         }
         NavigationManager.NavigateTo($"/products{queryString}");
+
+        OnFilterApplied.InvokeAsync();
     }
     private async Task<IEnumerable<CategoryDTO>> SearchCategory(string searchTerm)
     {
