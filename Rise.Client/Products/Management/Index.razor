@@ -1,28 +1,39 @@
-@page "/products/management"
-@attribute [Authorize]
-@using Rise.Client.Products.AddProduct
+@page "/products/management/"
+@attribute [Authorize(Roles = "Administrator")]
 @using Rise.Client.Products.Buttons
+@using Rise.Client.Products.Management.Components
 
 
 <PageTitle>Product Management</PageTitle>
 
-<div class="z-10 flex justify-center w-full">
-    @foreach (var button in new[] { "Wijzigen", "Verbergen", "Verwijderen" })
-    {
-        <button class="@GetButtonClass(button)" @onclick='() => SelectButton(button)'>@button</button>
-    }
-</div>
-<main>
-    @* @switch (selectedButton)
-    {
-        case "Wijzigen":
-            <EditProduct />
-            break;
-        case "Verbergen":
-            <HideProduct />
-            break;
-        case "Verwijderen":
-            <DeleteProduct />
-            break;
-    } *@
-</main>
+<CascadingValue Value="@SelectedProduct">
+    <div class="z-10 flex justify-center w-full">
+        @foreach (var button in new[] { "Wijzigen", "Verbergen", "Verwijderen" })
+        {
+            <button class="@GetButtonClass(button)" @onclick="@(() => SelectButton(button))">@button</button>
+        }
+    </div>
+    <main>
+        @if (SelectedProduct == null)
+        {
+            <div class="flex flex-col w-full items-center p-4">
+                <p class="text-center text-gray-900">Geen product geselecteerd</p>
+            </div>
+        }
+        else
+        {
+            @switch (selectedButton)
+            {
+                case "Wijzigen":
+                    <EditProduct />
+                    break;
+                case "Verbergen":
+                    <HideProduct />
+                    break;
+                case "Verwijderen":
+                    <DeleteProduct />
+                    break;
+            }
+        }
+    </main>
+</CascadingValue>
