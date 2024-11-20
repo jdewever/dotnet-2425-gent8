@@ -17,6 +17,8 @@ public partial class FilterModal : ComponentBase
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
     [Parameter] public EventCallback OnFilterApplied { get; set; }
+
+    [Parameter] public Boolean OnlyReservable { get; set; }
     private int[] _selectedCategoriesIds = [];
 
     private List<StockStatusOption> StockStatuses = new List<StockStatusOption>
@@ -93,7 +95,12 @@ public partial class FilterModal : ComponentBase
             queryString += queryString != "?" ? "&" : "";
             queryString += $"StockStatus={SelectedStockStatus.Value}";
         }
-        NavigationManager.NavigateTo($"/products{queryString}");
+        if (OnlyReservable)
+        {
+            NavigationManager.NavigateTo($"/reserve/{queryString}");
+        }else {
+            NavigationManager.NavigateTo($"/products{queryString}");
+        }
 
         OnFilterApplied.InvokeAsync();
     }
