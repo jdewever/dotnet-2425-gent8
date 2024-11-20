@@ -75,10 +75,8 @@ namespace Rise.Client.Products.AddProduct
 
         private void AddCategory()
         {
-            Console.WriteLine(newProduct.CategoryIds.Count);
             if (newProduct.CategoryIds.Count == 3)
             {
-                Console.WriteLine("testbruh");
                 showCategoryError = true;
             }
             if (newProduct.CategoryIds.Count < 3 && selectedCategory > 0)
