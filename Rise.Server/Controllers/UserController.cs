@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using Auth0.ManagementApi.Paging;
@@ -5,10 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.User;
 
-namespace Server.Controllers;
+namespace Rise.Server.Controllers;
 [ApiController]
-[Route("[controller]")]
-[Authorize(Roles = "Administrator")]
+[Route("api/[controller]")]
+[Authorize]
 
 public class UserController : ControllerBase
 {
@@ -20,6 +21,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Administrator")]
     public async Task<IEnumerable<UserDto>> GetUsers()
     {
         var users = await _managementApiClient.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
@@ -29,6 +31,24 @@ public class UserController : ControllerBase
             FirstName = x.FirstName,
             LastName = x.LastName,
             IsBlocked = x.Blocked ?? false,
+            Fullname = x.FullName,
+            Picture = x.Picture,
         });
+    }
+
+    [HttpGet("details")]
+    public async Task<UserDto> GetUser()
+    {
+        var userid = User.Claims.FirstOrDefault(x => x.Type ==  ClaimTypes.NameIdentifier)?.Value;
+        var user = await _managementApiClient.Users.GetAsync(userid);
+        return new UserDto
+        {
+            Email = user.Email,
+            FirstName = user.FirstName ?? "",
+            LastName = user.LastName ?? "",
+            IsBlocked = user.Blocked ?? false,
+            Picture = user.Picture ?? "",
+            Fullname = user.FullName ?? ""
+        };
     }
 }
