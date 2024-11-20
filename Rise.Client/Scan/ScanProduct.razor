@@ -38,17 +38,17 @@
 
     <!-- Quantity Selector -->
     <div class="flex flex-col items-center space-y-4">
-        <span class="text-3xl text-center">@Quantity</span>
-        <div class="flex items-center space-x-10">
-            <div class="flex items-center space-x-3">
-                <button class="text-xl font-bold @(Quantity < 100 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 100" disabled="@(Quantity < 100 || Product == null)">-100</button>
-                <button class="text-xl font-bold @(Quantity < 10 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 10" disabled="@(Quantity < 10 || Product == null)">-10</button>
-                <button class="text-xl font-bold @(Quantity <= 0 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity--" disabled="@(Quantity <= 0 || Product == null)">-1</button>
+        <span class="text-3xl font-bold text-center">@Quantity</span>
+        <div class="flex items-center justify-center space-x-10">
+            <div class="flex items-center space-x-2">
+                <button class="text-xl font-bold w-10 @(Quantity < 100 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 100" disabled="@(Quantity < 100 || Product == null)">-100</button>
+                <button class="text-xl font-bold w-10 @(Quantity < 10 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 10" disabled="@(Quantity < 10 || Product == null)">-10</button>
+                <button class="text-xl font-bold w-10 @(Quantity <= 0 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity--" disabled="@(Quantity <= 0 || Product == null)">-1</button>
             </div>
-            <div class="flex items-center space-x-3">
-                <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity++" disabled="@(Product == null)">+1</button>
-                <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 10" disabled="@(Product == null)">+10</button>
-                <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 100" disabled="@(Product == null)">+100</button>
+            <div class="flex items-center space-x-2">
+                <button class="text-xl font-bold w-10 @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity++" disabled="@(Product == null)">+1</button>
+                <button class="text-xl font-bold w-10 @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 10" disabled="@(Product == null)">+10</button>
+                <button class="text-xl font-bold w-10 @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 100" disabled="@(Product == null)">+100</button>
             </div>
         </div>
     </div>
