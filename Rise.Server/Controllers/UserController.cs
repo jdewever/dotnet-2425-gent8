@@ -28,8 +28,9 @@ public class UserController : ControllerBase
         return users.Select(x => new UserDto
         {
             Email = x.Email,
-            FirstName = x.FirstName,
-            LastName = x.LastName,
+            //zit niet in auth0
+            // FirstName = x.FirstName,
+            // LastName = x.LastName,
             IsBlocked = x.Blocked ?? false,
             Fullname = x.FullName,
             Picture = x.Picture,
@@ -44,11 +45,12 @@ public class UserController : ControllerBase
         return new UserDto
         {
             Email = user.Email,
-            FirstName = user.FirstName ?? "",
-            LastName = user.LastName ?? "",
+            // zit niet in auth0
+            // FirstName = user.FirstName ?? "",
+            // LastName = user.LastName ?? "",
             IsBlocked = user.Blocked ?? false,
-            Picture = user.Picture ?? "",
-            Fullname = user.FullName ?? ""
+            Picture = user.Picture,
+            Fullname = user.FullName
         };
     }
 }

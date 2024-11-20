@@ -3,13 +3,13 @@
 @inject NavigationManager Navigation
 <AuthorizeView>
     <Authorized>
-        <div class="flex flex-row justify-end align-middle">
-            @if (User != null)
-            {
+        @if (User != null)
+        {
+            <div class="flex flex-row justify-end align-middle">
                 <img src="@User.Picture" width="25px" class="rounded-full me-1" alt="Profile Picture"/>
                 <p>@User.Fullname</p>
-            }
-        </div>
+            </div>
+        }
     </Authorized>
     <NotAuthorized>
         <a href="authentication/login">Log in</a>
