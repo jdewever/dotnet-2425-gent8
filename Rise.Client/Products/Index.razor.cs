@@ -18,6 +18,11 @@ public partial class Index
     private int TotalPages { get; set; } = 1;
     private int PageSize { get; set; } = 14;
 
+    private void SetCurrentPageToOne()
+    {
+        CurrentPage = 1;
+    }
+
     private async Task showTable()
     {
         table = true;
