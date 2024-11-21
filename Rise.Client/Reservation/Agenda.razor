@@ -90,6 +90,13 @@
         </div>
         <div class="p-5 pt-10 flex flex-col items-center justify-center">
             <h2 class="text-xl text-center font-semibold mx-4 p-5">Reservatie details</h2>
+            @if (product != null)
+            {
+                <div class="flex items-center space-x-2 mb-4">
+                    <h2 class="text-l text-center font-semibold">Product :</h2>
+                    <p>@product.Name</p>
+                </div>
+            }
             <div class="flex items-center space-x-4">
                 @if(DateTime.Compare(startDay.Date, endDay.Date) == 0)
                 {
@@ -138,20 +145,20 @@
                                 }
                             </select>
                         </div>
-                        @if(hasConflict)
-                        {
-                            <p class="text-red-500">Er is een conflict met een andere reservatie</p>
-                        }
-                        @if(noHourSelected)
-                        {
-                            <p class="text-red-500">Gelieve een start en eind uur te selecteren</p>
-                        }
                     </div>
                     
                 }
             </div>
+            @if(hasConflict)
+            {
+                <p class="text-red-500">Er is een conflict met een andere reservatie</p>
+            }
+            @if(noHourSelected)
+            {
+                <p class="text-red-500">Gelieve een start en eind uur te selecteren</p>
+            }
             
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4" @onclick="Reserve">Reserveer</button>
+            <button class="bg-gray-300 px-4 py-2 rounded-lg mt-4" @onclick="Reserve">Reserveer</button>
         </div>
     </div>
 </div>
@@ -299,7 +306,7 @@
             
             await BookingService.AddBookingAsync(booking);
             ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
-            NavigationManager?.NavigateTo("/products");
+            NavigationManager?.NavigateTo("/reserve");
             HideModal();
             await OnInitializedAsync();
             
@@ -474,6 +481,10 @@
     private void SelectHour(int hour)
     {
         if (startDay != endDay)
+        {
+            return;
+        }
+        if (bookedHoursByDate.TryGetValue(currentDate.Date, out var bookedHours) && bookedHours.Contains(hour))
         {
             return;
         }

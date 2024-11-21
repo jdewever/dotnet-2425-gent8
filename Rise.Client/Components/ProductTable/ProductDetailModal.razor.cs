@@ -19,8 +19,7 @@ public partial class ProductDetailModal : ComponentBase
 
     private void OnReserverenClick()
     {
-        BarcodeService.Barcode = SelectedProduct.Barcode;
-        Navigation.NavigateTo("/reservations");
+        OnClick.InvokeAsync();
     }
 
     private void ProductManagement()
