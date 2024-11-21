@@ -1,4 +1,6 @@
-﻿namespace Rise.Shared.Products;
+﻿using System.Net;
+
+namespace Rise.Shared.Products;
 
 public interface IProductService
 {

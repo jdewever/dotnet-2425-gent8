@@ -56,7 +56,8 @@ public class ProductController : ControllerBase
 
     // get the image of a product by barcode
     [HttpGet("{barcode}/image")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [AllowAnonymous]
+
     public async Task<ActionResult> GetBarcodeImage(string barcode)
     {
         var imageBase64 = await productService.GetBarcodeImage(barcode);
