@@ -6,7 +6,8 @@ namespace Rise.Client.Auth;
 public class UserService
 {
     private readonly HttpClient _httpClient;
-    
+    private UserDto? _user;
+
     public UserService(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -14,7 +15,12 @@ public class UserService
 
     public async Task<UserDto> GetCurrentUser()
     {
-        var response = await _httpClient.GetFromJsonAsync<UserDto>("user/details");
-        return response!;
+        return _user ??= await _httpClient.GetFromJsonAsync<UserDto>("user/details") ??
+                         throw new InvalidOperationException();
+    }
+
+    public void ClearUser()
+    {
+        _user = null;
     }
 }

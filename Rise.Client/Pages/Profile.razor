@@ -1,0 +1,8 @@
+@page "/Profile"
+@attribute [Authorize]
+
+<div>
+    <img src="@_user.Picture" alt="Profile Picture"/>
+    <p>@_user.Fullname</p>
+    <p>@_user.Email</p>
+</div>

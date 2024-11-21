@@ -19,8 +19,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<BarcodeService>();
-builder.Services.AddHttpClient<UserService,UserService>("360zorg", client =>client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/")).AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-
 builder.Services.AddBlazoredToast();
 
 builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
@@ -43,5 +41,6 @@ builder.Services.AddOidcAuthentication(options =>
        options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]!);
 }).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>();
 builder.Services.AddBlazoredModal();
+builder.Services.AddScoped<UserService>();
 
 await builder.Build().RunAsync();
