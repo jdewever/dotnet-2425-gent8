@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Text;
 using BarcodeStandard;
 using Microsoft.EntityFrameworkCore;
@@ -250,7 +251,14 @@ public class ProductService : IProductService
                                     .ToListAsync();
 
         // todo: validate categories & product
-        // todo: check unique barcode
+
+        // checks if barcode is not already in use and generates a new one if it is.
+        // Maybe we should return an error instead?
+        if (await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
+        {
+            product.Barcode = (await GetNewBarcode()).Barcode;
+        }
+
         var newProduct = new Product
         {
             Name = product.Name,
