@@ -13,6 +13,8 @@ public class TransactionService : ITransactionService
 
     public TransactionService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider)
     {
+        if (authContextProvider.User is null)
+            throw new ArgumentNullException($"{nameof(TransactionService)} requires a {nameof(authContextProvider)}");
         this.dbContext = dbContext;
         this.authContextProvider = authContextProvider;
     }
