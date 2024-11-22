@@ -254,7 +254,7 @@ public class ProductService : IProductService
 
         // checks if barcode is not already in use and generates a new one if it is.
         // Maybe we should return an error instead?
-        if (await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
+        if (!IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
         {
             product.Barcode = (await GetNewBarcode()).Barcode;
         }
@@ -298,6 +298,23 @@ public class ProductService : IProductService
             barcode = (long.Parse(barcode) * 10 + checksum).ToString();
         }
         return new BarcodeResponse { Barcode = barcode };
+    }
+
+    private bool IsValidBarcode(string barcode)
+    {
+        if (barcode.Length != 13)
+        {
+            return false;
+        }
+
+        long sum = 0;
+        long checksum = long.Parse(barcode[12].ToString());
+        for (int i = 0; i < 12; i++)
+        {
+            sum += (i % 2 == 0) ? long.Parse(barcode[i].ToString()) : long.Parse(barcode[i].ToString()) * 3;
+        }
+
+        return (sum + checksum) % 10 == 0;
     }
 
     public Task<string> GetBarcodeImage(string barcode)
