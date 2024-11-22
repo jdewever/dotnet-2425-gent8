@@ -2,7 +2,7 @@ namespace Rise.Domain.DomainClasses;
 
 public class UserTransaction : Entity
 {
-    private int userId;
+    private string userId;
     private string type = null!;
 
     private static readonly HashSet<string> ValidTransactionTypes = new()
@@ -14,15 +14,15 @@ public class UserTransaction : Entity
 
     public UserTransaction() { }
 
-    public UserTransaction(int userId, string type)
+    public UserTransaction(string userId, string type)
     {
         SetUserId(userId);
         SetType(type);
     }
 
-    private void SetUserId(int userId)
+    private void SetUserId(string userId)
     {
-        this.userId = Guard.Against.NegativeOrZero(userId, nameof(userId));
+        this.userId = Guard.Against.NullOrWhiteSpace(userId, nameof(userId));
     }
 
     private void SetType(string type)
@@ -36,6 +36,6 @@ public class UserTransaction : Entity
         this.type = validatedType;
     }
 
-    public int UserId => userId;
+    public string UserId => userId;
     public string Type => type;
 }
