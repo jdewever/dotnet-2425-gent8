@@ -40,7 +40,7 @@ public class UserController : ControllerBase
     [HttpGet("details")]
     public async Task<UserDto> GetUser()
     {
-        var userid = _authContextProvider.User.Identity.Name;
+        var userid = _authContextProvider.User?.Identity?.Name;
         var user = await _managementApiClient.Users.GetAsync(userid);
         return new UserDto
         {

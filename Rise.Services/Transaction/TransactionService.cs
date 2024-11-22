@@ -1,5 +1,6 @@
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
+using Rise.Services.Auth;
 using Rise.Shared.Cart;
 using Rise.Shared.Transaction;
 
@@ -8,15 +9,17 @@ namespace Rise.Services.Transaction;
 public class TransactionService : ITransactionService
 {
     private readonly ApplicationDbContext dbContext;
+    private readonly IAuthContextProvider authContextProvider;
 
-    public TransactionService(ApplicationDbContext dbContext)
+    public TransactionService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider)
     {
         this.dbContext = dbContext;
+        this.authContextProvider = authContextProvider;
     }
 
     public async Task<int> AddTransactionScanOut()
     {
-        var transaction = new UserTransaction(1, "ScanOut");
+        var transaction = new UserTransaction(authContextProvider.User!.Identity.Name, "ScanOut");
 
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();
@@ -28,7 +31,7 @@ public class TransactionService : ITransactionService
 
     public async Task<int> AddTransactionScanIn()
     {
-        var transaction = new UserTransaction(1, "ScanIn");
+        var transaction = new UserTransaction(authContextProvider.User!.Identity.Name, "ScanIn");
 
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();
