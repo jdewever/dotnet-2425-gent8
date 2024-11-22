@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.User;
 
-namespace Server.Controllers;
+namespace Rise.Server.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize(Roles = "Administrator")]
@@ -26,8 +26,8 @@ public class UserController : ControllerBase
         return users.Select(x => new UserDto
         {
             Email = x.Email,
-            FirstName = x.FirstName,
-            LastName = x.LastName,
+            FullName = x.FullName,
+            Picture = x.Picture,
             IsBlocked = x.Blocked ?? false,
         });
     }
