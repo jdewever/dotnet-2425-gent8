@@ -302,7 +302,7 @@ public class ProductService : IProductService
 
     private bool IsValidBarcode(string barcode)
     {
-        if (barcode.Length != 13)
+        if (barcode.Length != 13 || !barcode.All(char.IsDigit))
         {
             return false;
         }
