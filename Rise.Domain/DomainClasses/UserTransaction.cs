@@ -22,6 +22,13 @@ public class UserTransaction : Entity
         SetUserId(userId);
         SetType(type);
     }
+    public UserTransaction(string userId, string type, List<TransactionItem> transactionItems, List<Product> products)
+    {
+        SetUserId(userId);
+        SetType(type);
+        setProducts(products);
+        setTransactionItems(transactionItems);
+    }
 
     private void SetUserId(string userId)
     {

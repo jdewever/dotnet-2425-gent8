@@ -59,4 +59,47 @@ public class UserTransactionShould
         act.ShouldThrow<ArgumentException>()
             .Message.ShouldContain("Invalid transaction type. Valid types are: ScanIn, ScanOut, AddStock");
     }
+
+    [Fact]
+    public void BeCreatedWithValidTransactionAndUser()
+    {
+        List<TransactionItem> transactionItems = [];
+        List<Product> products = [];
+        var transaction = new UserTransaction(
+            userId: "1",
+            type: "ScanIn",
+            transactionItems: transactionItems,
+            products: products
+        );
+        transaction.UserId.ShouldBe("1");
+        transaction.Type.ShouldBe("ScanIn");
+        transaction.TransactionItems.ShouldBe(transactionItems);
+        transaction.Products.ShouldBe(products);
+    }
+
+    [Fact]
+    public void NotBeCreatedWithValidTransaction()
+    {
+        Action act = () => new UserTransaction(
+            userId: "1",
+            type: "ScanIn",
+            transactionItems: null,
+            products: []
+        );
+
+        act.ShouldThrow<ArgumentException>();
+    }
+
+    [Fact]
+    public void NotBeCreatedWithValidProducts()
+    {
+        Action act = () => new UserTransaction(
+            userId: "1",
+            type: "ScanIn",
+            transactionItems: [],
+            products: null
+        );
+
+        act.ShouldThrow<ArgumentException>();
+    }
 }
