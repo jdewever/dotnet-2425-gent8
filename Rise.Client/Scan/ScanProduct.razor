@@ -76,10 +76,11 @@
         </div>
     }
 
-     <!-- Barcode Input / Scanner -->
-    @if (IsMobileView && ShowScanner){
+    <!-- Barcode Input / Scanner -->
+    @if (IsMobileView && ShowScanner)
+    {
         <div class="w-full lg:w-2/3 bg-white rounded-lg shadow-md p-2">
-            <div class="w-full h-[60vh] max-h-[400px] flex justify-center items-center bg-gray-100 rounded-lg">
+            <div class="w-full h-[60vh] max-h-[245px] flex justify-center items-center rounded-lg">
                 <BlazorBarcodeScanner.ZXing.JS.BarcodeReader Title=""
                                                              StartCameraAutomatically="true"
                                                              ShowStart="false"
@@ -88,7 +89,8 @@
                                                              ShowToggleTorch="true"
                                                              ShowResult="false"
                                                              ShowVideoDeviceList="false"
-                                                             OnBarcodeReceived="LocalReceivedBarcodeText" />
+                                                             OnBarcodeReceived="LocalReceivedBarcodeText"
+                                                             />
             </div>
         </div>
     }
@@ -104,9 +106,7 @@
                 </svg>
             </div>
         </div>
-    }
-    @if (!IsMobileView)
-    {
+
         <!-- Quantity Selector -->
         <div class="flex items-center space-x-2">
             <button class="text-xl font-bold @(Quantity < 100 || Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity -= 100" disabled="@(Quantity < 100 || Product == null)">-100</button>
@@ -116,7 +116,7 @@
             <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity++" disabled="@(Product == null)">+1</button>
             <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 10" disabled="@(Product == null)">+10</button>
             <button class="text-xl font-bold @(Product == null ? "text-gray-400" : "text-gray-600")" @onclick="() => Quantity += 100" disabled="@(Product == null)">+100</button>
-            </div>
+        </div>
         <!-- Add Button -->
         <button class="mt-4 px-6 py-2 bg-gray-300 text-gray-600 rounded-lg @((Product?.QuantityInStock - GetProductCount() == 0 || Quantity <= 0) ? "disabled cursor-not-allowed" : "")" @onclick="OnAddProduct">Voeg toe</button>
     }
