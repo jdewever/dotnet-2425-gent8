@@ -1,0 +1,38 @@
+<div class="w-6/12 border border-gray-300 rounded-lg">
+    <table class=" relative overflow-scroll p-5 w-full">
+        <caption class="rounded-t-lg bg-gray-200">Recente transacties</caption>
+        <thead>
+        <tr class="px-4 py-2 border-b border-gray-200">
+            <th scope="col" >Producten</th>
+            <th scope="col" >Datum</th>
+            <th scope="col" >Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (TransactionsList.Count() != 0)
+        {
+        @foreach (var transaction in TransactionsList)
+        {
+        <tr class="hover:bg-gray-100 cursor-pointer">
+            <td>@getSummeryProducts(transaction)</td>
+            <td>
+                <p>
+                    @transaction.Date.ToShortDateString()
+                </p>
+                <p>
+                    @transaction.Date.ToShortTimeString()
+                </p>
+            </td>
+            <td>@transaction.Type</td>
+        </tr>
+        }
+        }
+        else
+        {
+        <tr>
+            <td colspan="3" class="text-center">Geen transacties gevonden</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>

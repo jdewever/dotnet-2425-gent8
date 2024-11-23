@@ -2,10 +2,14 @@
 @using Rise.Client.Profile
 @attribute [Authorize]
 
-@if (User != null)
+@if (!_loading)
 {
-    <div class="flex flex-col flex-wrap justify-center">
+    <div class="mb-2">
         <ProfileDetails User="User"/>
+    </div>
+    <div class="flex flex-row justify-between">
+        <Transactions TransactionsList="TransactionsList"/>
+        <Reservations/>
     </div>
 }
 else
