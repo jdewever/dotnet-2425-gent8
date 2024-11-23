@@ -46,12 +46,12 @@ public class UserTransaction : Entity
         this.type = validatedType;
     }
 
-    private void setTransactionItems(List<TransactionItem> transactionItems)
+    public void setTransactionItems(List<TransactionItem> transactionItems)
     {
         this.transactionItems = Guard.Against.Null(transactionItems, nameof(transactionItems));
     }
 
-    private void setProducts(List<Product> products)
+    public void setProducts(List<Product> products)
     {
         this.products = Guard.Against.Null(products, nameof(products));
     }

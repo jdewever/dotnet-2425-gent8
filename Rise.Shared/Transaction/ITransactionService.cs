@@ -1,7 +1,9 @@
+using Rise.Shared.Cart;
+
 namespace Rise.Shared.Transaction;
 
 public interface ITransactionService
 {
-    Task<int> AddTransactionScanOut();
-    Task<int> AddTransactionScanIn();
+    Task AddTransactionScanOut(List<CartItem> cartItems);
+    Task AddTransactionScanIn(List<CartItem> cartItems);
 }

@@ -12,20 +12,17 @@ public class CartController : ControllerBase
 {
     private readonly ICartService cartService;
     private readonly ITransactionService transactionService;
-    private readonly ITransactionItemService transactionItemService;
 
-    public CartController(ICartService cartService, ITransactionService transactionService, ITransactionItemService transactionItemService)
+    public CartController(ICartService cartService, ITransactionService transactionService)
     {
         this.cartService = cartService;
         this.transactionService = transactionService;
-        this.transactionItemService = transactionItemService;
     }
 
     [HttpPut("checkout")]
     public async Task<IActionResult> Put([FromBody] List<CartItem> cartItems)
     {
-        var transactionID = await transactionService.AddTransactionScanOut();
-        await transactionItemService.AddTransactionItems(transactionID, cartItems);
+        await transactionService.AddTransactionScanOut(cartItems);
         await cartService.CheckoutItems(cartItems);
         return Ok();
     }
@@ -33,8 +30,7 @@ public class CartController : ControllerBase
     [HttpPut("checkin")]
     public async Task<IActionResult> PutCheckIn([FromBody] List<CartItem> cartItems)
     {
-        var transactionID = await transactionService.AddTransactionScanIn();
-        await transactionItemService.AddTransactionItems(transactionID, cartItems);
+        await transactionService.AddTransactionScanIn(cartItems);
         await cartService.CheckInItems(cartItems);
         return Ok();
     }
