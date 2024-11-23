@@ -14,15 +14,20 @@ public class TransactionItemService : ITransactionItemService
         this.dbContext = dbContext;
     }
 
-    public async Task AddTransactionItems(int transactionId, List<CartItem> transactionItems)
+    // public async Task AddTransactionItems(Transactio transactionId, List<CartItem> transactionItems)
+    // {
+    //     foreach (var item in transactionItems)
+    //     {
+    //         var transactionItem = new TransactionItem(transactionId, item.Product.Id, item.Quantity);
+    //
+    //         dbContext.TransactionItems.Add(transactionItem);
+    //     }
+    //     await dbContext.SaveChangesAsync();
+    //
+    // }
+
+    public Task AddTransactionItems(int transactionId, List<CartItem> transactionItems)
     {
-        foreach (var item in transactionItems)
-        {
-            var transactionItem = new TransactionItem(transactionId, item.Product.Id, item.Quantity);
-
-            dbContext.TransactionItems.Add(transactionItem);
-        }
-        await dbContext.SaveChangesAsync();
-
+        throw new NotImplementedException();
     }
 }

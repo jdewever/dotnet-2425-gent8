@@ -1,7 +1,6 @@
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Services.Auth;
-using Rise.Shared.Cart;
 using Rise.Shared.Transaction;
 
 namespace Rise.Services.Transaction;
