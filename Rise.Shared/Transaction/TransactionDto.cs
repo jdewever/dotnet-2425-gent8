@@ -1,4 +1,4 @@
-namespace Rise.Shared.User;
+namespace Rise.Shared.Transaction;
 
 public class TransactionDto
 {
