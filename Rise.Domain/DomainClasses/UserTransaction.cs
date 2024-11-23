@@ -4,7 +4,6 @@ public class UserTransaction : Entity
 {
     private string userId;
     private string type = null!;
-    private DateTime transactionDate;
     private List<TransactionItem> transactionItems;
     private List<Product> products;
     
@@ -40,11 +39,6 @@ public class UserTransaction : Entity
         this.type = validatedType;
     }
 
-    private void setDate(DateTime date)
-    {
-        this.transactionDate = Guard.Against.Null(date, nameof(date));
-    }
-
     private void setTransactionItems(List<TransactionItem> transactionItems)
     {
         this.transactionItems = Guard.Against.Null(transactionItems, nameof(transactionItems));
@@ -57,7 +51,6 @@ public class UserTransaction : Entity
 
     public string UserId => userId;
     public string Type => type;
-    public DateTime TransactionDate => transactionDate;
     public List<TransactionItem> TransactionItems => transactionItems;
     public List<Product> Products => products;
 }
