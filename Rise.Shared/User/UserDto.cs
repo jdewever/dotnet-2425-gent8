@@ -9,6 +9,6 @@ namespace Rise.Shared.User
         // public required string LastName { get; set; }
         public required bool IsBlocked { get; set; }
         public required string Picture { get; set; }
-        public required string Fullname { get; set; }
+        public required string FullName { get; set; }
     }
 }

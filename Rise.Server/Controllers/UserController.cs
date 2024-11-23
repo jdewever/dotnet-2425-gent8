@@ -4,6 +4,7 @@ using Auth0.ManagementApi.Models;
 using Auth0.ManagementApi.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Rise.Services.Auth;
 using Rise.Shared.User;
 
 namespace Rise.Server.Controllers;
@@ -14,10 +15,14 @@ namespace Rise.Server.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IManagementApiClient _managementApiClient;
+    private readonly IAuthContextProvider _authContextProvider;
 
-    public UserController(IManagementApiClient managementApiClient)
+    public UserController(IManagementApiClient managementApiClient, IAuthContextProvider authContextProvider)
     {
+        if (authContextProvider.User is null)
+            throw new ArgumentNullException($"{nameof(UserController)} requires a {nameof(authContextProvider)}");
         _managementApiClient = managementApiClient;
+        _authContextProvider = authContextProvider;
     }
 
     [HttpGet]
@@ -32,25 +37,21 @@ public class UserController : ControllerBase
             // FirstName = x.FirstName,
             // LastName = x.LastName,
             IsBlocked = x.Blocked ?? false,
-            Fullname = x.FullName,
+            FullName = x.FullName,
             Picture = x.Picture,
         });
     }
-
     [HttpGet("details")]
     public async Task<UserDto> GetUser()
     {
-        var userid = User.Claims.FirstOrDefault(x => x.Type ==  ClaimTypes.NameIdentifier)?.Value;
+        var userid = _authContextProvider.User?.Identity?.Name;
         var user = await _managementApiClient.Users.GetAsync(userid);
         return new UserDto
         {
             Email = user.Email,
-            // zit niet in auth0
-            // FirstName = user.FirstName ?? "",
-            // LastName = user.LastName ?? "",
             IsBlocked = user.Blocked ?? false,
             Picture = user.Picture,
-            Fullname = user.FullName
+            FullName = user.FullName
         };
     }
 }
