@@ -1,7 +1,7 @@
 using Rise.Domain.DomainClasses;
 using Shouldly;
 
-namespace Rise.Domain.Tests.Transactions;
+namespace Rise.Domain.Tests.Transaction;
 
 public class UserTransactionShould
 {
@@ -12,18 +12,18 @@ public class UserTransactionShould
     public void BeCreatedWithValidData(string type)
     {
         var transaction = new UserTransaction(
-            userId: 1,
+            userId: "1",
             type: type
         );
 
-        transaction.UserId.ShouldBe(1);
+        transaction.UserId.ShouldBe("1");
         transaction.Type.ShouldBe(type);
     }
 
     [Theory]
-    [InlineData(0)]
-    [InlineData(-1)]
-    public void NotBeCreatedWithInvalidUserId(int userId)
+    [InlineData("")]
+    [InlineData(null)]
+    public void NotBeCreatedWithInvalidUserId(string userId)
     {
         Action act = () => new UserTransaction(
             userId: userId,
@@ -41,7 +41,7 @@ public class UserTransactionShould
     public void NotBeCreatedWithInvalidType(string? type)
     {
         Action act = () => new UserTransaction(
-            userId: 1,
+            userId: "1",
             type: type!
         );
 
@@ -52,7 +52,7 @@ public class UserTransactionShould
     public void NotBeCreatedWithInvalidTransactionType()
     {
         Action act = () => new UserTransaction(
-            userId: 1,
+            userId: "1",
             type: "InvalidType"
         );
 
