@@ -7,10 +7,10 @@ namespace Rise.Client.Pages;
 public partial class Profile : ComponentBase
 {
     [Inject] public required UserService UserService { get; set; }
-    private UserDto _user { get; set; }
+    private UserDto? User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _user = await UserService.GetCurrentUser();
+        User = await UserService.GetCurrentUser();
     }
 }

@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using Auth0.ManagementApi.Paging;
@@ -33,9 +32,6 @@ public class UserController : ControllerBase
         return users.Select(x => new UserDto
         {
             Email = x.Email,
-            //zit niet in auth0
-            // FirstName = x.FirstName,
-            // LastName = x.LastName,
             IsBlocked = x.Blocked ?? false,
             FullName = x.FullName,
             Picture = x.Picture,

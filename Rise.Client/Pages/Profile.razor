@@ -1,8 +1,16 @@
 @page "/Profile"
+@using Rise.Client.Profile
 @attribute [Authorize]
 
-<div>
-    <img src="@_user.Picture" alt="Profile Picture"/>
-    <p>@_user.FullName</p>
-    <p>@_user.Email</p>
-</div>
+@if (User != null)
+{
+    <div class="flex flex-col flex-wrap justify-center">
+        <ProfileDetails User="User"/>
+    </div>
+}
+else
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
