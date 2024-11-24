@@ -70,7 +70,15 @@ namespace Rise.Client.Products.AddProduct
             showCategoryError = false;
             showAddCategoryError = false;
 
+            barcode = await ProductService.GetNewBarcode();
+            newProduct.Barcode = barcode.Barcode;
+
             StateHasChanged(); 
+        }
+
+        private void HandleInvalidSubmit()
+        {
+            ToastService.ShowError("Vergeet niet alle velden in te vullen!");
         }
 
         private void AddCategory()

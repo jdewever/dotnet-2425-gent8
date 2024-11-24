@@ -7,7 +7,7 @@
 <body class="flex items-center justify-center min-h-screen">
     <div class="max-w-3xl">
         <div>
-            <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
                 <DataAnnotationsValidator />
 
                 <div class="grid md:grid-cols-1 md:gap-6">
