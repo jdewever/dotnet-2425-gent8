@@ -66,10 +66,10 @@ namespace Rise.Client.Products.AddProduct
             showCategoryError = false;
             showAddCategoryError = false;
 
-            barcode = await ProductService.GetNewBarcode();
+            barcode = await BarcodeService.GetNewBarcode();
             newProduct.Barcode = barcode.Barcode;
 
-            StateHasChanged(); 
+            StateHasChanged();
         }
 
         private void HandleInvalidSubmit()
