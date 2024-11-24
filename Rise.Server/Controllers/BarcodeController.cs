@@ -17,7 +17,9 @@ public class BarcodeController : ControllerBase
     }
 
     // get a new barcode that's not in use
-    [HttpGet]
+    // since this endpoint checks the database state (and will result in a change later, it is better to use POST)
+    // the result is not idempotent en causes a change, hence POST
+    [HttpPost]
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task<BarcodeResponse> GetNewBarcode()
     {

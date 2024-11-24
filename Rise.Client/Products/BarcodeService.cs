@@ -14,7 +14,9 @@ public class BarcodeService : IBarcodeService
 
     public async Task<BarcodeResponse> GetNewBarcode()
     {
-        var barcode = await httpClient.GetFromJsonAsync<BarcodeResponse>("barcodes");
+        var response = await httpClient.PostAsJsonAsync("barcodes", new { });
+        response.EnsureSuccessStatusCode();
+        var barcode = await response.Content.ReadFromJsonAsync<BarcodeResponse>();
         return barcode!;
     }
 
