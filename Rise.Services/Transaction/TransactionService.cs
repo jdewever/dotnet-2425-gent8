@@ -22,7 +22,8 @@ public class TransactionService : ITransactionService
 
     public async Task AddTransactionScanOut(List<CartItem> cartItems)
     {
-        var transaction = new UserTransaction(authContextProvider.User!.Identity.Name, "ScanOut");
+        var userid = authContextProvider.User?.Identity?.Name ?? throw new InvalidOperationException("User name is null");
+        var transaction = new UserTransaction(userid, "ScanOut");
         var transactionItems = new List<TransactionItem>();
         foreach (var cartItem in cartItems)
         {
@@ -38,7 +39,8 @@ public class TransactionService : ITransactionService
 
     public async Task AddTransactionScanIn(List<CartItem> cartItems)
     {
-        var transaction = new UserTransaction(authContextProvider.User!.Identity.Name, "ScanIn");
+        var userid = authContextProvider.User?.Identity?.Name ?? throw new InvalidOperationException("User name is null");
+        var transaction = new UserTransaction(userid, "ScanIn");
         var transactionItems = new List<TransactionItem>();
         foreach (var cartItem in cartItems)
         {

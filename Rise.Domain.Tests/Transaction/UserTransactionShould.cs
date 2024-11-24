@@ -83,7 +83,7 @@ public class UserTransactionShould
         Action act = () => new UserTransaction(
             userId: "1",
             type: "ScanIn",
-            transactionItems: null,
+            transactionItems: null!,
             products: []
         );
 
@@ -97,7 +97,7 @@ public class UserTransactionShould
             userId: "1",
             type: "ScanIn",
             transactionItems: [],
-            products: null
+            products: null!
         );
 
         act.ShouldThrow<ArgumentException>();
