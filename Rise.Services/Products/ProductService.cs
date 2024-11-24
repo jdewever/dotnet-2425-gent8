@@ -269,7 +269,7 @@ public class ProductService : IProductService
             LowStock = product.LowStock,
             ClassRoomCode = product.ClassRoomCode,
             IsReservable = product.IsReservable,
-            IsHidden = false,
+            IsHidden = product.IsHidden,
             Categories = categories
         };
 
