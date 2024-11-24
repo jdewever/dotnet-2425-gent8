@@ -1,9 +1,6 @@
 ﻿using Rise.Shared.Products;
 using System.Net.Http.Json;
 using Rise.Client.Extensions;
-using System.IO.Pipelines;
-using System.Net.Http.Headers;
-using System.Net;
 
 namespace Rise.Client.Products;
 
@@ -69,17 +66,5 @@ public class ProductService : IProductService
         {
             // Log error
         }
-    }
-
-    public async Task<BarcodeResponse> GetNewBarcode()
-    {
-        var barcode = await httpClient.GetFromJsonAsync<BarcodeResponse>("product/barcode");
-        return barcode!;
-    }
-
-    public async Task<string> GetBarcodeImage(string barcode)
-    {
-        var image = await httpClient.GetStringAsync($"product/{barcode}/image");
-        return image;
     }
 }
