@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @using Rise.Shared.Products
 @using Rise.Client.Components.Table
+@using Rise.Client.Products.Components
 @using Rise.Client.Products.Buttons
 
 <PageTitle>Products</PageTitle>
@@ -29,7 +30,6 @@ else
     @if (table)
     {
         <div class="overflow-x-auto w-full">
-            @* FUCKING MODAL IS CAUSING TROUBLE AAAAAAAAAAAAAAA *@
             <Table Items="products" OnSelectRow="EventCallback.Factory.Create<ProductDTO>(this, ShowModal)">
                 <Columns>
                     <AuthorizeView Roles="Administrator, Inventory Manager">
@@ -56,7 +56,7 @@ else
 
         @if (selectedProduct != null)
         {
-            <ProductDetailModal SelectedProduct="selectedProduct" OnClick="CloseModal" />
+            <ProductDetailModal SelectedProduct="selectedProduct" OnClick="CloseModal" Reserve="OnlyReservable" />
         }
     }
 
