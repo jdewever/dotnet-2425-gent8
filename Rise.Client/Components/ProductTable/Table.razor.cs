@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
+using Rise.Client.Products;
 
 namespace Rise.Client.Components.ProductTable;
 
@@ -13,9 +14,9 @@ public partial class Table : ProductModal
 
     [Parameter] public Boolean Reserve {  get; set; } = false;
  
-    [Inject] NavigationManager NavigationManager { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; } = null!;
 
-    [Inject] BarcodeService BarcodeService { get; set; }
+    [Inject] ScanBarcodeService BarcodeService { get; set; } = null!;
 
     private void OnUitlenenClick(ProductDTO product)
     {

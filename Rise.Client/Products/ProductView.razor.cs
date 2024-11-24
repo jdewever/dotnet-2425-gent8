@@ -10,19 +10,19 @@ public partial class ProductView : ComponentBase
     [Parameter] public EventCallback OnClick { get; set; }
     [Parameter] public Boolean Reserve { get; set; } = false;
 
-    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private ScanBarcodeService ScanBarcodeService { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
 
 
     private void NavigateToScan()
     {
-        BarcodeService.Barcode = Product.Barcode;
+        ScanBarcodeService.Barcode = Product.Barcode;
         Navigation.NavigateTo($"/scan");
     }
 
     private void OnReserverenClick()
     {
-        BarcodeService.Barcode = Product.Barcode;
+        ScanBarcodeService.Barcode = Product.Barcode;
         Navigation.NavigateTo("/reservations");
     }
 }

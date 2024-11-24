@@ -1,4 +1,5 @@
-public class BarcodeService
+// todo: rewrite this, include in CartService or rename to ScanService?
+public class ScanBarcodeService
 {
     private string? barcode;
     public string? Barcode

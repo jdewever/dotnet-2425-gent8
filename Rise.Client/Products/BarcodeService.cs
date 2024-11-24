@@ -6,6 +6,7 @@ namespace Rise.Client.Products;
 public class BarcodeService : IBarcodeService
 {
     private readonly HttpClient httpClient;
+    private const string barcodeEndpoint = "barcodes";
 
     public BarcodeService(HttpClient httpClient)
     {
@@ -14,7 +15,7 @@ public class BarcodeService : IBarcodeService
 
     public async Task<BarcodeResponse> GetNewBarcode()
     {
-        var response = await httpClient.PostAsJsonAsync("barcodes", new { });
+        var response = await httpClient.PostAsJsonAsync(barcodeEndpoint, new { });
         response.EnsureSuccessStatusCode();
         var barcode = await response.Content.ReadFromJsonAsync<BarcodeResponse>();
         return barcode!;
