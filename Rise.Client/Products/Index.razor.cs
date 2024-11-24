@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Rise.Client.Scan;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products;
@@ -18,7 +19,7 @@ public partial class Index
     private int PageSize { get; set; } = 14;
 
     [Inject] NavigationManager NavigationManager { get; set; } = null!;
-    [Inject] BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] ScanService ScanService { get; set; } = null!;
 
     private void SetCurrentPageToOne()
     {
@@ -108,12 +109,12 @@ public partial class Index
     // table actions
     private void OnUitlenenClick(ProductDTO product)
     {
-        BarcodeService.Barcode = product.Barcode;
+        ScanService.Barcode = product.Barcode;
         NavigationManager.NavigateTo("/scan");
     }
     private void OnReserverenClick(ProductDTO product)
     {
-        BarcodeService.Barcode = product.Barcode;
+        ScanService.Barcode = product.Barcode;
         NavigationManager.NavigateTo("/reservations");
     }
 
