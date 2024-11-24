@@ -2,10 +2,10 @@ namespace Rise.Domain.DomainClasses;
 
 public class UserTransaction : Entity
 {
-    private string userId;
+    private string userId = null!;
     private string type = null!;
-    private List<TransactionItem> transactionItems;
-    private List<Product> products;
+    private List<TransactionItem> transactionItems = null!;
+    private List<Product> products = null!;
     
 
     private static readonly HashSet<string> ValidTransactionTypes = new()
@@ -26,8 +26,8 @@ public class UserTransaction : Entity
     {
         SetUserId(userId);
         SetType(type);
-        setProducts(products);
-        setTransactionItems(transactionItems);
+        SetProducts(products);
+        SetTransactionItems(transactionItems);
     }
 
     private void SetUserId(string userId)
@@ -46,12 +46,12 @@ public class UserTransaction : Entity
         this.type = validatedType;
     }
 
-    public void setTransactionItems(List<TransactionItem> transactionItems)
+    public void SetTransactionItems(List<TransactionItem> transactionItems)
     {
         this.transactionItems = Guard.Against.Null(transactionItems, nameof(transactionItems));
     }
 
-    public void setProducts(List<Product> products)
+    private void SetProducts(List<Product> products)
     {
         this.products = Guard.Against.Null(products, nameof(products));
     }

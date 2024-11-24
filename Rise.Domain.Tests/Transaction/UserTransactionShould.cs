@@ -78,7 +78,7 @@ public class UserTransactionShould
     }
 
     [Fact]
-    public void NotBeCreatedWithValidTransaction()
+    public void NotBeCreatedWithInValidTransaction()
     {
         Action act = () => new UserTransaction(
             userId: "1",
@@ -91,7 +91,7 @@ public class UserTransactionShould
     }
 
     [Fact]
-    public void NotBeCreatedWithValidProducts()
+    public void NotBeCreatedWithInValidProducts()
     {
         Action act = () => new UserTransaction(
             userId: "1",

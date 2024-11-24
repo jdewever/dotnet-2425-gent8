@@ -31,7 +31,7 @@ public class TransactionService : ITransactionService
             transactionItems.Add(new TransactionItem(transaction, product, cartItem.Quantity));
         }
 
-        transaction.setTransactionItems(transactionItems);
+        transaction.SetTransactionItems(transactionItems);
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();
     }
@@ -47,7 +47,7 @@ public class TransactionService : ITransactionService
             transactionItems.Add(new TransactionItem(transaction, product, cartItem.Quantity));
         }
 
-        transaction.setTransactionItems(transactionItems);
+        transaction.SetTransactionItems(transactionItems);
         dbContext.Transaction.Add(transaction);
         await dbContext.SaveChangesAsync();
     }

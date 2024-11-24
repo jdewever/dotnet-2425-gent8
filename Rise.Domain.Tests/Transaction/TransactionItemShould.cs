@@ -46,7 +46,7 @@ public class TransactionItemShould
     {
         Action act = () => new TransactionItem(
             product: _product,
-            transaction: null,
+            transaction: null!,
             quantity: 1
         );
 
@@ -58,7 +58,7 @@ public class TransactionItemShould
     {
         Action act = () => new TransactionItem(
             transaction: _userTransaction,
-            product: null,
+            product: null!,
             quantity: 1
         );
 

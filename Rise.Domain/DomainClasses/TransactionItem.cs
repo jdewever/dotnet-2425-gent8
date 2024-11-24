@@ -2,8 +2,8 @@ namespace Rise.Domain.DomainClasses
 {
     public class TransactionItem
     {
-        public UserTransaction Transaction { get; set; }
-        public Product Product { get; set; }
+        public UserTransaction Transaction { get; set; } = null!;
+        public Product Product { get; set; } = null!;
         public int Quantity { get; set; }
 
         public TransactionItem() { }
