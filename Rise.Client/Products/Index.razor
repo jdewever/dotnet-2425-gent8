@@ -1,7 +1,7 @@
 @page "/products"
 @attribute [Authorize]
 @using Rise.Shared.Products
-@using Rise.Client.Components.ProductTable
+@using Rise.Client.Components.Table
 @using Rise.Client.Products.Buttons
 
 <PageTitle>Products</PageTitle>
@@ -29,21 +29,35 @@ else
     @if (table)
     {
         <div class="overflow-x-auto w-full">
-            <Table Items="products" Reserve="OnlyReservable">
+            @* FUCKING MODAL IS CAUSING TROUBLE AAAAAAAAAAAAAAA *@
+            <Table Items="products" OnSelectRow="EventCallback.Factory.Create<ProductDTO>(this, ShowModal)">
                 <Columns>
                     <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="Barcode" Label="Code" />
+                        <Column T="ProductDTO" Value="Barcode" Title="Code" />
                     </AuthorizeView>
-                    <Column Name="Name" Label="Naam" />
-                    <Column Name="Description" Label="Beschrijving" />
-                    <Column Name="QuantityInStock" Label="In Stock" />
+                    <Column T="ProductDTO" Value="Name" Title="Naam" />
+                    <Column T="ProductDTO" Value="Description" Title="Beschrijving" />
+                    <Column T="ProductDTO" Value="QuantityInStock" Title="In Stock" />
                     <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                        <Column T="ProductDTO" Value="QuantityOnOrder" Title="In Bestelling" />
                     </AuthorizeView>
-                    <Column Name="ClassRoomCode" Label="Lokaal" />
+                    <Column T="ProductDTO" Value="ClassRoomCode" Title="Lokaal" />
                 </Columns>
+                <Actions>
+                    @if (OnlyReservable)
+                    {
+                        <TAction T="ProductDTO" Name="Reserveren" Method="OnReserverenClick" />
+                    } else {
+                        <TAction T="ProductDTO" Name="Uitlenen" Method="OnUitlenenClick" />
+                    }
+                </Actions>
             </Table>
         </div>
+
+        @if (selectedProduct != null)
+        {
+            <ProductDetailModal SelectedProduct="selectedProduct" OnClick="CloseModal" />
+        }
     }
 
     @if (table2)

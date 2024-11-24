@@ -11,12 +11,14 @@ public partial class Index
     private string? _searchTerm;
     private IEnumerable<string>? _locations;
     private int totalPages;
-    private Boolean table = false;
-    private Boolean table2 = true;
-
+    private bool table = false;
+    private bool table2 = true;
     private int CurrentPage { get; set; } = 1;
     private int TotalPages { get; set; } = 1;
     private int PageSize { get; set; } = 14;
+
+    [Inject] NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] BarcodeService BarcodeService { get; set; } = null!;
 
     private void SetCurrentPageToOne()
     {
@@ -101,5 +103,29 @@ public partial class Index
         var productResponse = await ProductService.GetAllProducts(request);
         products = productResponse.Products;
         TotalPages = productResponse.TotalPages;
+    }
+
+    // table actions
+    private void OnUitlenenClick(ProductDTO product)
+    {
+        BarcodeService.Barcode = product.Barcode;
+        NavigationManager.NavigateTo("/scan");
+    }
+    private void OnReserverenClick(ProductDTO product)
+    {
+        BarcodeService.Barcode = product.Barcode;
+        NavigationManager.NavigateTo("/reservations");
+    }
+
+    // modal actions
+    private ProductDTO? selectedProduct;
+    private void ShowModal(ProductDTO product)
+    {
+        selectedProduct = product;
+    }
+
+    private void CloseModal()
+    {
+        selectedProduct = null;
     }
 }
