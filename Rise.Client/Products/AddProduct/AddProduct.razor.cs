@@ -1,12 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text;
-using BarcodeStandard;
-using SkiaSharp;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Blazored.Toast.Services;
+using Rise.Shared.Barcodes;
 
 namespace Rise.Client.Products.AddProduct
 {
@@ -15,6 +10,7 @@ namespace Rise.Client.Products.AddProduct
         private BarcodeResponse barcode = null!;
         [Inject] public required ICategoryService CategoryService { get; set; }
         [Inject] public required IProductService ProductService { get; set; }
+        [Inject] public required IBarcodeService BarcodeService { get; set; }
         [Inject] private IToastService ToastService { get; set; } = null!;
 
         private int selectedCategory;
@@ -42,7 +38,7 @@ namespace Rise.Client.Products.AddProduct
             var categories = await CategoryService.GetAllCategories();
             CategoryOptions = categories.ToList();
 
-            barcode = await ProductService.GetNewBarcode();
+            barcode = await BarcodeService.GetNewBarcode();
             newProduct.Barcode = barcode.Barcode;
         }
 
@@ -55,7 +51,7 @@ namespace Rise.Client.Products.AddProduct
             {
                 Name = string.Empty,
                 Description = string.Empty,
-                Barcode = await ProductService.GetNewBarcode().ContinueWith(t => t.Result.Barcode),
+                Barcode = await BarcodeService.GetNewBarcode().ContinueWith(t => t.Result.Barcode),
                 QuantityInStock = 0,
                 QuantityOnOrder = 0,
                 LowStock = 0,
