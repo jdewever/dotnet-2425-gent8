@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Rise.Shared.Products;
+﻿namespace Rise.Shared.Products;
 
 public interface IProductService
 {
@@ -9,8 +7,6 @@ public interface IProductService
     Task<ProductDTO> GetProductByBarcode(string barcode);
     Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock();
     Task AddProduct(ProductCreationDTO product);
-    Task<BarcodeResponse> GetNewBarcode();
-    Task<string> GetBarcodeImage(string barcode);
     Task ToggleHideProduct(string barcode);
     Task DeleteProduct(string barcode);
 }
