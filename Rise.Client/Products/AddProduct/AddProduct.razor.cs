@@ -76,6 +76,11 @@ namespace Rise.Client.Products.AddProduct
             StateHasChanged(); 
         }
 
+        private void HandleInvalidSubmit()
+        {
+            ToastService.ShowError("Vergeet niet alle velden in te vullen!");
+        }
+
         private void AddCategory()
         {
             if (newProduct.CategoryIds.Count == 3)
