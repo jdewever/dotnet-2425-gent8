@@ -11,6 +11,7 @@ using Rise.Client.Cart;
 using Blazored.Modal;
 using Blazored.LocalStorage;
 using Blazored.Toast;
+using Rise.Client.Scan;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -18,7 +19,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddSingleton<ScanBarcodeService>();
+builder.Services.AddSingleton<ScanService>();
 
 builder.Services.AddBlazoredToast();
 

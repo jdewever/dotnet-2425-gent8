@@ -1,5 +1,5 @@
-// todo: rewrite this, include in CartService or rename to ScanService?
-public class ScanBarcodeService
+namespace Rise.Client.Scan;
+public class ScanService
 {
     private string? barcode;
     public string? Barcode
