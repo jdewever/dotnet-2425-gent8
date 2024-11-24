@@ -34,6 +34,7 @@ public class ProductCreationDTO
     [StringLength(50, ErrorMessage = "Naam mag niet langer zijn dan 50 tekens.")]
     public required string Name { get; set; }
 
+    [Required(ErrorMessage = "Omschrijving is verplicht.")]
     [StringLength(500, ErrorMessage = "Omschrijving mag niet langer zijn dan 500 tekens.")]
     public required string Description { get; set; }
     public required string Barcode { get; set; }

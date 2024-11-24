@@ -1,10 +1,8 @@
-using System.Text;
-using BarcodeStandard;
 using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
-using SkiaSharp;
+using Rise.Services.Barcodes;
 
 namespace Rise.Services.Products;
 
@@ -250,7 +248,15 @@ public class ProductService : IProductService
                                     .ToListAsync();
 
         // todo: validate categories & product
-        // todo: check unique barcode
+
+        // checks if barcode is not already in use and generates a new one if it is.
+        // Maybe we should return an error instead?
+        BarcodeService barcodeService = new BarcodeService(dbContext);
+        if (!barcodeService.IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
+        {
+            product.Barcode = (await barcodeService.GetNewBarcode()).Barcode;
+        }
+
         var newProduct = new Product
         {
             Name = product.Name,
@@ -261,40 +267,11 @@ public class ProductService : IProductService
             LowStock = product.LowStock,
             ClassRoomCode = product.ClassRoomCode,
             IsReservable = product.IsReservable,
-            IsHidden = false,
+            IsHidden = product.IsHidden,
             Categories = categories
         };
 
         dbContext.Products.Add(newProduct);
         await dbContext.SaveChangesAsync();
-    }
-
-    public async Task<BarcodeResponse> GetNewBarcode()
-    {
-        var random = new Random();
-        var barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
-
-        while (await dbContext.Products.AnyAsync(p => p.Barcode == barcode))
-        {
-            barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
-        }
-        return new BarcodeResponse { Barcode = barcode };
-    }
-
-    public Task<string> GetBarcodeImage(string barcode)
-    {
-        var b = new Barcode(barcode, BarcodeStandard.Type.Code93);
-        b.ImageFormat = SKEncodedImageFormat.Png;
-        b.IncludeLabel = true;
-        b.LabelFont = new SKFont{
-            Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Normal),
-            Size = 14,
-        };
-        b.Encode(BarcodeStandard.Type.Code93, barcode, 300, 90).ToString();
-
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(b.ToJson()));
-        SaveData saveData = Barcode.FromJson(stream);
-
-        return Task.FromResult(saveData.Image);
     }
 }
