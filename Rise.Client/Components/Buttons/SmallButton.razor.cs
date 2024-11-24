@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace Rise.Client.Components
+namespace Rise.Client.Components.Buttons
 {
     public partial class SmallButton : ComponentBase
     {
