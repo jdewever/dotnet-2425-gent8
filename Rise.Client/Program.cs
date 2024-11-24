@@ -5,6 +5,7 @@ using Rise.Client;
 using Client.Auth;
 using Rise.Shared.Products;
 using Rise.Client.Products;
+using Rise.Shared.Barcodes;
 using Rise.Shared.Cart;
 using Rise.Client.Cart;
 using Blazored.Modal;
@@ -17,7 +18,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddSingleton<BarcodeService>();
+builder.Services.AddSingleton<ScanBarcodeService>();
 
 builder.Services.AddBlazoredToast();
 
@@ -25,6 +26,9 @@ builder.Services.AddHttpClient<IProductService, ProductService>("360zorg", clien
        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
         .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
