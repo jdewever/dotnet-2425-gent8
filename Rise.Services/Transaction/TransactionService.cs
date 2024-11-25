@@ -63,7 +63,8 @@ public class TransactionService : ITransactionService
                      throw new InvalidOperationException("User name is null");
         var query = dbContext.Transaction.Where(t => t.UserId == userid)
             .Include(t => t.TransactionItems)
-            .Include(t => t.Products); 
+            .Include(t => t.Products)
+            .OrderByDescending(transaction => transaction.CreatedAt); 
         return await query.Select(transaction => new TransactionDto.History
         {
             Id = transaction.Id,
