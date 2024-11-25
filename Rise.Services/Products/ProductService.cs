@@ -1,11 +1,8 @@
-using System.Data.Common;
-using System.Text;
-using BarcodeStandard;
 using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
-using SkiaSharp;
+using Rise.Services.Barcodes;
 
 namespace Rise.Services.Products;
 
@@ -254,9 +251,10 @@ public class ProductService : IProductService
 
         // checks if barcode is not already in use and generates a new one if it is.
         // Maybe we should return an error instead?
-        if (!IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
+        BarcodeService barcodeService = new BarcodeService(dbContext);
+        if (!barcodeService.IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
         {
-            product.Barcode = (await GetNewBarcode()).Barcode;
+            product.Barcode = (await barcodeService.GetNewBarcode()).Barcode;
         }
 
         var newProduct = new Product
@@ -269,68 +267,11 @@ public class ProductService : IProductService
             LowStock = product.LowStock,
             ClassRoomCode = product.ClassRoomCode,
             IsReservable = product.IsReservable,
-            IsHidden = false,
+            IsHidden = product.IsHidden,
             Categories = categories
         };
 
         dbContext.Products.Add(newProduct);
         await dbContext.SaveChangesAsync();
-    }
-
-    public async Task<BarcodeResponse> GetNewBarcode()
-    {
-        var random = new Random();
-        string? barcode = null;
-        long sum;
-        long checksum;
-
-        while (barcode == null || await dbContext.Products.AnyAsync(p => p.Barcode == barcode))
-        {
-            barcode = random.NextInt64(100000000000, 999999999999).ToString();
-
-            sum = 0;
-            for (int i = 0; i < 12; i++)
-            {
-                sum += (i % 2 == 0) ? long.Parse(barcode[i].ToString()) : long.Parse(barcode[i].ToString()) * 3;
-            }
-            checksum = (10 - sum % 10) % 10;
-
-            barcode = (long.Parse(barcode) * 10 + checksum).ToString();
-        }
-        return new BarcodeResponse { Barcode = barcode };
-    }
-
-    private bool IsValidBarcode(string barcode)
-    {
-        if (barcode.Length != 13 || !barcode.All(char.IsDigit))
-        {
-            return false;
-        }
-
-        long sum = 0;
-        long checksum = long.Parse(barcode[12].ToString());
-        for (int i = 0; i < 12; i++)
-        {
-            sum += (i % 2 == 0) ? long.Parse(barcode[i].ToString()) : long.Parse(barcode[i].ToString()) * 3;
-        }
-
-        return (sum + checksum) % 10 == 0;
-    }
-
-    public Task<string> GetBarcodeImage(string barcode)
-    {
-        var b = new Barcode(barcode, BarcodeStandard.Type.Ean13);
-        b.ImageFormat = SKEncodedImageFormat.Png;
-        b.IncludeLabel = true;
-        b.LabelFont = new SKFont{
-            Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Normal),
-            Size = 20,
-        };
-        b.Encode(BarcodeStandard.Type.Ean13, barcode, 300, 160).ToString();
-
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(b.ToJson()));
-        SaveData saveData = Barcode.FromJson(stream);
-
-        return Task.FromResult(saveData.Image);
     }
 }

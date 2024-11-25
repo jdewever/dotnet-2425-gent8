@@ -1,4 +1,5 @@
-public class BarcodeService
+namespace Rise.Client.Scan;
+public class ScanService
 {
     private string? barcode;
     public string? Barcode

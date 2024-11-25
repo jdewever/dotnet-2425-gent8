@@ -29,7 +29,7 @@
         <label class="text-gray-500">Barcode</label>
         <div class="relative w-1/2">
             <input class="w-full border border-gray-300 rounded-lg p-2 pr-10" type="text" placeholder="123456789"
-                @bind="@BarcodeService.Barcode" oninput="validateNumericInput(event)" />
+                @bind="@ScanService.Barcode" oninput="validateNumericInput(event)" />
             <svg class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 size-6"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor">

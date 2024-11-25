@@ -1,5 +1,4 @@
-﻿using System.Transactions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 
 namespace Rise.Persistence;
@@ -12,11 +11,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<UserTransaction> Transaction => Set<UserTransaction>();
 
-    public DbSet<TransactionItem> TransactionItems => Set<TransactionItem>();
-
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
-
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -32,6 +28,7 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<UserTransaction>().HasMany(e => e.Products).WithMany().UsingEntity<TransactionItem>();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         modelBuilder.Entity<UserTransaction>(entity =>
@@ -39,12 +36,5 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.UserId).IsRequired();
             entity.Property(e => e.Type).IsRequired();
         });
-
-        modelBuilder.Entity<TransactionItem>(entity =>
-        {
-            entity.Property(e => e.TransactionID).IsRequired();
-        });
     }
-
 }
-
