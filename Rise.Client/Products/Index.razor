@@ -16,7 +16,7 @@
 else
 {
     <div class="flex justify-center mb-8">
-        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2" Categories="categories"
+        <TableNavbar OnShowTable="showColumnTable" OnShowTable2="showRegularTable" Categories="categories"
             SelectedCategoriesIds="_selectedCategories" Location="@Location" Locations="_locations" MaxInStock="MaxInStock"
             MaxOnOrder="MaxOnOrder" MinInStock="MinInStock" MinOnOrder="MinOnOrder" OnFilterApplied="SetCurrentPageToOne"
             OnlyReservable="OnlyReservable"/>
@@ -27,7 +27,7 @@ else
         </AuthorizeView>
     </div>
 
-    @if (table)
+    @if (isColumnTable)
     {
         <div class="overflow-x-auto w-full">
             <Table Items="products" OnSelectRow="EventCallback.Factory.Create<ProductDTO>(this, ShowModal)">
@@ -58,15 +58,12 @@ else
         {
             <ProductDetailModal SelectedProduct="selectedProduct" OnClick="CloseModal" Reserve="OnlyReservable" />
         }
-    }
-
-    @if (table2)
-    {
+    } else {
         <div class="flex justify-center mb-8">
             <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" />
         </div>
     }
 
     <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" CurrentPageSize="@PageSize"
-        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" table2="table2" />
+        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" IsColumnTable="isColumnTable" />
 }

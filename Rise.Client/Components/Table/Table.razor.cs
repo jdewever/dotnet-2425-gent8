@@ -12,9 +12,6 @@ public partial class Table<T> : ComponentBase
 
     private void SelectItem(T item)
     {
-        if (OnSelectRow != null)
-        {
-            OnSelectRow.Value.InvokeAsync(item);
-        }
+        OnSelectRow?.InvokeAsync(item);
     }
 }

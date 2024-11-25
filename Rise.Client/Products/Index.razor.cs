@@ -11,9 +11,7 @@ public partial class Index
     private IList<int>? _selectedCategories;
     private string? _searchTerm;
     private IEnumerable<string>? _locations;
-    private int totalPages;
-    private bool table = false;
-    private bool table2 = true;
+    private bool isColumnTable = true;
     private int CurrentPage { get; set; } = 1;
     private int TotalPages { get; set; } = 1;
     private int PageSize { get; set; } = 14;
@@ -26,19 +24,17 @@ public partial class Index
         CurrentPage = 1;
     }
 
-    private async Task showTable()
+    private async Task showColumnTable()
     {
-        table = true;
-        table2 = false;
+        isColumnTable = true;
         PageSize = 10;
         CurrentPage = 1;
         await OnParametersSetAsync();
     }
 
-    private async Task showTable2()
+    private async Task showRegularTable()
     {
-        table = false;
-        table2 = true;
+        isColumnTable = false;
         PageSize = 14;
         CurrentPage = 1;
         await OnParametersSetAsync();
