@@ -1,7 +1,6 @@
 ﻿using System.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
-using Rise.Persistence.Configurations;
 
 namespace Rise.Persistence;
 
@@ -36,7 +35,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        modelBuilder.ApplyConfiguration(new BookingConfiguration());
 
         modelBuilder.Entity<UserTransaction>(entity =>
         {

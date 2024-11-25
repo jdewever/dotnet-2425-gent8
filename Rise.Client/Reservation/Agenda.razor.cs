@@ -137,7 +137,7 @@ namespace Rise.Client.Reservation
                 }
                 var booking = new BookingDTO
                 {
-                    ProductId = product.Id,
+                    Product = product,
                     StartDate = startDate,
                     EndDate = endDate,
                     UserId = "Test1"
