@@ -1,37 +1,37 @@
-<div class="w-6/12 border border-gray-300 rounded-lg">
+<div class="w-6/12 border border-gray-300 rounded-lg mb-2">
     <table class=" table-auto relative overflow-scroll p-5 w-full">
         <caption class="rounded-t-lg bg-gray-200">Recente transacties</caption>
         <thead>
-        <tr class="px-4 py-2 border-b border-gray-200">
-            <th scope="col" >Producten</th>
-            <th scope="col" >Datum</th>
-            <th scope="col" >Type</th>
+        <tr class="border-b border-gray-200">
+            <th class="text-left px-4 py-2">Producten</th>
+            <th class="text-left px-4 py-2">Datum</th>
+            <th class="text-left px-4 py-2">Type</th>
         </tr>
         </thead>
         <tbody>
         @if (TransactionsList.Count() != 0)
         {
-        @foreach (var transaction in TransactionsList)
-        {
-        <tr class="hover:bg-gray-100 cursor-pointer">
-            <td>@GetSummeryProducts(transaction)</td>
-            <td>
-                <p>
-                    @transaction.Date.ToShortDateString()
-                </p>
-                <p>
-                    @transaction.Date.ToShortTimeString()
-                </p>
-            </td>
-            <td>@transaction.Type</td>
-        </tr>
-        }
+            @foreach (var transaction in TransactionsList)
+            {
+                <tr class="hover:bg-gray-100 cursor-pointer">
+                    <td class="px-4 py-2">@((MarkupString)GetSummeryProducts(transaction).Replace(Environment.NewLine, "<br/>"))</td>
+                    <td class="px-4 py-2">
+                        <p>
+                            @transaction.Date.ToShortDateString()
+                        </p>
+                        <p>
+                            @transaction.Date.ToShortTimeString()
+                        </p>
+                    </td>
+                    <td class="px-4 py-2">@transaction.Type</td>
+                </tr>
+            }
         }
         else
         {
-        <tr>
-            <td colspan="3" class="text-center p-5">Geen transacties gevonden</td>
-        </tr>
+            <tr>
+                <td colspan="3" class="text-center p-5">Geen transacties gevonden</td>
+            </tr>
         }
         </tbody>
     </table>
