@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using Rise.Client.Components.ProductTable;
+using Rise.Client.Products.Components;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products;

@@ -1,7 +1,8 @@
 @page "/products"
 @attribute [Authorize]
 @using Rise.Shared.Products
-@using Rise.Client.Components.ProductTable
+@using Rise.Client.Components.Table
+@using Rise.Client.Products.Components
 @using Rise.Client.Products.Buttons
 
 <PageTitle>Products</PageTitle>
@@ -15,7 +16,7 @@
 else
 {
     <div class="flex justify-center mb-8">
-        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2" Categories="categories"
+        <TableNavbar OnShowTable="showColumnTable" OnShowTable2="showRegularTable" Categories="categories"
             SelectedCategoriesIds="_selectedCategories" Location="@Location" Locations="_locations" MaxInStock="MaxInStock"
             MaxOnOrder="MaxOnOrder" MinInStock="MinInStock" MinOnOrder="MinOnOrder" OnFilterApplied="SetCurrentPageToOne"
             OnlyReservable="OnlyReservable"/>
@@ -26,33 +27,43 @@ else
         </AuthorizeView>
     </div>
 
-    @if (table)
+    @if (isColumnTable)
     {
         <div class="overflow-x-auto w-full">
-            <Table Items="products" Reserve="OnlyReservable">
+            <Table Items="products" OnSelectRow="EventCallback.Factory.Create<ProductDTO>(this, ShowModal)">
                 <Columns>
                     <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="Barcode" Label="Code" />
+                        <Column T="ProductDTO" Value="Barcode" Title="Code" />
                     </AuthorizeView>
-                    <Column Name="Name" Label="Naam" />
-                    <Column Name="Description" Label="Beschrijving" />
-                    <Column Name="QuantityInStock" Label="In Stock" />
+                    <Column T="ProductDTO" Value="Name" Title="Naam" />
+                    <Column T="ProductDTO" Value="Description" Title="Beschrijving" />
+                    <Column T="ProductDTO" Value="QuantityInStock" Title="In Stock" />
                     <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="QuantityOnOrder" Label="In Bestelling" />
+                        <Column T="ProductDTO" Value="QuantityOnOrder" Title="In Bestelling" />
                     </AuthorizeView>
-                    <Column Name="ClassRoomCode" Label="Lokaal" />
+                    <Column T="ProductDTO" Value="ClassRoomCode" Title="Lokaal" />
                 </Columns>
+                <Actions>
+                    @if (OnlyReservable)
+                    {
+                        <TAction T="ProductDTO" Name="Reserveren" Method="OnReserverenClick" />
+                    } else {
+                        <TAction T="ProductDTO" Name="Uitlenen" Method="OnUitlenenClick" />
+                    }
+                </Actions>
             </Table>
         </div>
-    }
 
-    @if (table2)
-    {
+        @if (selectedProduct != null)
+        {
+            <ProductDetailModal SelectedProduct="selectedProduct" OnClick="CloseModal" Reserve="OnlyReservable" />
+        }
+    } else {
         <div class="flex justify-center mb-8">
             <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" />
         </div>
     }
 
     <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" CurrentPageSize="@PageSize"
-        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" table2="table2" />
+        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" IsColumnTable="isColumnTable" />
 }

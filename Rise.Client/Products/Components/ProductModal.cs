@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 
-namespace Rise.Client.Components.ProductTable;
+namespace Rise.Client.Products.Components;
 public partial class ProductModal : ComponentBase
 {
     protected bool isModalVisible = false;

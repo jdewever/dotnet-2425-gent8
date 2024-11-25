@@ -9,11 +9,11 @@ namespace Rise.Client.Products
         [Parameter] public int CurrentPageSize { get; set; }
         [Parameter] public EventCallback<int> OnPageChanged { get; set; }
         [Parameter] public EventCallback<int> OnPageSizeChanged { get; set; }
-        [Parameter] public bool table2 { get; set; }
+        [Parameter] public bool IsColumnTable { get; set; }
 
         private bool IsFirstPage => CurrentPage <= 1;
         private bool IsLastPage => CurrentPage >= TotalPages;
-        public int[] PageSizes => new int[] { 5, 10, 14, 20, 50, 100, 200 };
+        public int[] PageSizes => [5, 10, 14, 20, 50, 100, 200];
 
         private async Task GoToPreviousPage()
         {

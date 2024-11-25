@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 using Rise.Client.Scan;
 
-namespace Rise.Client.Components.ProductTable;
+namespace Rise.Client.Products.Components;
 
 public partial class ProductDetailModal : ComponentBase
 {
