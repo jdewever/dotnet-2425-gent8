@@ -15,7 +15,7 @@ namespace Rise.Client.Products
         public async Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
         {
             var bookings = await _httpClient.GetFromJsonAsync<List<BookingDTO>>($"booking/{productId}");
-            return bookings ?? new List<BookingDTO>();
+            return bookings ?? [];
         }
 
         public async Task AddBookingAsync(BookingDTO booking)

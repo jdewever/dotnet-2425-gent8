@@ -21,12 +21,12 @@ namespace Rise.Client.Reservation
 
         private bool noHourSelected = false;
 
-        [Inject] private IJSRuntime JSRuntime { get; set; }
-        [Inject] private BarcodeService BarcodeService { get; set; }
-        [Inject] private IProductService ProductService { get; set; }
-        [Inject] private IBookingService BookingService { get; set; }
-        [Inject] private IToastService ToastService { get; set; }
-        [Inject] private NavigationManager NavigationManager { get; set; }
+        [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
+        [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+        [Inject] private IProductService ProductService { get; set; } = null!;
+        [Inject] private IBookingService BookingService { get; set; } = null!;
+        [Inject] private IToastService ToastService { get; set; } = null!;
+        [Inject] private NavigationManager NavigationManager { get; set; } = null!;
 
         protected override async Task OnInitializedAsync()
         {
