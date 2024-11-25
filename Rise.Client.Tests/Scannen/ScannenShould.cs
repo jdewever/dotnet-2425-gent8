@@ -416,7 +416,7 @@ public class ScannenShould : TestContext
         // Assert
         var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
         productName.ShouldNotBeNull();
-        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains('1'));
         quantity.ShouldNotBeNull();
         quantity.GetAttribute("class")!.ShouldNotContain("text-red-700");
 

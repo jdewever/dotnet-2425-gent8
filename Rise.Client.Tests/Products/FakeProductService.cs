@@ -9,10 +9,8 @@ public class FakeProductService : IProductService
 {
     public Task<ProductResponse> GetAllProducts(ProductRequest.Index request)
     {
-        var products = Enumerable.Range(1, 5)
-                                 .Select(i => new ProductDTO { Id = i, Name = $"Product {i}",Barcode = $"Barcode {i}",Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null,IsReservable=false });
-        products.Append(new ProductDTO { Id = 6, Name = "Product 6", Barcode = "Barcode 6", Description = "Description 6", ClassRoomCode = "ClassRoom 6", QuantityInStock = 10, QuantityOnOrder = 2, LowStock = 15, Categories = null,IsReservable=false});
-        products.Append(new ProductDTO { Id = 6, Name = "Product 7", Barcode = "Barcode 7", Description = "Description 7", ClassRoomCode = "ClassRoom 7", QuantityInStock = 10, QuantityOnOrder = 2, LowStock = 10, Categories = null,IsReservable=false});
+        var products = Enumerable.Range(1, 7)
+                                 .Select(i => new ProductDTO { Id = i, Name = $"Product {i}",Barcode = $"Barcode {i}",Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null,IsReservable=false }).ToList();
 
         return Task.FromResult(new ProductResponse { Products = products, TotalPages = 1 });
     }
