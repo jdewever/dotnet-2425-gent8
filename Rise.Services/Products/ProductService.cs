@@ -1,8 +1,8 @@
-using Ardalis.GuardClauses;
 using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
+using Rise.Services.Barcodes;
 
 namespace Rise.Services.Products;
 
@@ -161,7 +161,7 @@ public class ProductService : IProductService
         return categoriesDto;
     }
 
-    public async Task<ProductDTO> GetProductByBarcode(string? barcode = null)
+    public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
         // todo: check admin / inv mgr to show in case of hidden products
         IQueryable<ProductDTO> query = dbContext.Products
@@ -247,36 +247,31 @@ public class ProductService : IProductService
                                     .Where(c => product.CategoryIds.Contains(c.Id))
                                     .ToListAsync();
 
-        // creer unique barcode
-        var barcode = GenerateBarcode();
-        while (await dbContext.Products.AnyAsync(p => p.Barcode == barcode))
+        // todo: validate categories & product
+
+        // checks if barcode is not already in use and generates a new one if it is.
+        // Maybe we should return an error instead?
+        BarcodeService barcodeService = new BarcodeService(dbContext);
+        if (!barcodeService.IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
         {
-            barcode = GenerateBarcode();
+            product.Barcode = (await barcodeService.GetNewBarcode()).Barcode;
         }
 
-        // todo: validate categories & product
         var newProduct = new Product
         {
             Name = product.Name,
             Description = product.Description,
-            Barcode = barcode,
+            Barcode = product.Barcode,
             QuantityInStock = product.QuantityInStock,
             QuantityOnOrder = product.QuantityOnOrder,
             LowStock = product.LowStock,
             ClassRoomCode = product.ClassRoomCode,
             IsReservable = product.IsReservable,
-            IsHidden = false,
+            IsHidden = product.IsHidden,
             Categories = categories
         };
 
         dbContext.Products.Add(newProduct);
         await dbContext.SaveChangesAsync();
-    }
-
-    private static string GenerateBarcode()
-    {
-        var random = new Random();
-        var barcode = random.NextInt64(1000000000000, 9999999999999).ToString();
-        return barcode;
     }
 }

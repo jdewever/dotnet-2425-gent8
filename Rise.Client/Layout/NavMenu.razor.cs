@@ -10,7 +10,7 @@ public partial class NavMenu : ComponentBase
     [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
     private bool collapseNavMenu = true;
-    private string NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-[calc(100vh-20rem)] min-h-full";
+    private string NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-full min-h-full";
     private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
     
     private string? userRole;

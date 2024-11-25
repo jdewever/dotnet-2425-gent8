@@ -5,11 +5,13 @@ using Rise.Client;
 using Client.Auth;
 using Rise.Shared.Products;
 using Rise.Client.Products;
+using Rise.Shared.Barcodes;
 using Rise.Shared.Cart;
 using Rise.Client.Cart;
 using Blazored.Modal;
 using Blazored.LocalStorage;
 using Blazored.Toast;
+using Rise.Client.Scan;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,7 +19,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddSingleton<BarcodeService>();
+builder.Services.AddSingleton<ScanService>();
 
 builder.Services.AddBlazoredToast();
 
@@ -29,6 +31,9 @@ builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg", cli
 
 builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
        .CreateClient("360zorg"));

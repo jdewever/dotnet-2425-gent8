@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Rise.Client.Scan;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products;
@@ -10,27 +11,30 @@ public partial class Index
     private IList<int>? _selectedCategories;
     private string? _searchTerm;
     private IEnumerable<string>? _locations;
-    private int totalPages;
-    private Boolean table = false;
-    private Boolean table2 = true;
-
+    private bool isColumnTable = true;
     private int CurrentPage { get; set; } = 1;
     private int TotalPages { get; set; } = 1;
     private int PageSize { get; set; } = 14;
 
-    private async Task showTable()
+    [Inject] NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] ScanService ScanService { get; set; } = null!;
+
+    private void SetCurrentPageToOne()
     {
-        table = true;
-        table2 = false;
+        CurrentPage = 1;
+    }
+
+    private async Task showColumnTable()
+    {
+        isColumnTable = true;
         PageSize = 10;
         CurrentPage = 1;
         await OnParametersSetAsync();
     }
 
-    private async Task showTable2()
+    private async Task showRegularTable()
     {
-        table = false;
-        table2 = true;
+        isColumnTable = false;
         PageSize = 14;
         CurrentPage = 1;
         await OnParametersSetAsync();
@@ -96,5 +100,29 @@ public partial class Index
         var productResponse = await ProductService.GetAllProducts(request);
         products = productResponse.Products;
         TotalPages = productResponse.TotalPages;
+    }
+
+    // table actions
+    private void OnUitlenenClick(ProductDTO product)
+    {
+        ScanService.Barcode = product.Barcode;
+        NavigationManager.NavigateTo("/scan");
+    }
+    private void OnReserverenClick(ProductDTO product)
+    {
+        ScanService.Barcode = product.Barcode;
+        NavigationManager.NavigateTo("/reservations");
+    }
+
+    // modal actions
+    private ProductDTO? selectedProduct;
+    private void ShowModal(ProductDTO product)
+    {
+        selectedProduct = product;
+    }
+
+    private void CloseModal()
+    {
+        selectedProduct = null;
     }
 }

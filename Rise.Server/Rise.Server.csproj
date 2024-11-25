@@ -9,6 +9,8 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <ItemGroup>
+    <PackageReference Include="Auth0Net.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="BarcodeLib" Version="3.1.4" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.8" />

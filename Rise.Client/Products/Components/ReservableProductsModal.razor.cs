@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using Rise.Client.Scan;
 using Rise.Shared.Products;
 
 
@@ -11,11 +12,11 @@ public partial class ReservableProductsModal : ComponentBase
 
     [Inject] private NavigationManager? NavigationManager { get; set; }
 
-    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private ScanService ScanService { get; set; } = null!;
 
     private void NavigateToAgenda()
     {
-        BarcodeService.Barcode = Product.Barcode;
+        ScanService.Barcode = Product.Barcode;
         NavigationManager!.NavigateTo("/agenda");
     }
 }

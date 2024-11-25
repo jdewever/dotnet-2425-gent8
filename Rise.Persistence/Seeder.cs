@@ -33,7 +33,7 @@ public class Seeder
     {
         Name = "Blood Pressure Monitor",
         Description = "A device for monitoring blood pressure.",
-        Barcode = "123456789012",
+        Barcode = "2128621336990",
         QuantityInStock = 15,
         QuantityOnOrder = 10,
         LowStock = 5,
@@ -45,7 +45,7 @@ public class Seeder
     {
         Name = "Therapy Ball",
         Description = "A tool for physical therapy and rehabilitation exercises.",
-        Barcode = "987654321098",
+        Barcode = "7786005654037",
         QuantityInStock = 30,
         QuantityOnOrder = 5,
         LowStock = 10,
@@ -57,7 +57,7 @@ public class Seeder
     {
         Name = "Infrared Thermometer",
         Description = "A non-contact thermometer for measuring body temperature.",
-        Barcode = "123450987654",
+        Barcode = "8977149310036",
         QuantityInStock = 25,
         QuantityOnOrder = 12,
         LowStock = 5,
@@ -69,7 +69,7 @@ public class Seeder
     {
         Name = "Hand Sanitizer",
         Description = "An alcohol-based hand sanitizer for personal hygiene.",
-        Barcode = "111122223333",
+        Barcode = "6950263680928",
         QuantityInStock = 100,
         QuantityOnOrder = 50,
         LowStock = 100,
@@ -81,7 +81,7 @@ public class Seeder
     {
         Name = "Electric Wheelchair",
         Description = "A battery-powered wheelchair for mobility support.",
-        Barcode = "555566667777",
+        Barcode = "1344607852440",
         QuantityInStock = 8,
         QuantityOnOrder = 2,
         LowStock = 3,
@@ -93,7 +93,7 @@ public class Seeder
     {
         Name = "Sterile Syringe",
         Description = "Sterile disposable syringe",
-        Barcode = "888800000001",
+        Barcode = "7919454827619",
         QuantityInStock = 500,
         QuantityOnOrder = 200,
         ClassRoomCode = "S101",
@@ -104,7 +104,7 @@ public class Seeder
     {
         Name = "Sterile Needle",
         Description = "Sterile disposable needle",
-        Barcode = "888800000002",
+        Barcode = "4994804485384",
         QuantityInStock = 50,
         QuantityOnOrder = 150,
         LowStock = 250,
@@ -116,7 +116,7 @@ public class Seeder
     {
         Name = "Surgical Mask",
         Description = "Disposable medical surgical mask for protection.",
-        Barcode = "888800000003",
+        Barcode = "2778717870893",
         QuantityInStock = 1000,
         QuantityOnOrder = 500,
         LowStock = 250,
@@ -128,7 +128,7 @@ public class Seeder
     {
         Name = "Elastic Bandage",
         Description = "Elastic bandage for compression and support.",
-        Barcode = "888800000004",
+        Barcode = "1501097441756",
         QuantityInStock = 300,
         QuantityOnOrder = 100,
         LowStock = 500,
@@ -140,7 +140,7 @@ public class Seeder
     {
         Name = "Sterile Gauze Pads",
         Description = "Sterile gauze pads for wound dressing.",
-        Barcode = "888800000005",
+        Barcode = "3793699087502",
         QuantityInStock = 400,
         QuantityOnOrder = 150,
         LowStock = 200,
@@ -153,7 +153,7 @@ public class Seeder
     {
         Name = "Oxygen Mask",
         Description = "Mask used for oxygen therapy.",
-        Barcode = "888800000006",
+        Barcode = "9132449329907",
         QuantityInStock = 150,
         QuantityOnOrder = 50,
         LowStock = 50,
@@ -165,7 +165,7 @@ public class Seeder
     {
         Name = "ECG Machine",
         Description = "Machine for recording the electrical activity of the heart.",
-        Barcode = "888800000007",
+        Barcode = "7252594591591",
         QuantityInStock = 10,
         QuantityOnOrder = 5,
         LowStock = 3,
@@ -177,7 +177,7 @@ public class Seeder
     {
         Name = "Pulse Oximeter",
         Description = "Device to measure oxygen saturation.",
-        Barcode = "888800000008",
+        Barcode = "3737312589301",
         QuantityInStock = 200,
         QuantityOnOrder = 100,
         LowStock = 25,
@@ -189,7 +189,7 @@ public class Seeder
     {
         Name = "IV Drip Stand",
         Description = "Adjustable stand for holding IV drips.",
-        Barcode = "888800000009",
+        Barcode = "3797151253207",
         QuantityInStock = 50,
         QuantityOnOrder = 20,
         LowStock = 50,
@@ -201,7 +201,7 @@ public class Seeder
     {
         Name = "Nebulizer",
         Description = "Device that administers medication in the form of a mist inhaled into the lungs.",
-        Barcode = "888800000010",
+        Barcode = "1234142880520",
         QuantityInStock = 40,
         QuantityOnOrder = 15,
         LowStock = 10,
@@ -213,7 +213,7 @@ public class Seeder
     {
         Name = "Glucometer",
         Description = "Device to measure blood glucose levels.",
-        Barcode = "888800000011",
+        Barcode = "8844616580431",
         QuantityInStock = 120,
         QuantityOnOrder = 60,
         LowStock = 30,
@@ -225,7 +225,7 @@ public class Seeder
     {
         Name = "Stethoscope",
         Description = "Acoustic medical device for auscultation.",
-        Barcode = "888800000012",
+        Barcode = "6807449252199",
         QuantityInStock = 80,
         QuantityOnOrder = 30,
         LowStock = 10,
@@ -237,7 +237,7 @@ public class Seeder
     {
         Name = "Defibrillator",
         Description = "Device that delivers a dose of electrical energy to the heart.",
-        Barcode = "888800000013",
+        Barcode = "5467200503178",
         QuantityInStock = 6,
         QuantityOnOrder = 3,
         LowStock = 2,
@@ -249,7 +249,7 @@ public class Seeder
     {
         Name = "Surgical Gloves",
         Description = "Sterile gloves used in surgery.",
-        Barcode = "888800000014",
+        Barcode = "5865626226662",
         QuantityInStock = 500,
         QuantityOnOrder = 250,
         LowStock = 250,
@@ -261,7 +261,7 @@ public class Seeder
     {
         Name = "Wound Dressing",
         Description = "Sterile dressing for wound protection.",
-        Barcode = "888800000015",
+        Barcode = "2448086833385",
         QuantityInStock = 200,
         QuantityOnOrder = 150,
         LowStock = 500,
@@ -273,7 +273,7 @@ public class Seeder
     {
         Name = "Blood Collection Tubes",
         Description = "Sterile tubes for collecting blood samples.",
-        Barcode = "888800000016",
+        Barcode = "5329093380307",
         QuantityInStock = 400,
         QuantityOnOrder = 200,
         LowStock = 500,
@@ -285,7 +285,7 @@ public class Seeder
     {
         Name = "Suture Kit",
         Description = "Sterile kit for wound closure.",
-        Barcode = "888800000017",
+        Barcode = "6181433842314",
         QuantityInStock = 100,
         QuantityOnOrder = 50,
         LowStock = 100,
@@ -297,7 +297,7 @@ public class Seeder
     {
         Name = "Crutches",
         Description = "Walking aid for mobility support.",
-        Barcode = "888800000018",
+        Barcode = "1071087105963",
         QuantityInStock = 30,
         QuantityOnOrder = 10,
         LowStock = 5,
@@ -309,7 +309,7 @@ public class Seeder
     {
         Name = "Hydrogen Peroxide",
         Description = "Disinfectant used for cleaning wounds.",
-        Barcode = "888800000019",
+        Barcode = "3461949537809",
         QuantityInStock = 100,
         QuantityOnOrder = 40,
         LowStock = 25,
@@ -321,7 +321,7 @@ public class Seeder
     {
         Name = "Splint",
         Description = "Device used to support and immobilize a limb or the spine.",
-        Barcode = "888800000020",
+        Barcode = "4327121744153",
         QuantityInStock = 40,
         QuantityOnOrder = 20,
         LowStock = 10,
@@ -333,7 +333,7 @@ public class Seeder
     {
         Name = "Antiseptic Wipes",
         Description = "Sterile wipes used for cleaning the skin.",
-        Barcode = "888800000021",
+        Barcode = "8994744124271",
         QuantityInStock = 700,
         QuantityOnOrder = 350,
         LowStock = 500,
@@ -345,7 +345,7 @@ public class Seeder
     {
         Name = "Cervical Collar",
         Description = "Device used to support the neck.",
-        Barcode = "888800000022",
+        Barcode = "5460034448608",
         QuantityInStock = 15,
         QuantityOnOrder = 5,
         LowStock = 5,
@@ -357,7 +357,7 @@ public class Seeder
     {
         Name = "IV Cannula",
         Description = "Tube inserted into a vein for intravenous therapy.",
-        Barcode = "888800000023",
+        Barcode = "3620544171737",
         QuantityInStock = 500,
         QuantityOnOrder = 200,
         LowStock = 250,
@@ -369,7 +369,7 @@ public class Seeder
     {
         Name = "Blood Pressure Cuff",
         Description = "Inflatable cuff used to measure blood pressure.",
-        Barcode = "888800000024",
+        Barcode = "1511125934709",
         QuantityInStock = 150,
         QuantityOnOrder = 75,
         LowStock = 50,
@@ -381,7 +381,7 @@ public class Seeder
     {
         Name = "Hot Water Bottle",
         Description = "Bottle used for providing warmth.",
-        Barcode = "888800000025",
+        Barcode = "8549797229116",
         QuantityInStock = 80,
         QuantityOnOrder = 30,
         LowStock = 20,
@@ -393,7 +393,7 @@ public class Seeder
     {
         Name = "Portable Ultrasound Machine",
         Description = "A compact device for ultrasound imaging.",
-        Barcode = "888800000030",
+        Barcode = "7259742316020",
         QuantityInStock = 5,
         QuantityOnOrder = 2,
         LowStock = 1,
@@ -405,7 +405,7 @@ public class Seeder
     {
         Name = "Rehabilitation Treadmill",
         Description = "Treadmill for physical rehabilitation exercises.",
-        Barcode = "888800000031",
+        Barcode = "2697387883500",
         QuantityInStock = 3,
         QuantityOnOrder = 1,
         LowStock = 1,
@@ -417,7 +417,7 @@ public class Seeder
     {
         Name = "Mobile X-Ray Unit",
         Description = "A portable X-ray machine for mobile imaging.",
-        Barcode = "888800000032",
+        Barcode = "7566065164000",
         QuantityInStock = 2,
         QuantityOnOrder = 1,
         LowStock = 1,
@@ -429,7 +429,7 @@ public class Seeder
     {
         Name = "Patient Monitor",
         Description = "Device to monitor vital signs of patients.",
-        Barcode = "888800000033",
+        Barcode = "2887891436983",
         QuantityInStock = 6,
         QuantityOnOrder = 2,
         LowStock = 1,
@@ -441,7 +441,7 @@ public class Seeder
     {
         Name = "Bone Densitometer",
         Description = "Device to measure bone density.",
-        Barcode = "888800000034",
+        Barcode = "5034056696899",
         QuantityInStock = 4,
         QuantityOnOrder = 2,
         LowStock = 1,
@@ -453,7 +453,7 @@ public class Seeder
     {
         Name = "Electric Patient Bed",
         Description = "Adjustable electric bed for patient comfort.",
-        Barcode = "888800000035",
+        Barcode = "1463097558004",
         QuantityInStock = 8,
         QuantityOnOrder = 4,
         LowStock = 2,
@@ -465,7 +465,7 @@ public class Seeder
     {
         Name = "Respirator",
         Description = "Device for artificial respiration.",
-        Barcode = "888800000036",
+        Barcode = "3580482011581",
         QuantityInStock = 5,
         QuantityOnOrder = 3,
         LowStock = 2,
@@ -477,7 +477,7 @@ public class Seeder
     {
         Name = "Portable ECG Device",
         Description = "ECG machine for mobile use.",
-        Barcode = "888800000037",
+        Barcode = "3315293203531",
         QuantityInStock = 10,
         QuantityOnOrder = 5,
         LowStock = 2,
@@ -489,7 +489,7 @@ public class Seeder
     {
         Name = "Dialysis Machine",
         Description = "Machine for blood purification (dialysis).",
-        Barcode = "888800000038",
+        Barcode = "8635715688957",
         QuantityInStock = 3,
         QuantityOnOrder = 1,
         LowStock = 1,
@@ -501,7 +501,7 @@ public class Seeder
     {
         Name = "Infusion Pump",
         Description = "Device for controlled infusion of fluids.",
-        Barcode = "888800000039",
+        Barcode = "2892182108593",
         QuantityInStock = 12,
         QuantityOnOrder = 4,
         LowStock = 3,

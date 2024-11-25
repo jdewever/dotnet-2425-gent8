@@ -22,6 +22,10 @@ public partial class TableNavbar : ComponentBase
     [Parameter] public int? MaxOnOrder { get; set; }
     [Parameter] public int? MinOnOrder { get; set; }
 
+    [Parameter] public EventCallback OnFilterApplied { get; set; }
+
+    [Parameter] public Boolean OnlyReservable { get; set; }
+
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
 
     private void ShowModal()
@@ -34,7 +38,9 @@ public partial class TableNavbar : ComponentBase
             .Add(nameof(FilterModal.MaxInStock), MaxInStock)
             .Add(nameof(FilterModal.MinInStock), MinInStock)
             .Add(nameof(FilterModal.MaxOnOrder), MaxOnOrder)
-            .Add(nameof(FilterModal.MinOnOrder), MinOnOrder);
+            .Add(nameof(FilterModal.MinOnOrder), MinOnOrder)
+            .Add("OnFilterApplied", OnFilterApplied)
+            .Add("OnlyReservable", OnlyReservable);
         Modal.Show<FilterModal>("Filters", parameters);
     }
 
@@ -85,7 +91,14 @@ public partial class TableNavbar : ComponentBase
             MinOnOrder = MinOnOrder,
             Location = Location,
         };
-        var url = "products?";
+        var url = "";
+        if(OnlyReservable)
+        {
+            url = "reserve?";
+        }else {
+            url = "products?";
+        }
+        
         url += request.AsQueryString();
 
         if (SelectedCategoriesIds != null)

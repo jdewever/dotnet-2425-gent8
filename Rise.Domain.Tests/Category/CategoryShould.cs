@@ -2,6 +2,7 @@ using Rise.Domain.DomainClasses;
 using Shouldly;
 
 namespace Rise.Domain.Tests.Categorys;
+
 public class CategoryShould
 {
     [Fact]
@@ -45,8 +46,8 @@ public class CategoryShould
     [Fact]
     public void AllowUpdatingProductList()
     {
-        var product1 = new Product("Laptop", "description", 1, 2, 1, "classRoomCode", "123456789012");
-        var product2 = new Product("Phone", "description", 1, 2, 1, "classRoomCode", "123456789012");
+        var product1 = new Product("Laptop", "description", 1, 2, 1, "classRoomCode", "123456789012", false, true);
+        var product2 = new Product("Phone", "description", 1, 2, 1, "classRoomCode", "123456789012", false, true);
         var products = new List<Product> { product1, product2 };
         var category = new Category("Electronics");
 
