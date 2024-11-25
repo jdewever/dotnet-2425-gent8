@@ -1,24 +1,22 @@
 using Rise.Shared.Products;
 using Rise.Shared.Cart;
 using Rise.Client.Scan;
-using Rise.Client.Cart;
-using Xunit.Abstractions;
 using Shouldly;
 using System.Linq;
 using System;
-using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
+using Rise.Client.Products;
 
 
-namespace Rise.Client.Products;
+namespace Rise.Client.Scannen;
 
 public class ScannenShould : TestContext
 {
 
-    private BarcodeService? barcodeService;
+    private ScanService? barcodeService;
     private List<CartItem>? cartItems;
     private Func<string, int>? getProductCountByBarcode;
     private EventCallback<(ProductDTO, int)> addProduct;
@@ -32,7 +30,7 @@ public class ScannenShould : TestContext
         Services.AddScoped<IProductService, FakeProductService>();
         Services.AddScoped<ICategoryService, FakeCategoryService>();
         Services.AddScoped<ICartService, FakeCartService>();
-        Services.AddSingleton(new BarcodeService());
+        Services.AddSingleton(new ScanService());
         Services.AddBlazoredLocalStorage();
 
         Initialize();
@@ -41,7 +39,7 @@ public class ScannenShould : TestContext
     private void Initialize()
     {
         cartItems = new List<CartItem>();
-        barcodeService = Services.GetRequiredService<BarcodeService>();
+        barcodeService = Services.GetRequiredService<ScanService>();
         getProductCountByBarcode = barcode => cartItems.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity);
         
         addProduct = EventCallback.Factory.Create<(ProductDTO, int)>(this, async productInfo =>

@@ -8,8 +8,8 @@ namespace Rise.Client.Pages;
 
 public partial class Profile : ComponentBase
 {
-    [Inject] public required UserService UserService { get; set; }
-    [Inject] public required TransactionService TransactionService { get; set; }
+    [Inject] public required IUserService UserService { get; set; }
+    [Inject] public required ITransactionService TransactionService { get; set; }
     private bool _loading;
     private UserDto? User { get; set; }
     private IEnumerable<TransactionDto.History> TransactionsList { get; set; } = [];

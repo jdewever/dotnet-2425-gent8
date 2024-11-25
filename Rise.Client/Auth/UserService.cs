@@ -3,7 +3,7 @@ using Rise.Shared.User;
 
 namespace Rise.Client.Auth;
 
-public class UserService
+public class UserService: IUserService
 {
     private readonly HttpClient _httpClient;
     private UserDto? _user;

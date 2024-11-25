@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Rise.Shared.Cart;
 
-namespace Rise.Client.Cart
+namespace Rise.Client.Scannen
 {
     public class FakeCartService : ICartService
     {
@@ -12,6 +12,11 @@ namespace Rise.Client.Cart
         {
             cart.Clear();
             return Task.CompletedTask;
+        }
+
+        public Task CheckInItems(List<CartItem> cart)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -9,7 +9,7 @@ public partial class NavMenu : ComponentBase
 {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
-    [Inject] public required UserService UserService { get; set; }
+    [Inject] public required IUserService UserService { get; set; }
 
     private bool collapseNavMenu = true;
     private string NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-full min-h-full";

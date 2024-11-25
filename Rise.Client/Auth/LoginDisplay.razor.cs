@@ -6,7 +6,7 @@ namespace Rise.Client.Auth;
 
 public partial class LoginDisplay : ComponentBase
 {
-    [Inject] public required UserService UserService { get; set; }
+    [Inject] public required IUserService UserService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     public UserDto? User { get; set; }
 
