@@ -15,7 +15,7 @@ public partial class ProductDetailModal : ComponentBase
     private void NavigateToScan()
     {
         ScanService.Barcode = SelectedProduct.Barcode;
-        Navigation.NavigateTo($"/scan");
+        Navigation.NavigateTo("/scan");
     }
 
     private void OnReserverenClick()
