@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Rise.Shared.Products;
 using Blazored.Toast.Services;
+using Rise.Client.Scan;
 
 namespace Rise.Client.Reservation
 {
@@ -22,7 +23,7 @@ namespace Rise.Client.Reservation
         private bool noHourSelected = false;
 
         [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
-        [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+        [Inject] private ScanService ScanService { get; set; } = null!;
         [Inject] private IProductService ProductService { get; set; } = null!;
         [Inject] private IBookingService BookingService { get; set; } = null!;
         [Inject] private IToastService ToastService { get; set; } = null!;
@@ -30,7 +31,13 @@ namespace Rise.Client.Reservation
 
         protected override async Task OnInitializedAsync()
         {
-            product = await ProductService.GetProductByBarcode(BarcodeService.Barcode);
+            if (ScanService.Barcode == null)
+            {
+                NavigationManager.NavigateTo("/scan");
+                return;
+            }
+
+            product = await ProductService.GetProductByBarcode(ScanService.Barcode);
             if (product != null)
             {
                 bookings = await BookingService.GetBookingsByProductIdAsync(product.Id);

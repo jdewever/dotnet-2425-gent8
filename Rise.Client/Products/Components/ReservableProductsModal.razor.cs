@@ -3,10 +3,11 @@ using Rise.Client.Scan;
 using Rise.Shared.Products;
 
 
-namespace Rise.Client.Components.ProductTable;
+namespace Rise.Client.Products.Components;
+
 public partial class ReservableProductsModal : ComponentBase
 {
-  [Parameter] public EventCallback HideModal { get; set; }
+    [Parameter] public EventCallback HideModal { get; set; }
 
     [Parameter] public required ProductDTO Product { get; set; }
 
@@ -18,5 +19,17 @@ public partial class ReservableProductsModal : ComponentBase
     {
         ScanService.Barcode = Product.Barcode;
         NavigationManager!.NavigateTo("/agenda");
+    }
+
+    private bool isModalVisible = false;
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
     }
 }

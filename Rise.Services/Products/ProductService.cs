@@ -243,6 +243,7 @@ public class ProductService : IProductService
 
     public async Task AddProduct(ProductCreationDTO product)
     {
+     
         var categories = await dbContext.Categories
                                     .Where(c => product.CategoryIds.Contains(c.Id))
                                     .ToListAsync();
