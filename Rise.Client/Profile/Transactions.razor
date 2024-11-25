@@ -14,7 +14,7 @@
         @foreach (var transaction in TransactionsList)
         {
         <tr class="hover:bg-gray-100 cursor-pointer">
-            <td>@getSummeryProducts(transaction)</td>
+            <td>@GetSummeryProducts(transaction)</td>
             <td>
                 <p>
                     @transaction.Date.ToShortDateString()
