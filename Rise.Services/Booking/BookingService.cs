@@ -51,11 +51,13 @@ namespace Rise.Services.Booking
 
         public async Task AddBookingAsync(BookingDTO booking)
         {
+            var userid = _authContextProvider.User?.Identity?.Name ??
+                         throw new InvalidOperationException("User name is null");
             //TODO: Add validation
             var product = await _dbContext.Products.FindAsync(booking.Product.Id);
 
             var newBooking =
-                new Domain.DomainClasses.Booking(product, booking.UserId, booking.StartDate, booking.EndDate);
+                new Domain.DomainClasses.Booking(product, userid, booking.StartDate, booking.EndDate);
 
             _dbContext.Booking.Add(newBooking);
             await _dbContext.SaveChangesAsync();
