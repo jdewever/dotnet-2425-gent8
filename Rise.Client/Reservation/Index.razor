@@ -1,0 +1,80 @@
+@page "/agenda"
+@inject IJSRuntime JSRuntime;
+@using Blazored.Toast.Services;
+
+@inject NavigationManager NavigationManager;
+@inject IToastService ToastService;
+
+<div class="p-8">
+    <Agenda />
+</div>
+
+<script>
+    window.dragSelection = {
+        startSelection: function (dotNetHelper) {
+            let isSelecting = false;
+
+            document.addEventListener('mousedown', function (event) {
+                if (event.target.classList.contains('hour-cell') || event.target.closest('.hour-cell')) {
+                    isSelecting = true;
+                    dotNetHelper.invokeMethodAsync('StartSelection');
+                }
+            });
+
+            document.addEventListener('mouseup', function (event) {
+                if (isSelecting) {
+                    isSelecting = false;
+                    dotNetHelper.invokeMethodAsync('EndSelection');
+                }
+            });
+
+            document.addEventListener('mousemove', function (event) {
+                if (isSelecting && event.buttons === 1) {
+                    let element = document.elementFromPoint(event.clientX, event.clientY);
+                    if (element && !element.classList.contains('hour-cell')) {
+                        element = element.closest('.hour-cell');
+                    }
+                    if (element && element.classList.contains('hour-cell')) {
+                        const hour = element.getAttribute('data-hour');
+                        dotNetHelper.invokeMethodAsync('UpdateSelection', parseInt(hour));
+                    }
+                }
+            });
+        }
+    };
+    window.dragSelectDays = {
+        initialize: function (dotNetHelper) {
+            const calendarElement = document.getElementById('calendarGrid');
+            if (!calendarElement) {
+                console.error('Calendar grid element not found');
+                return;
+            }
+
+            let isMouseDown = false;
+            let startCell = null;
+
+            calendarElement.addEventListener('mousedown', (event) => {
+                if (event.target.classList.contains('day-cell')) {
+                    isMouseDown = true;
+                    startCell = event.target;
+                    const date = startCell.getAttribute('data-date');
+                    dotNetHelper.invokeMethodAsync('StartDaySelection', date);
+                }
+            });
+
+            calendarElement.addEventListener('mouseover', (event) => {
+                if (isMouseDown && event.target.classList.contains('day-cell')) {
+                    const date = event.target.getAttribute('data-date');
+                    dotNetHelper.invokeMethodAsync('UpdateDaySelection', date);
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isMouseDown) {
+                    isMouseDown = false;
+                    dotNetHelper.invokeMethodAsync('EndDaySelection');
+                }
+            });
+        }
+    };
+</script>

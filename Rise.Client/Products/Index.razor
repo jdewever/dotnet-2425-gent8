@@ -16,7 +16,7 @@
 else
 {
     <div class="flex justify-center mb-8">
-        <TableNavbar OnShowTable="showColumnTable" OnShowTable2="showRegularTable" Categories="categories"
+        <TableNavbar OnShowColumnTable="showColumnTable" OnShowRegularTable="showRegularTable" Categories="categories"
             SelectedCategoriesIds="_selectedCategories" Location="@Location" Locations="_locations" MaxInStock="MaxInStock"
             MaxOnOrder="MaxOnOrder" MinInStock="MinInStock" MinOnOrder="MinOnOrder" OnFilterApplied="SetCurrentPageToOne"
             OnlyReservable="OnlyReservable"/>
@@ -27,7 +27,7 @@ else
         </AuthorizeView>
     </div>
 
-    @if (isColumnTable)
+    @if (!isColumnTable)
     {
         <div class="overflow-x-auto w-full">
             <Table Items="products" OnSelectRow="EventCallback.Factory.Create<ProductDTO>(this, ShowModal)">

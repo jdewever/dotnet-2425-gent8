@@ -24,17 +24,17 @@ public partial class Index
         CurrentPage = 1;
     }
 
-    private async Task showColumnTable()
+    private async Task showRegularTable()
     {
-        isColumnTable = true;
+        isColumnTable = false;
         PageSize = 10;
         CurrentPage = 1;
         await OnParametersSetAsync();
     }
 
-    private async Task showRegularTable()
+    private async Task showColumnTable()
     {
-        isColumnTable = false;
+        isColumnTable = true;
         PageSize = 14;
         CurrentPage = 1;
         await OnParametersSetAsync();

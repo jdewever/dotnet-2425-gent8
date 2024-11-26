@@ -15,13 +15,15 @@ public partial class ProductDetailModal : ComponentBase
     private void NavigateToScan()
     {
         ScanService.Barcode = SelectedProduct.Barcode;
-        Navigation.NavigateTo($"/scan");
+        Navigation.NavigateTo("/scan");
     }
 
     private void OnReserverenClick()
     {
-        ScanService.Barcode = SelectedProduct.Barcode;
-        Navigation.NavigateTo("/reservations");
+        // todo
+        OnClick.InvokeAsync();
+        // ScanService.Barcode = SelectedProduct.Barcode;
+        // Navigation.NavigateTo("/reservations");
     }
 
     private void ProductManagement()

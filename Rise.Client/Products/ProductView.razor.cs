@@ -9,21 +9,27 @@ public partial class ProductView : ComponentBase
     [Parameter] public required ProductDTO Product { get; set; }
     [Parameter] public string? ImageUrl { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
-    [Parameter] public Boolean Reserve { get; set; } = false;
+    [Parameter] public bool Reserve { get; set; } = false;
 
     [Inject] private ScanService ScanService { get; set; } = null!;
     [Inject] private NavigationManager Navigation { get; set; } = null!;
 
+    private bool isReservableProductsModalVisible = false;
 
     private void NavigateToScan()
     {
         ScanService.Barcode = Product.Barcode;
         Navigation.NavigateTo($"/scan");
     }
-
-    private void OnReserverenClick()
+    
+    private void ShowReservableProductsModal()
     {
-        ScanService.Barcode = Product.Barcode;
-        Navigation.NavigateTo("/reservations");
+        isReservableProductsModalVisible = true;
     }
+
+    private void HideReservableProductsModal()
+    {
+        isReservableProductsModalVisible = false;
+    }
+
 }

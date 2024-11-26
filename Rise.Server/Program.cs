@@ -80,6 +80,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IBarcodeService, BarcodeService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddHttpContextAccessor()
     .AddScoped<IAuthContextProvider, HttpContextAuthProvider>();
 
