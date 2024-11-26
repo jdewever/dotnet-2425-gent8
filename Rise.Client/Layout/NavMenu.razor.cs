@@ -30,6 +30,12 @@ public partial class NavMenu : ComponentBase
         },
         new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
         new NavItem { Label = "Reserveringen", Href = "reserveringen", Icon = "reservation" },
+        new NavItem {
+            Label = "Beheren",
+            Href = "manage",
+            Icon = "settings",
+            IsVisible = userRole == "Inventory Manager" || userRole == "Administrator"
+        },
     };
 
     private void ToggleNavMenu() {
