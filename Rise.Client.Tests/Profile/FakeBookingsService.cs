@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Rise.Shared.Cart;
+using Rise.Shared.Booking;
 using Rise.Shared.Products;
-using Rise.Shared.Transaction;
 
 namespace Rise.Client.Profile;
 
-public class FakeTransactionService : ITransactionService
+public class FakeBookingsService: IBookingService
 {
-    private readonly List<TransactionDto.History> _transactionHistory;
+    private readonly IEnumerable<BookingDTO> _fakeBookings;
 
-    public FakeTransactionService()
+    public FakeBookingsService()
     {
         var product = new ProductDTO()
         {
@@ -35,38 +34,35 @@ public class FakeTransactionService : ITransactionService
             QuantityOnOrder = 10,
             IsHidden = false,
         };
-        _transactionHistory =
+        _fakeBookings =
         [
-            new TransactionDto.History()
+            new BookingDTO()
             {
-                Id = 1,
-                Date = DateTime.MinValue,
-                Products =
-                [
-                    new TransactionItemDto
-                    {
-                        Product = product,
-                        Quantity = 10
-                    }
-                ],
-                Type = "InScannen",
-                UserId = "1"
+                Product = product,
+                StartDate = new DateTime(2024, 11, 25, 10, 0, 0),
+                EndDate = new DateTime(2024, 11, 25, 12, 0, 0)
+            },
+
+            new BookingDTO()
+            {
+                Product = product,
+                StartDate = new DateTime(2024, 11, 26, 14, 0, 0),
+                EndDate = new DateTime(2024, 11, 26, 16, 30, 0)
             }
         ];
     }
-
-    public Task AddTransactionScanOut(List<CartItem> cartItems)
+    public Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
     {
         throw new System.NotImplementedException();
     }
 
-    public Task AddTransactionScanIn(List<CartItem> cartItems)
+    public Task AddBookingAsync(BookingDTO booking)
     {
         throw new System.NotImplementedException();
     }
 
-    public Task<List<TransactionDto.History>> GetRecentTransactions()
+    public Task<IEnumerable<BookingDTO>> GetRecentBookings()
     {
-        return Task.FromResult(_transactionHistory);
+        return Task.FromResult(_fakeBookings);
     }
 }
