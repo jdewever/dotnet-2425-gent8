@@ -14,6 +14,7 @@ using Blazored.Toast;
 using Rise.Client.Scan;
 using Rise.Client.Auth;
 using Rise.Client.Profile;
+using Rise.Shared.Transaction;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -37,7 +38,7 @@ builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg",
 builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg",
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
-builder.Services.AddHttpClient<TransactionService>("360zorg",
+builder.Services.AddHttpClient<ITransactionService, TransactionService>("360zorg",
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
