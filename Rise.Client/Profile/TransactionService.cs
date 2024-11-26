@@ -1,0 +1,32 @@
+using System.Diagnostics;
+using System.Net.Http.Json;
+using Rise.Shared.Cart;
+using Rise.Shared.Transaction;
+
+namespace Rise.Client.Profile;
+
+public class TransactionService: ITransactionService
+{
+    private readonly HttpClient _httpClient;
+
+    public TransactionService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public Task AddTransactionScanOut(List<CartItem> cartItems)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddTransactionScanIn(List<CartItem> cartItems)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<TransactionDto.History>> GetRecentTransactions()
+    {
+        var response = await _httpClient.GetFromJsonAsync<List<TransactionDto.History>>("history/recent/transactions");
+        return response ?? [];
+    }
+}

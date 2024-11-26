@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Rise.Shared.Cart;
 
-namespace Rise.Client.Cart
+namespace Rise.Client.Scannen
 {
     public class FakeCartService : ICartService
     {

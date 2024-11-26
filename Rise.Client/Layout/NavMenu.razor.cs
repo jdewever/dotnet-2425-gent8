@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Rise.Client.Auth;
 
 namespace Rise.Client.Layout;
 
@@ -8,6 +9,7 @@ public partial class NavMenu : ComponentBase
 {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+    [Inject] public required IUserService UserService { get; set; }
 
     private bool collapseNavMenu = true;
     private string NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-full min-h-full";
@@ -37,6 +39,7 @@ public partial class NavMenu : ComponentBase
     }
     public void BeginLogOut()
     {
+        UserService.ClearUser();
         Navigation.NavigateToLogout("authentication/logout");
     }
 

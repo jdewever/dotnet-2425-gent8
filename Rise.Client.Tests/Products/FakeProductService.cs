@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Rise.Shared.Barcodes;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products;

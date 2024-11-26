@@ -1,7 +1,8 @@
 using System.Net.Http.Json;
+using Rise.Shared.Booking;
 using Rise.Shared.Products;
 
-namespace Rise.Client.Products
+namespace Rise.Client.Reservation
 {
     public class BookingService : IBookingService
     {
@@ -21,6 +22,12 @@ namespace Rise.Client.Products
         public async Task AddBookingAsync(BookingDTO booking)
         {
             await _httpClient.PostAsJsonAsync("booking", booking);
+        }
+
+        public async Task<IEnumerable<BookingDTO>> GetRecentBookings()
+        {
+            var bookings = await _httpClient.GetFromJsonAsync<List<BookingDTO>>("history/recent/bookings");
+            return bookings ?? [];
         }
     }
 }
