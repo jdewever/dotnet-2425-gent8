@@ -16,10 +16,5 @@ namespace Rise.Client.Scannen
             cart.Clear();
             return Task.CompletedTask;
         }
-
-        public Task CheckInItems(List<CartItem> cart)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

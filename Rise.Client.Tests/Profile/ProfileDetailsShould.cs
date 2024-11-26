@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Rise.Client.Auth;
 using Rise.Client.Components;
+using Rise.Client.Components.Buttons;
 using Rise.Shared.User;
 using Xunit.Abstractions;
 

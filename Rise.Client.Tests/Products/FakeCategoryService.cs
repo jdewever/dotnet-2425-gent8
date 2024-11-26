@@ -23,14 +23,4 @@ public class FakeCategoryService: ICategoryService
             .Select(i => new CategoryDTO { Id = i, Name = $"Category {i}"});
         return Task.FromResult(categories);
     }
-
-    public Task AddCategory(CategoryDTO category)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public Task DeleteCategory(int id)
-    {
-        throw new System.NotImplementedException();
-    }
 }
