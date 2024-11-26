@@ -1,4 +1,4 @@
-﻿using Rise.Shared.Products;
+using Rise.Shared.Products;
 using Xunit.Abstractions;
 using Shouldly;
 using NSubstitute;
@@ -22,7 +22,7 @@ public class IndexWithMockExampleShould : TestContext
     public void ShowsProducts()
     {
         var products = Enumerable.Range(1, 5)
-            .Select(i => new ProductDTO { Id = i, Name = $"Product {i}", Barcode = $"Barcode {i}", Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null , IsReservable = true ,IsHidden = false });
+            .Select(i => new ProductDTO { Id = i, Name = $"Product {i}", Barcode = $"Barcode {i}", Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null, IsReservable = false });
         var categories = Enumerable.Range(1, 5)
             .Select(i => new CategoryDTO { Id = i, Name = $"Category {i}" });
         

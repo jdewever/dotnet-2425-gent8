@@ -17,6 +17,7 @@ public class Seeder
             return;
 
         SeedProductsAndCategories();
+        SeedBookings();
     }
 
     private bool HasAlreadyBeenSeeded()
@@ -574,6 +575,24 @@ public class Seeder
         categories[6].Products = [products[8], products[9]];
 
         dbContext.SaveChanges();
+    }
+
+    private void SeedBookings()
+    {
+        var firstReservableProduct = dbContext.Products.FirstOrDefault(p => p.IsReservable);
+
+        if (firstReservableProduct != null)
+        {
+            var bookings = new List<Booking>
+            {
+                new Booking(firstReservableProduct, "user1", new DateTime(DateTime.UtcNow.Year, 11, 20, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 21, 16, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "user1", new DateTime(DateTime.UtcNow.Year, 11, 3, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 6, 16, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "user4", new DateTime(DateTime.UtcNow.Year, 11, 25, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 25, 10, 0, 0, DateTimeKind.Utc))
+            };
+
+            dbContext.Booking.AddRange(bookings);
+            dbContext.SaveChanges();
+        }
     }
 
 }

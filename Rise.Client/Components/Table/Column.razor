@@ -1,42 +1,33 @@
-﻿@using Rise.Shared.Products
+﻿@typeparam T
+@using Rise.Shared.Products
 
+@* table header has Item == null *@
 @if (Item == null)
 {
     <th class="px-4 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">
-        @Label
+        @Title
     </th>
 }
 else
 {
-    var property = string.IsNullOrEmpty(Name) ? null : typeof(ProductDTO).GetProperty(Name);
+    var property = string.IsNullOrEmpty(Value) ? null : typeof(T).GetProperty(Value);
 
     <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
         @if (property != null)
         {
             @property?.GetValue(Item)?.ToString()
         }
-        else
-        {
-            @ChildContent
-        }
     </td>
 
-    @if (Name != "Barcode")
+    @if (Value != "Barcode")
     {
         <div class="lg:hidden mb-2 relative">
             <p class="text-sm text-gray-500 mb-2">
-                <strong>@Label@(Label != "" ? ":" : "")</strong> @property?.GetValue(Item)?.ToString()
+                <strong>@Title@(Title != "" ? ":" : "")</strong> @property?.GetValue(Item)?.ToString()
             </p>
-
-            @if (ChildContent != null)
-            {
-                <div class="absolute bottom-4 right-4">
-                    @ChildContent
-                </div>
-            }
         </div>
     }
-    else if (Name == "Barcode")
+    else if (Value == "Barcode")
     {
         <div class="lg:hidden mb-2">
             <p class="text-xs text-gray-400">

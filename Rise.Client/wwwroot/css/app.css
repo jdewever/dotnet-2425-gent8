@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;  
+  }
+} 
+
 @layer components {
     .nav-item {
         @apply flex items-center w-full p-3 leading-tight text-start;

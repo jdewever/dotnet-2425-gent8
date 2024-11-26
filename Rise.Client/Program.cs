@@ -35,9 +35,11 @@ builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg",
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg",
-        client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
-    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+       .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 builder.Services.AddHttpClient<ITransactionService, TransactionService>("360zorg",
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();

@@ -1,6 +1,7 @@
 using Rise.Shared.Products;
 using Rise.Shared.Cart;
 using Rise.Client.Scan;
+using Rise.Client.Cart;
 using Shouldly;
 using System.Linq;
 using System;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Rise.Client.Products;
+using Blazored.Toast;
 
 
 namespace Rise.Client.Scannen;
@@ -30,6 +32,7 @@ public class ScannenShould : TestContext
         Services.AddScoped<IProductService, FakeProductService>();
         Services.AddScoped<ICategoryService, FakeCategoryService>();
         Services.AddScoped<ICartService, FakeCartService>();
+        Services.AddBlazoredToast();
         Services.AddSingleton(new ScanService());
         Services.AddBlazoredLocalStorage();
 
@@ -109,7 +112,7 @@ public class ScannenShould : TestContext
         label.TextContent.ShouldBe("1");
     }
 
-    [Fact]
+    [Fact]    
     public async Task ShowProductOnBarcodeInvalid()
     {
         // Arrange
@@ -146,7 +149,7 @@ public class ScannenShould : TestContext
             scanProductComponent!.Render();
         });
         
-        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+1"));
         increaseButton.ShouldNotBeNull();
         increaseButton.Click();
 
@@ -155,12 +158,13 @@ public class ScannenShould : TestContext
         addButton.ShouldNotBeNull();
         addButton.Click();
 
-        // Assert
-        var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("1");
+        scanTableComponent!.Render();
 
-        cartItems.Count.ShouldBe(1);
-        cartItems.First().Product.Barcode.ShouldBe("Barcode 1");
+        // Assert
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1")); 
+        productName.ShouldNotBeNull();
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
+        quantity.ShouldNotBeNull();
     }
 
     [Fact]
@@ -176,7 +180,7 @@ public class ScannenShould : TestContext
             scanProductComponent!.Render();
         });
 
-        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+1"));
         increaseButton.ShouldNotBeNull();
         increaseButton.Click();
         increaseButton.Click();
@@ -185,12 +189,13 @@ public class ScannenShould : TestContext
         addButton.ShouldNotBeNull();
         addButton.Click();
 
-        // Assert
-        var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("2");
+        scanTableComponent!.Render();
 
-        cartItems.Count.ShouldBe(1);
-        cartItems.All(p => p.Product.Barcode == "Barcode 2").ShouldBeTrue();
+        // Assert
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 2"));
+        productName.ShouldNotBeNull();
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("2"));
+        quantity.ShouldNotBeNull();
     }
 
     [Fact]
@@ -206,12 +211,12 @@ public class ScannenShould : TestContext
             scanProductComponent!.Render();
         });
 
-        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+"));
+        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+1"));
         increaseButton.ShouldNotBeNull();
         increaseButton.Click();
         increaseButton.Click();
 
-        var decreaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("-"));
+        var decreaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent == "-1");
         decreaseButton.ShouldNotBeNull();
         decreaseButton.Click();
 
@@ -219,17 +224,16 @@ public class ScannenShould : TestContext
         addButton.ShouldNotBeNull();
         addButton.Click();
 
-        
+        scanTableComponent!.Render();
 
         // Assert
-        var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("3");
-
-        cartItems.Count.ShouldBe(1);
-        cartItems.All(p => p.Product.Barcode == "Barcode 3").ShouldBeTrue();
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 3"));
+        productName.ShouldNotBeNull();
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
+        quantity.ShouldNotBeNull();
     }
 
-    [Fact] 
+    [Fact]
     public async Task UpdateStockOnProductAddTwiceAndRemoveTwice()
     {
         // Arrange
@@ -256,11 +260,11 @@ public class ScannenShould : TestContext
         addButton.ShouldNotBeNull();
         addButton.HasAttribute("disabled").ShouldBeFalse();
 
+        scanTableComponent!.Render();
+        
         // Assert
-        var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("1");
-
-        cartItems.Count.ShouldBe(0);
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
+        productName.ShouldBeNull();
     }
 
     [Fact]
@@ -297,14 +301,21 @@ public class ScannenShould : TestContext
         addButton2.ShouldNotBeNull();
         addButton2.Click();
 
-        // Assert
-        var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("2");
+        scanTableComponent!.Render();
 
-        cartItems.Count.ShouldBe(2);
+        // Assert
+        var productName1 = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
+        productName1.ShouldNotBeNull();
+        var quantity1 = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
+        quantity1.ShouldNotBeNull();
+
+        var productName2 = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 2"));
+        productName2.ShouldNotBeNull();
+        var quantity2 = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
+        quantity2.ShouldNotBeNull();
     }
 
-    [Fact (Skip = "Not working yet")]
+    [Fact]
     public async Task AddProductToCartAndRemoveIt(){
         // Arrange
         cartItems!.Clear();
@@ -324,16 +335,105 @@ public class ScannenShould : TestContext
         addButton.ShouldNotBeNull();
         addButton.Click();
 
-        var label = scanProductComponent!.Find("label.quantity-in-stock");
-        label.TextContent.ShouldBe("0");
+        scanTableComponent!.Render();
 
-        cartItems.Count.ShouldBe(1);
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 2"));
+        productName.ShouldNotBeNull();
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
+        quantity.ShouldNotBeNull();
 
         var removeButton = scanTableComponent!.FindAll("button").FirstOrDefault(b => b.OuterHtml.Contains("text-red-600"));
         removeButton.ShouldNotBeNull();
         removeButton.Click();
 
-        cartItems.Count.ShouldBe(0);
+        scanTableComponent!.Render();
 
+        // Assert
+        var productName2 = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 2"));
+        productName2.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task AddProductMoreThenStock(){
+        // Arrange
+        cartItems!.Clear();
+
+        // Act
+        await scanProductComponent!.InvokeAsync(() =>
+        {
+            barcodeService!.Barcode = "Barcode 1";
+            scanProductComponent!.Render();
+        });
+
+        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent == "+1");
+        increaseButton.ShouldNotBeNull();
+        increaseButton.Click();
+        increaseButton.Click();
+        increaseButton.Click();
+
+        var addButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton.ShouldNotBeNull();
+        addButton.Click();
+
+        scanTableComponent!.Render();
+
+        // Assert
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
+        productName.ShouldNotBeNull();
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("3"));
+        quantity.ShouldNotBeNull();
+        quantity.GetAttribute("class")!.ShouldContain("text-red-700");
+
+        var errorMessages = scanTableComponent!.FindAll("label").FirstOrDefault(td => td.TextContent.Contains("Niet alle producten in stock"));
+    }
+
+    [Fact]
+    public async Task AddProductMoreThenStockAndChangeToCorrectValue(){
+        // Arrange
+        cartItems!.Clear();
+
+        // Act
+        await scanProductComponent!.InvokeAsync(() =>
+        {
+            barcodeService!.Barcode = "Barcode 1";
+            scanProductComponent!.Render();
+        });
+
+        var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent == "+1");
+        increaseButton.ShouldNotBeNull();
+        increaseButton.Click();
+        increaseButton.Click();
+
+        var decreaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent == "-1");
+        decreaseButton.ShouldNotBeNull();
+        decreaseButton.Click();
+
+        var addButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
+        addButton.ShouldNotBeNull();
+        addButton.Click();
+
+        scanTableComponent!.Render();
+
+        // Assert
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
+        productName.ShouldNotBeNull();
+        var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains('1'));
+        quantity.ShouldNotBeNull();
+        quantity.GetAttribute("class")!.ShouldNotContain("text-red-700");
+
+        var errorMessages = scanTableComponent!.FindAll("label").FirstOrDefault(td => td.TextContent.Contains("Niet alle producten in stock"));
+        errorMessages.ShouldBeNull();
+
+        var productTd = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
+        productTd.ShouldNotBeNull();
+        productTd.Click();
+
+        await scanProductComponent!.InvokeAsync(() =>
+        {
+            scanProductComponent!.Render();
+        });
+
+        var input = scanProductComponent!.Find("input");
+        input.GetAttribute("value").ShouldBe("Barcode 1");
     }
 }

@@ -11,6 +11,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<UserTransaction> Transaction => Set<UserTransaction>();
 
+    public DbSet<Booking> Booking => Set<Booking>();
+
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
