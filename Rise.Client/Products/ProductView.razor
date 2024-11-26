@@ -18,11 +18,6 @@
     </span>
 
     <!-- Button Uitlenen -->
-    <BigButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@(Reserve ? ShowReservableProductsModal : NavigateToScan)" />
+    <BigButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@OnActionButtonClick" />
     
 </div>
-
-@if (isReservableProductsModalVisible)
-{
-    <ReservableProductsModal HideModal="HideReservableProductsModal" Product="Product" />
-}

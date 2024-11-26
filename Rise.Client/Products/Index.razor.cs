@@ -110,8 +110,8 @@ public partial class Index
     }
     private void OnReserverenClick(ProductDTO product)
     {
-        ScanService.Barcode = product.Barcode;
-        NavigationManager.NavigateTo("/reservations");
+        selectedProduct = null; // hides the detail modal if it is was open
+        selectedReservableProduct = product;
     }
 
     // modal actions
@@ -124,5 +124,24 @@ public partial class Index
     private void CloseModal()
     {
         selectedProduct = null;
+    }
+
+    // reservation modal actions
+    private ProductDTO? selectedReservableProduct;
+    private void HideReservableProductsModal()
+    {
+        selectedReservableProduct = null;
+    }
+
+    private void OnProductClick(ProductDTO product)
+    {
+        if (OnlyReservable)
+        {
+            OnReserverenClick(product);
+        }
+        else
+        {
+            OnUitlenenClick(product);
+        }
     }
 }
