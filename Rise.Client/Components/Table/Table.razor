@@ -23,7 +23,8 @@
                             @Columns
                             @if (@Actions != null)
                             {
-                                <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700">
+                                @* stopPropagation is needed to not execute the SelectItem on actions *@
+                                <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700" @onclick:stopPropagation="true">
                                     @Actions
                                 </td>
                             }
@@ -43,7 +44,7 @@
                     @Columns
                     @if (@Actions != null)
                     {
-                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700">
+                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700" @onclick:stopPropagation="true">
                             @Actions
                         </td>
                     }

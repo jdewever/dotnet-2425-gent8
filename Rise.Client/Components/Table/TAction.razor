@@ -1,7 +1,7 @@
 @typeparam T
 @using Rise.Client.Components.Buttons;
 
-@if (!string.IsNullOrEmpty(Name) && Method != null)
+@if (!string.IsNullOrEmpty(Name))
 {
-    <SmallButton Text="@Name" OnClick="() => Method.Invoke(Item)" />
+    <SmallButton Text="@Name" OnClick="OnClick" />
 }

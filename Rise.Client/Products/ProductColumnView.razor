@@ -1,13 +1,13 @@
 @using Rise.Client.Products.Components
-@inherits ProductModal
 
 <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
     @foreach (var product in Products)
     {
-        <ProductView Product="product" ImageUrl="/images/testafbeelding.png" OnClick="@(() => ShowModal(product))" Reserve="Reserve"/>
-    }
-    @if (isModalVisible && selectedProduct != null)
-    {
-        <ProductDetailModal SelectedProduct="@selectedProduct" OnClick="CloseModal" Reserve="Reserve" />
+        <ProductView
+            Product="product"
+            ImageUrl="/images/testafbeelding.png"
+            OnClick="@(() => ShowModal(product))"
+            OnActionButtonClick="@(() => ProductClick(product))"
+            Reserve="Reserve"/>
     }
 </div>

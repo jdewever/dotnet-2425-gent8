@@ -20,16 +20,4 @@ public partial class ReservableProductsModal : ComponentBase
         ScanService.Barcode = Product.Barcode;
         NavigationManager!.NavigateTo("/agenda");
     }
-
-    private bool isModalVisible = false;
-
-    private void ShowModal()
-    {
-        isModalVisible = true;
-    }
-
-    private void CloseModal()
-    {
-        isModalVisible = false;
-    }
 }
