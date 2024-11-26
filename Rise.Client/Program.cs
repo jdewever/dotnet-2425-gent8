@@ -14,6 +14,8 @@ using Blazored.Toast;
 using Rise.Client.Scan;
 using Rise.Client.Auth;
 using Rise.Client.Profile;
+using Rise.Client.Reservation;
+using Rise.Shared.Booking;
 using Rise.Shared.Transaction;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

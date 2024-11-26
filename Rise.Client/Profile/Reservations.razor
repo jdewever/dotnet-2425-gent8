@@ -6,13 +6,40 @@
             <th class="text-left px-4 py-2">Product</th>
             <th class="text-left px-4 py-2">Start</th>
             <th class="text-left px-4 py-2">Einde</th>
-            <th class="text-left px-4 py-2">Status</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td colspan="4" class="text-center p-5">Geen Reservaties gevonden</td>
-        </tr>
+        @if (BookingsList.Count() != 0)
+        {
+            @foreach (var booking in BookingsList)
+            {
+                <tr class="hover:bg-gray-100">
+                    <td class="px-4 py-2">@booking.Product.Name</td>
+                    <td class="px-4 py-2">
+                        <p>
+                            @booking.StartDate.ToShortDateString()
+                        </p>
+                        <p>
+                            @booking.StartDate.ToShortTimeString()
+                        </p>
+                    </td>
+                    <td class="px-4 py-2">
+                        <p>
+                            @booking.EndDate.ToShortDateString()
+                        </p>
+                        <p>
+                            @booking.EndDate.ToShortTimeString()
+                        </p>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center p-5">Geen Reservaties gevonden</td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
