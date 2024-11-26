@@ -27,6 +27,15 @@ else
         </AuthorizeView>
     </div>
 
+    @if (selectedReservableProduct != null)
+    {
+        <ReservableProductsModal HideModal="HideReservableProductsModal" Product="selectedReservableProduct" />
+    }
+    @if (selectedProduct != null)
+    {
+        <ProductDetailModal SelectedProduct="selectedProduct" OnCloseClick="CloseModal" OnActionClick="() => OnProductClick(selectedProduct)" Reserve="OnlyReservable" />
+    }
+
     @if (!isColumnTable)
     {
         <div class="overflow-x-auto w-full">
@@ -44,23 +53,13 @@ else
                     <Column T="ProductDTO" Value="ClassRoomCode" Title="Lokaal" />
                 </Columns>
                 <Actions>
-                    @if (OnlyReservable)
-                    {
-                        <TAction T="ProductDTO" Name="Reserveren" Method="OnReserverenClick" />
-                    } else {
-                        <TAction T="ProductDTO" Name="Uitlenen" Method="OnUitlenenClick" />
-                    }
+                    <TAction T="ProductDTO" Name="@(OnlyReservable ? "Reserveren" : "Uitlenen")" Method="OnProductClick" />
                 </Actions>
             </Table>
         </div>
-
-        @if (selectedProduct != null)
-        {
-            <ProductDetailModal SelectedProduct="selectedProduct" OnClick="CloseModal" Reserve="OnlyReservable" />
-        }
     } else {
         <div class="flex justify-center mb-8">
-            <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" />
+            <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" OnShowModal="ShowModal" OnProductClick="OnProductClick" />
         </div>
     }
 
