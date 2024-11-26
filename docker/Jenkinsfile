@@ -1,0 +1,40 @@
+pipeline {
+    agent { label "app" }
+
+    environment {
+        CONTAINER_NAME="rise8-webapp"
+        CONTAINER_IMAGE="rise-gent-gr08"
+    }
+    stages {
+        stage('Preparation') {
+            steps {
+                script {
+                    echo "Checking for running Docker containers"
+
+                    def containerExists = sh(
+                        script: "docker ps -a -q -f name=${CONTAINER_NAME}",
+                        returnStdout: true
+                    ).trim()
+
+                    if (containerExists) {
+                        echo "Container ${CONTAINER_NAME} is running. Stopping and removing it..."
+                        sh "docker stop ${CONTAINER_NAME}"
+                        sh "docker rm ${CONTAINER_NAME}"
+                        sh "docker rmi ${CONTAINER_IMAGE}"
+                    } else {
+                        echo "No running container named ${CONTAINER_NAME} found."
+                    }
+                }
+            }
+        }
+
+        stage('Build'){
+            steps {
+                echo "Starting Docker Compose services..."
+                dir("docker/") {
+                    sh "docker compose up -d"
+                }
+            }
+        }
+    }   
+}
