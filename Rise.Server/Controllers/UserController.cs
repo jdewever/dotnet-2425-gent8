@@ -37,6 +37,7 @@ public class UserController : ControllerBase
             Picture = x.Picture,
         });
     }
+
     [HttpGet("details")]
     public async Task<UserDto> GetUser()
     {
