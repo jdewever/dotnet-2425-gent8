@@ -21,6 +21,7 @@ pipeline {
                         sh "docker stop ${CONTAINER_NAME}"
                         sh "docker rm ${CONTAINER_NAME}"
                         sh "docker rmi ${CONTAINER_IMAGE}"
+                        sh "docker system prune -a -f"
                     } else {
                         echo "No running container named ${CONTAINER_NAME} found."
                     }
