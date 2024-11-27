@@ -17,6 +17,8 @@ using Rise.Services.Transaction;
 using Auth0Net.DependencyInjection;
 using Rise.Server.Auth;
 using Rise.Services.Auth;
+using Rise.Services.Booking;
+using Rise.Shared.Booking;
 
 var builder = WebApplication.CreateBuilder(args);
 

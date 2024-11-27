@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Products;
 using Microsoft.AspNetCore.Authorization;
+using Rise.Shared.Booking;
 
 namespace Rise.Server.Controllers;
 
