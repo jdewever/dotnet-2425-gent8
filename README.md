@@ -71,3 +71,13 @@ To compile the css for production, run the following command:
 npm install
 npm run build
 ```
+
+## Required environment variables
+
+Please see `docker/appsettings.json.template`.
+
+- All `Auth0` variables are required.
+- The `AllowedHosts` value has to be updated.
+- The MS SQL connection string has to be updated in case Docker is not used.
+
+
