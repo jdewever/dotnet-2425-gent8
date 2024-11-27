@@ -8,7 +8,7 @@ using Rise.Shared.User;
 
 namespace Rise.Server.Controllers;
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/user")]
 [Authorize]
 
 public class UserController : ControllerBase
