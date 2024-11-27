@@ -1,5 +1,6 @@
 @attribute [Authorize(Roles = "Administrator")]
 @page "/products/add"
+@inject NavigationManager NavigationManager
 
 <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Toevoegen nieuw product</h2>
 
@@ -33,7 +34,7 @@
                                 <label for="barcodeImage" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
                                 @if (!string.IsNullOrEmpty(newProduct.Barcode))
                                 {
-                                    <img src="https://localhost:5001/api/barcodes/@barcode.Barcode/image" alt="Barcode" class="w-full h-auto" />
+                                    <img src="@($"{NavigationManager.BaseUri}api/barcodes/{newProduct.Barcode}/image")" alt="Barcode" class="w-full h-auto" />
                                 }
                                 else
                                 {
