@@ -1,4 +1,4 @@
-﻿using Rise.Shared.Products;
+using Rise.Shared.Products;
 using Xunit.Abstractions;
 using Shouldly;
 using NSubstitute;

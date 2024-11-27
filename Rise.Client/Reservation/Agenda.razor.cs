@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using Rise.Shared.Products;
 using Blazored.Toast.Services;
 using Rise.Client.Scan;
+using Rise.Shared.Booking;
 
 namespace Rise.Client.Reservation
 {
