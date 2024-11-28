@@ -1,0 +1,29 @@
+@page "/reservations"
+@using Rise.Client.Components.Table
+@using Rise.Shared.Products
+
+<PageTitle>Reserveringen</PageTitle>
+
+<body>
+    <h1 class="text-2xl font-light py-8">Reserveringen</h1>
+
+    <div class="w-full">
+        @if (Reservations == null)
+        {
+            <p>
+                <em>Loading...</em>
+            </p>
+        }
+        else
+        {
+            <Table Items="Reservations">
+                <Columns>
+                    <Column T="BookingDTO" Value="Name" Title="NeedHelpEliott" />
+                    <Column T="BookingDTO" Value="StartDate" Title="Startdatum" />
+                    <Column T="BookingDTO" Value="EndDate" Title="Einddatum" />
+                    <TAction T="BookingDTO" Name="Annuleer" Method="GetProductName" />
+                </Columns>
+            </Table>
+        }
+    </div>
+</body>

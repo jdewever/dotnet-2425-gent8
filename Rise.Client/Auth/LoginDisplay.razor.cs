@@ -16,7 +16,7 @@ public partial class LoginDisplay : ComponentBase
         {
             User = await UserService.GetCurrentUser();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             NavigationManager.NavigateToLogin("login");
         }
