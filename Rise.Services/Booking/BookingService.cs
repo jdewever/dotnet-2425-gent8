@@ -54,7 +54,7 @@ namespace Rise.Services.Booking
             var userid = _authContextProvider.User?.Identity?.Name ??
                          throw new InvalidOperationException("User name is null");
             //TODO: Add validation
-            var product = await _dbContext.Products.FindAsync(booking.Product.Id);
+            var product = await _dbContext.Products.FindAsync(booking.Product.Id) ?? throw new InvalidOperationException("Product not found");
 
             var newBooking =
                 new Domain.DomainClasses.Booking(product, userid, booking.StartDate, booking.EndDate);

@@ -511,7 +511,7 @@ public class Seeder
     }
 };
 
-    var categories = new List<Category>
+        var categories = new List<Category>
     {
         new Category { Name = "Medical Devices" },
         new Category { Name = "Therapy Tools" },
@@ -581,7 +581,7 @@ public class Seeder
     {
         var firstReservableProduct = dbContext.Products.FirstOrDefault(p => p.IsReservable);
 
-        if (firstReservableProduct != null)
+        if (firstReservableProduct?.Id != null)
         {
             var bookings = new List<Booking>
             {
