@@ -20,7 +20,7 @@ namespace Rise.Services.Booking
         public async Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
         {
             return await _dbContext.Booking
-                .Where(b => b.Product.Id == productId)
+                .Where(b => b.Product.Id == productId && b.IsDeleted == false)
                 .Select(b => new BookingDTO
                 {
                     Id = b.Id,
@@ -69,14 +69,23 @@ namespace Rise.Services.Booking
                          throw new InvalidOperationException("User name is null");
             var bookings = _dbContext.Booking.Where(b => b.UserId == userid).OrderByDescending(b => b.StartDate)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
-            return await bookings.Select(b => new BookingDTO
-            {
-                Id = b.Id,
-                UserId = b.UserId,
-                StartDate = b.StartDate,
-                EndDate = b.EndDate,
-                Product = ProductEntityConverter.EntityToDto(b.Product)
-            }).ToListAsync();
+            return await bookings
+                .Where(b => b.IsDeleted == false)
+                .Select(b => new BookingDTO
+                {
+                    Id = b.Id,
+                    UserId = b.UserId,
+                    StartDate = b.StartDate,
+                    EndDate = b.EndDate,
+                    Product = ProductEntityConverter.EntityToDto(b.Product)
+                }).ToListAsync();
+        }
+
+        public Task CancelBooking(int id)
+        {
+            var booking = _dbContext.Booking.Find(id) ?? throw new InvalidOperationException("Booking not found");
+            _dbContext.Booking.Remove(booking);
+            return _dbContext.SaveChangesAsync();
         }
     }
 }
