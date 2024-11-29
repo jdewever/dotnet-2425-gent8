@@ -37,6 +37,22 @@ public class CategoryService : ICategoryService
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task UpdateCategory(int id, CategoryDTO category)
+    {
+        var existingCategory = await dbContext.Categories
+            .Where(c => !c.IsDeleted)
+            .Include(c => c.Products)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (existingCategory is not null)
+        {
+            existingCategory.Name = category.Name;
+            await dbContext.SaveChangesAsync();
+        } else {
+            throw new Exception($"Category with id {id} not found");
+        }
+    }
+
     public async Task DeleteCategory(int id)
     {
         var category = await dbContext.Categories
@@ -55,7 +71,7 @@ public class CategoryService : ICategoryService
             dbContext.Categories.Remove(category);
             await dbContext.SaveChangesAsync();
         } else {
-            throw new Exception("Category with id " + id + " not found");
+            throw new Exception($"Category with id {id} not found");
         }
     }
 }

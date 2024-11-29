@@ -12,6 +12,11 @@ public class FakeCategoryService: ICategoryService
         throw new System.NotImplementedException();
     }
 
+    public Task UpdateCategory(int id, CategoryDTO category)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public Task DeleteCategory(int id)
     {
         throw new System.NotImplementedException();
