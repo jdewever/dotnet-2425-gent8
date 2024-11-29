@@ -47,7 +47,7 @@
                             @onclick="OnAddProduct">
                         Bevestigen
                     </button>
-                    <button class="text-sm text-gray-500 underline" @onclick="() => ShowQuantityModal = false">Annuleren</button>
+                    <button class="text-sm text-gray-500 underline" @onclick="() => { ShowQuantityModal = false; ShowScanner = true; }">Annuleren</button>
                 </div>
             </div>
         </div>
