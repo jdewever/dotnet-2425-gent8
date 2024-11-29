@@ -10,20 +10,17 @@
 }
 else
 {
-    var property = string.IsNullOrEmpty(Value) ? null : typeof(T).GetProperty(Value);
+    var property = GetNestedValue(Item, Value);
 
     <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 hidden lg:table-cell">
-        @if (property != null)
-        {
-            @property?.GetValue(Item)?.ToString()
-        }
+        @property
     </td>
 
     @if (Value != "Barcode")
     {
         <div class="lg:hidden mb-2 relative">
             <p class="text-sm text-gray-500 mb-2">
-                <strong>@Title@(Title != "" ? ":" : "")</strong> @property?.GetValue(Item)?.ToString()
+                <strong>@Title@(Title != "" ? ":" : "")</strong> @property
             </p>
         </div>
     }
@@ -31,7 +28,7 @@ else
     {
         <div class="lg:hidden mb-2">
             <p class="text-xs text-gray-400">
-                @property?.GetValue(Item)?.ToString()
+                @property
             </p>
         </div>
     }
