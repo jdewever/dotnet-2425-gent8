@@ -23,6 +23,11 @@ public class CategoryService : ICategoryService
         await _httpClient.PostAsJsonAsync("category", category);
     }
 
+    public async Task UpdateCategory(int id, CategoryDTO category)
+    {
+        await _httpClient.PutAsJsonAsync($"category/{id}", category);
+    }
+
     public async Task DeleteCategory(int id)
     {
         await _httpClient.DeleteAsync($"category/{id}");
