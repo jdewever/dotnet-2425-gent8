@@ -6,7 +6,9 @@
     "Authority": "",
     "Audience": "",
     "BlazorClientId": "",
-    "BlazorClientSecret": ""
+    "BlazorClientSecret": "",
+    "M2MClientId": "",
+    "M2MClientSecret": ""
   },
   "Logging": {
     "LogLevel": {
