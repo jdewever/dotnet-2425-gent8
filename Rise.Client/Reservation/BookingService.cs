@@ -29,5 +29,10 @@ namespace Rise.Client.Reservation
             var bookings = await _httpClient.GetFromJsonAsync<List<BookingDTO>>("history/recent/bookings");
             return bookings ?? [];
         }
+
+        public async Task CancelBooking(int id)
+    {
+        await _httpClient.DeleteAsync($"booking/{id}");
+    }
     }
 }

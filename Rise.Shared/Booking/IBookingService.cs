@@ -9,4 +9,6 @@ public interface IBookingService
     Task AddBookingAsync(BookingDTO booking);
     
     Task<IEnumerable<BookingDTO>> GetRecentBookings();
+
+    Task CancelBooking(int id);
 }
