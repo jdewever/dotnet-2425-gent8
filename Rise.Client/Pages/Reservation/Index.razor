@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @using Rise.Client.Pages.Reservation.Components
 @using Rise.Client.Components.Buttons
+@using Rise.Client.Components.Table
 
 <PageTitle>Reserveringen</PageTitle>
 
@@ -16,7 +17,7 @@
     <div class="w-full">
         @if (Reservations == null)
         {
-            <p>Loading...</p>
+            <TableSkeleton ColumnCount="3" RowCount="6" />
         }
         else
         {
