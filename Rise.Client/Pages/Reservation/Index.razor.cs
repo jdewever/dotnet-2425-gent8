@@ -2,28 +2,26 @@ using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 using Rise.Shared.Booking;
 using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Rise.Client.Pages.Reservation;
 
 public partial class Index : ComponentBase
 {
-    [Parameter] public IEnumerable<BookingDTO>? Reservations { get; set; }
-    [Parameter] public RenderFragment? ReservationsTable { get; set; }
     [Inject] public required IBookingService BookingService { get; set; }
     [Inject] public required IToastService ToastService { get; set; }
     private bool IsHistory { get; set; } = false;
+    private IEnumerable<BookingDTO>? Reservations { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
-        Reservations = await BookingService.GetRecentBookings(IsHistory);
+        Reservations = await BookingService.GetRecentBookings(false);
     }
 
-    private async Task FilterOutdated()
+    private async Task ToggleHistory()
     {
         IsHistory = !IsHistory;
-        Reservations = IsHistory
-            ? await BookingService.GetRecentBookings(true)
-            : await BookingService.GetRecentBookings(false);
+        Reservations = await BookingService.GetRecentBookings(IsHistory);
     }
 
     private async Task HandleCancellation(BookingDTO booking)
