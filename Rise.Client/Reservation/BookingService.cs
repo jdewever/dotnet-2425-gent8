@@ -24,15 +24,15 @@ namespace Rise.Client.Reservation
             await _httpClient.PostAsJsonAsync("booking", booking);
         }
 
-        public async Task<IEnumerable<BookingDTO>> GetRecentBookings()
+        public async Task<IEnumerable<BookingDTO>> GetRecentBookings(bool history)
         {
-            var bookings = await _httpClient.GetFromJsonAsync<List<BookingDTO>>("history/recent/bookings");
+            var bookings = await _httpClient.GetFromJsonAsync<List<BookingDTO>>($"History/recent/bookings?history={history}");
             return bookings ?? [];
         }
 
         public async Task CancelBooking(int id)
-    {
-        await _httpClient.DeleteAsync($"booking/{id}");
-    }
+        {
+            await _httpClient.DeleteAsync($"booking/{id}");
+        }
     }
 }

@@ -23,7 +23,7 @@ public partial class Profile : ComponentBase
         _loading = true;
         User = await UserService.GetCurrentUser();
         TransactionsList = await TransactionService.GetRecentTransactions();
-        BookingsList = await BookingService.GetRecentBookings();
+        BookingsList = await BookingService.GetRecentBookings(false);
         _loading = false;
     }
 }

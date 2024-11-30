@@ -63,14 +63,16 @@ namespace Rise.Services.Booking
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<BookingDTO>> GetRecentBookings()
+        public async Task<IEnumerable<BookingDTO>> GetRecentBookings(bool History)
         {
             var userid = _authContextProvider.User?.Identity?.Name ??
                          throw new InvalidOperationException("User name is null");
             var bookings = _dbContext.Booking.Where(b => b.UserId == userid).OrderByDescending(b => b.StartDate)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
+            var now = DateTime.UtcNow;
             return await bookings
                 .Where(b => b.IsDeleted == false)
+                .Where(b => History ? b.EndDate.CompareTo(now) <= 0 : b.EndDate.CompareTo(now) > 0)
                 .Select(b => new BookingDTO
                 {
                     Id = b.Id,
@@ -79,6 +81,7 @@ namespace Rise.Services.Booking
                     EndDate = b.EndDate,
                     Product = ProductEntityConverter.EntityToDto(b.Product)
                 }).ToListAsync();
+
         }
 
         public Task CancelBooking(int id)

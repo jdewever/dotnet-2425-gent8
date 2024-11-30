@@ -8,25 +8,22 @@ namespace Rise.Client.Pages.Reservation;
 public partial class Index : ComponentBase
 {
     [Parameter] public IEnumerable<BookingDTO>? Reservations { get; set; }
-
-    private bool IsOutdated { get; set; } = false;
-
+    [Parameter] public RenderFragment? ReservationsTable { get; set; }
     [Inject] public required IBookingService BookingService { get; set; }
-
     [Inject] public required IToastService ToastService { get; set; }
+    private bool IsHistory { get; set; } = false;
 
     protected override async Task OnParametersSetAsync()
     {
-        Reservations = (await BookingService.GetRecentBookings()).OrderBy(r => r.StartDate);
+        Reservations = await BookingService.GetRecentBookings(IsHistory);
     }
 
     private async Task FilterOutdated()
     {
-        IsOutdated = !IsOutdated;
-        var recentBookings = await BookingService.GetRecentBookings();
-        Reservations = IsOutdated
-            ? recentBookings.Where(r => r.StartDate < DateTime.Now)
-            : recentBookings.Where(r => r.StartDate >= DateTime.Now);
+        IsHistory = !IsHistory;
+        Reservations = IsHistory
+            ? await BookingService.GetRecentBookings(true)
+            : await BookingService.GetRecentBookings(false);
     }
 
     private async Task HandleCancellation(BookingDTO booking)
