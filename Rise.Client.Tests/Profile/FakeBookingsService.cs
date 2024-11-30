@@ -6,7 +6,7 @@ using Rise.Shared.Products;
 
 namespace Rise.Client.Profile;
 
-public class FakeBookingsService: IBookingService
+public class FakeBookingsService : IBookingService
 {
     private readonly IEnumerable<BookingDTO> _fakeBookings;
 
@@ -61,8 +61,13 @@ public class FakeBookingsService: IBookingService
         throw new System.NotImplementedException();
     }
 
-    public Task<IEnumerable<BookingDTO>> GetRecentBookings()
+    public Task<IEnumerable<BookingDTO>> GetRecentBookings(bool isHistory)
     {
         return Task.FromResult(_fakeBookings);
+    }
+
+    public Task CancelBooking(int id)
+    {
+        throw new NotImplementedException();
     }
 }
