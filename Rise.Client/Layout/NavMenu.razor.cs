@@ -34,7 +34,7 @@ public partial class NavMenu : ComponentBase
         new NavItem { Label = "Reserveringen", Href = "reservations", Icon = "reservation" },
         new NavItem {
             Label = "Beheren",
-            Href = "manage",
+            Href = "manage/categories",
             Icon = "settings",
             IsVisible = userRole == "Inventory Manager" || userRole == "Administrator"
         },
