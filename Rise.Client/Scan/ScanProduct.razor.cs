@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 using BlazorBarcodeScanner.ZXing.JS;
 using Microsoft.JSInterop;
+using Rise.Shared.Barcodes;
 
 namespace Rise.Client.Scan;
 
@@ -65,7 +66,7 @@ public partial class ScanProduct : ComponentBase
 
     private async void LocalReceivedBarcodeText(BarcodeReceivedEventArgs args)
     {
-        BarcodeService.Barcode = args.BarcodeText;
+        ScanService.Barcode = args.BarcodeText;
         await ShowScannerChanged.InvokeAsync(false);
         await ShowQuantityModalChanged.InvokeAsync(true);
         StateHasChanged();
