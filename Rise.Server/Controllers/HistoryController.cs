@@ -19,7 +19,7 @@ public class HistoryController
         _transactionService = transactionService;
         _bookingService = bookingService;
     }
-    
+
     [HttpGet("recent/transactions")]
     public async Task<List<TransactionDto.History>> GetRecentTransactionHistory()
     {
@@ -27,8 +27,8 @@ public class HistoryController
     }
 
     [HttpGet("recent/bookings")]
-    public async Task<IEnumerable<BookingDTO>> GetRecentBookingHistory()
+    public async Task<IEnumerable<BookingDTO>> GetRecentBookingHistory([FromQuery] bool history)
     {
-        return await _bookingService.GetRecentBookings();
+        return await _bookingService.GetRecentBookings(history);
     }
 }

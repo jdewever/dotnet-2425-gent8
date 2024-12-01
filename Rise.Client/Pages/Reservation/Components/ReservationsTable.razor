@@ -1,0 +1,16 @@
+@using Rise.Client.Components.Table
+@using Rise.Shared.Products
+
+<Table Items="Reservations">
+    <Columns>
+        <Column T="BookingDTO" Value="Product.Name" Title="Naam" />
+        <Column T="BookingDTO" Value="StartDate" Title="Startdatum" />
+        <Column T="BookingDTO" Value="EndDate" Title="Einddatum" />
+    </Columns>
+    <Actions>
+        @if (!ShowHistory)
+        {
+            <TAction T="BookingDTO" Name="annuleren" Method="OnCancel" />
+        }
+    </Actions>
+</Table>
