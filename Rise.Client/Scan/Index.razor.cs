@@ -2,16 +2,23 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
 using Rise.Shared.Products;
+using Microsoft.JSInterop;
+
 
 namespace Rise.Client.Scan;
 
 public partial class Index : ComponentBase
 {
     private List<CartItem> products = new List<CartItem>();
+    private bool isMobileView;
+    private bool showScanner = true;
+    private bool showQuantityModal = false;
 
     [Inject] private ILocalStorageService localStorage { get; set; } = null!;
 
     [Inject] private IProductService ProductService { get; set; } = null!;
+    [Inject] private IJSRuntime JS { get; set; } = null!;
+
 
     protected override async Task OnParametersSetAsync()
     {
@@ -19,6 +26,15 @@ public partial class Index : ComponentBase
         if (storedProducts != null)
         {
             products = storedProducts;
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Detecteer mobiele weergave en stel de waarde in
+            isMobileView = await JS.InvokeAsync<bool>("detectMobileView");
+            StateHasChanged();
         }
     }
 
@@ -38,7 +54,8 @@ public partial class Index : ComponentBase
         {
             products.Add(new CartItem { Product = productInfo.product, Quantity = productInfo.quantity });
         }
-        await localStorage.SetItemAsync("products", products);
+        showScanner = true;
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task removeProduct(CartItem item)
@@ -57,6 +74,7 @@ public partial class Index : ComponentBase
             storedProducts.Remove(existingProduct);
             await localStorage.SetItemAsync("products", storedProducts);
             products = storedProducts;
+            StateHasChanged();
         }
     }
 

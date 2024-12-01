@@ -70,14 +70,16 @@ public class ProductService : IProductService
             query = query.Where(x => !x.IsHidden);
         }
 
-        //by default only get the non-reservable products
-        if (request.OnlyReservable == true)
+        if (request.OnlyReservable.HasValue)
         {
-            query = query.Where(x => x.IsReservable);
-        }
-        else
-        {
-            query = query.Where(x => !x.IsReservable);
+            if (request.OnlyReservable == true)
+            {
+                query = query.Where(x => x.IsReservable); 
+            }
+            else
+            {
+                query = query.Where(x => !x.IsReservable); 
+            }
         }
 
         if (!string.IsNullOrWhiteSpace(request.Location))

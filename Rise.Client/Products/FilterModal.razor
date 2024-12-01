@@ -1,11 +1,8 @@
 <div class="flex flex-col items-center">
     <div class="w-full">
         <label>Categoriën</label>
-        <BlazoredTypeahead SearchMethod="SearchCategory"
-                           ConvertMethod="ConvertMethod"
-                           @bind-Values="SelectedCategoriesIds"
-                           EnableDropDown="true"
-                           placeholder="Zoeken via categorie ...">
+        <BlazoredTypeahead SearchMethod="SearchCategory" ConvertMethod="ConvertMethod"
+            @bind-Values="SelectedCategoriesIds" EnableDropDown="true" placeholder="Zoeken via categorie ...">
             <SelectedTemplate Context="categoryId">
                 @{
                     var selectedCategory = GetCategory(categoryId);
@@ -19,10 +16,8 @@
     </div>
     <div class="w-full mt-2">
         <label>Locatie</label>
-        <BlazoredTypeahead SearchMethod="SearchLocation"
-                           @bind-Value="Location"
-                           EnableDropDown="true"
-                           placeholder="Zoeken via Locatie ...">
+        <BlazoredTypeahead SearchMethod="SearchLocation" @bind-Value="Location" EnableDropDown="true"
+            placeholder="Zoeken via Locatie ...">
             <SelectedTemplate Context="location">
                 @location
             </SelectedTemplate>
@@ -33,14 +28,10 @@
     </div>
     <div class="w-full mt-2">
         <label>Voorraad Status</label>
-        <BlazoredTypeahead SearchMethod="SearchStockStatus"
-                           @bind-Value="SelectedStockStatus"
-                           ValueMember="Value"
-                           TextMember="Display"
-                           EnableDropDown="true"
-                           placeholder="Zoeken via Voorraad Status ...">
+        <BlazoredTypeahead SearchMethod="SearchStockStatus" @bind-Value="SelectedStockStatus" ValueMember="Value"
+            TextMember="Display" EnableDropDown="true" placeholder="Zoeken via Voorraad Status ...">
             <SelectedTemplate Context="status">
-                @status.Display
+                @status?.Display
             </SelectedTemplate>
             <ResultTemplate Context="status">
                 @status.Display
@@ -51,21 +42,24 @@
     <div class="w-full mt-2">
         <label>Aantal in stock</label>
         <div class="flex justify-between items-center">
-            <input type="number" min="0" value="@MinInStock" @onchange="@MinInStockChanged" class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50  block p-2.5 w-full"/>
+            <input type="number" min="0" value="@MinInStock" @onchange="@MinInStockChanged"
+                class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50  block p-2.5 w-full" />
             <text class="mx-2">tot</text>
-            <input type="number" min="0" value="@MaxInStock" @onchange="@MaxInStockChanged" class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full"/>
+            <input type="number" min="0" value="@MaxInStock" @onchange="@MaxInStockChanged"
+                class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full" />
         </div>
     </div>
     <AuthorizeView Roles="Administrator, Inventory Manager">
         <div class="w-full mt-2">
             <label>Aantal besteld</label>
             <div class="flex justify-between items-center">
-                <input type="number" min="0" value="@MinOnOrder" @onchange="@MinOnOrderChanged" class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full"/>
+                <input type="number" min="0" value="@MinOnOrder" @onchange="@MinOnOrderChanged"
+                    class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full" />
                 <text class="mx-2">tot</text>
-                <input type="number" min="0" value="@MaxOnOrder" @onchange="@MaxOnOrderChanged" class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full"/>
+                <input type="number" min="0" value="@MaxOnOrder" @onchange="@MaxOnOrderChanged"
+                    class="border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-400/50 block p-2.5 w-full" />
             </div>
         </div>
     </AuthorizeView>
     <button @onclick="Filter" class="bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md mt-2">Filter</button>
 </div>
-

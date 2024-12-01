@@ -7,26 +7,26 @@ using Xunit.Abstractions;
 
 namespace Rise.Client.Profile;
 
-public class ReservationsShould: TestContext
+public class ReservationsShould : TestContext
 {
     public ReservationsShould(ITestOutputHelper outputHelper)
     {
         Services.AddXunitLogger(outputHelper);
         Services.AddSingleton<IBookingService, FakeBookingsService>();
     }
-    
+
     [Fact]
     public async Task RendersTableStructureCorrectly()
     {
-        var bookings = await Services.GetService<IBookingService>()!.GetRecentBookings();
+        var bookings = await Services.GetService<IBookingService>()!.GetRecentBookings(false);
 
         var component = RenderComponent<Reservations>(parameters => parameters
             .Add(p => p.BookingsList, bookings)
         );
-        
+
         var caption = component.Find("caption");
         var headers = component.FindAll("th");
-        
+
         Assert.Equal("Recente reserveringen", caption.TextContent.Trim());
         Assert.Equal("Product", headers[0].TextContent.Trim());
         Assert.Equal("Start", headers[1].TextContent.Trim());
@@ -36,17 +36,17 @@ public class ReservationsShould: TestContext
     [Fact]
     public async Task RendersBookingsCorrectly_WhenBookingsListIsNotEmpty()
     {
-        var bookings = await Services.GetService<IBookingService>()!.GetRecentBookings();
+        var bookings = await Services.GetService<IBookingService>()!.GetRecentBookings(false);
 
         var component = RenderComponent<Reservations>(parameters => parameters
             .Add(p => p.BookingsList, bookings)
         );
-        
+
         var rows = component.FindAll("tbody tr");
 
         var bookingDtos = bookings.ToList();
         Assert.Equal(bookingDtos.Count(), rows.Count);
-        
+
         var columns = component.FindAll("tbody tr td");
         var dates = component.FindAll("td p");
 

@@ -62,7 +62,7 @@ public class ProductService : IProductService
         {
             var result = await httpClient.DeleteAsync($"product/{barcode}");
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // Log error
         }
