@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 using BlazorBarcodeScanner.ZXing.JS;
@@ -11,7 +10,7 @@ public partial class ScanProduct : ComponentBase
     [Parameter] public ProductDTO? Product { get; set; }
     [Parameter] public EventCallback<(ProductDTO, int)> AddProduct { get; set; }
     [Parameter] public required Func<string, int> GetProductCountByBarcode { get; set; }
-    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private ScanService ScanService { get; set; } = null!;
     [Inject] private IProductService ProductService { get; set; } = null!;
     [Parameter] public bool IsMobileView { get; set; }
     [Parameter] public bool ShowScanner { get; set; }
@@ -25,8 +24,8 @@ public partial class ScanProduct : ComponentBase
     {
         // Subscribe to the OnBarcodeChanged event
         // When the barcode changes, searchProductByBarcode is called and the product is updated and quantity is reset
-        BarcodeService.OnBarcodeChanged += async (sender, args) => await SearchProductByBarcode();
-        if (!string.IsNullOrEmpty(BarcodeService.Barcode))
+        ScanService.OnBarcodeChanged += async (sender, args) => await SearchProductByBarcode();
+        if (!string.IsNullOrEmpty(ScanService.Barcode))
         {
             await SearchProductByBarcode();
         }
@@ -34,9 +33,9 @@ public partial class ScanProduct : ComponentBase
 
     private async Task SearchProductByBarcode()
     {
-        if (!string.IsNullOrEmpty(BarcodeService.Barcode))
+        if (!string.IsNullOrEmpty(ScanService.Barcode))
         {
-            Product = await ProductService.GetProductByBarcode(BarcodeService.Barcode);
+            Product = await ProductService.GetProductByBarcode(ScanService.Barcode);
             Quantity = 0;
             await ShowQuantityModalChanged.InvokeAsync(true);
             await ShowScannerChanged.InvokeAsync(false);
@@ -51,7 +50,7 @@ public partial class ScanProduct : ComponentBase
         }
         await AddProduct.InvokeAsync((Product, Quantity));
         Quantity = 0;
-        BarcodeService.Barcode = "";
+        ScanService.Barcode = "";
         Product = null;
         await ShowQuantityModalChanged.InvokeAsync(false);
         await ShowScannerChanged.InvokeAsync(true);

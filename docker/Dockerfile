@@ -10,10 +10,18 @@ RUN cd ./Rise.Client && npm i && npm run build:prod && cd ..
 RUN dotnet restore
 RUN dotnet publish ./Rise.Server -c Release -o out
 
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
+
 COPY --from=build-env /App/out .
-#RUN dotnet tool install --global dotnet-ef
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-dejavu \
+    fonts-liberation \
+    fonts-noto \
+    && rm -rf /var/lib/apt/lists/
+
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 ENTRYPOINT ["dotnet", "Rise.Server.dll"]

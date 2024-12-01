@@ -1,7 +1,8 @@
 @page "/products"
 @attribute [Authorize]
 @using Rise.Shared.Products
-@using Rise.Client.Components.ProductTable
+@using Rise.Client.Components.Table
+@using Rise.Client.Products.Components
 @using Rise.Client.Products.Buttons
 
 <PageTitle>Products</PageTitle>
@@ -15,9 +16,10 @@
 else
 {
     <div class="flex justify-center mb-8">
-        <TableNavbar OnShowTable="showTable" OnShowTable2="showTable2" Categories="categories"
+        <TableNavbar OnShowColumnTable="showColumnTable" OnShowRegularTable="showRegularTable" Categories="categories"
             SelectedCategoriesIds="_selectedCategories" Location="@Location" Locations="_locations" MaxInStock="MaxInStock"
-            MaxOnOrder="MaxOnOrder" MinInStock="MinInStock" MinOnOrder="MinOnOrder" />
+            MaxOnOrder="MaxOnOrder" MinInStock="MinInStock" MinOnOrder="MinOnOrder" OnFilterApplied="SetCurrentPageToOne"
+            OnlyReservable="OnlyReservable"/>
         <input type="text" placeholder="zoektermen" @oninput="OnSearchInput"
             class="border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
         <AuthorizeView Roles="Administrator, Invertorymanager">
@@ -25,33 +27,42 @@ else
         </AuthorizeView>
     </div>
 
-    @if (table)
+    @if (selectedReservableProduct != null)
     {
-        <div class="overflow-x-auto w-full">
-            <Table Items="products" Reserve="OnlyReservable">
-                <Columns>
-                    <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="Barcode" Label="Code" />
-                    </AuthorizeView>
-                    <Column Name="Name" Label="Naam" />
-                    <Column Name="Description" Label="Beschrijving" />
-                    <Column Name="QuantityInStock" Label="In Stock" />
-                    <AuthorizeView Roles="Administrator, Inventory Manager">
-                        <Column Name="QuantityOnOrder" Label="In Bestelling" />
-                    </AuthorizeView>
-                    <Column Name="ClassRoomCode" Label="Lokaal" />
-                </Columns>
-            </Table>
-        </div>
+        <ReservableProductsModal HideModal="HideReservableProductsModal" Product="selectedReservableProduct" />
+    }
+    @if (selectedProduct != null)
+    {
+        <ProductDetailModal SelectedProduct="selectedProduct" OnCloseClick="CloseModal" OnActionClick="() => OnProductClick(selectedProduct)" Reserve="OnlyReservable" />
     }
 
-    @if (table2)
+    @if (!isColumnTable)
     {
+        <div class="overflow-x-auto w-full">
+            <Table Items="products" OnSelectRow="EventCallback.Factory.Create<ProductDTO>(this, ShowModal)">
+                <Columns>
+                    <AuthorizeView Roles="Administrator, Inventory Manager">
+                        <Column T="ProductDTO" Value="Barcode" Title="Code" />
+                    </AuthorizeView>
+                    <Column T="ProductDTO" Value="Name" Title="Naam" />
+                    <Column T="ProductDTO" Value="Description" Title="Beschrijving" />
+                    <Column T="ProductDTO" Value="QuantityInStock" Title="In Stock" />
+                    <AuthorizeView Roles="Administrator, Inventory Manager">
+                        <Column T="ProductDTO" Value="QuantityOnOrder" Title="In Bestelling" />
+                    </AuthorizeView>
+                    <Column T="ProductDTO" Value="ClassRoomCode" Title="Lokaal" />
+                </Columns>
+                <Actions>
+                    <TAction T="ProductDTO" Name="@(OnlyReservable ? "Reserveren" : "Uitlenen")" Method="OnProductClick" />
+                </Actions>
+            </Table>
+        </div>
+    } else {
         <div class="flex justify-center mb-8">
-            <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" />
+            <ProductColumnView Products="products.ToList()" Reserve="OnlyReservable" OnShowModal="ShowModal" OnProductClick="OnProductClick" />
         </div>
     }
 
     <Pagination CurrentPage="@CurrentPage" TotalPages="@TotalPages" CurrentPageSize="@PageSize"
-        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" table2="table2" />
+        OnPageChanged="HandlePageChanged" OnPageSizeChanged="HandlePageSizeChanged" IsColumnTable="isColumnTable" />
 }

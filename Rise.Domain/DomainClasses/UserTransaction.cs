@@ -2,8 +2,11 @@ namespace Rise.Domain.DomainClasses;
 
 public class UserTransaction : Entity
 {
-    private int userId;
+    private string userId = null!;
     private string type = null!;
+    private List<TransactionItem> transactionItems = null!;
+    private List<Product> products = null!;
+    
 
     private static readonly HashSet<string> ValidTransactionTypes = new()
     {
@@ -14,15 +17,22 @@ public class UserTransaction : Entity
 
     public UserTransaction() { }
 
-    public UserTransaction(int userId, string type)
+    public UserTransaction(string userId, string type)
     {
         SetUserId(userId);
         SetType(type);
     }
-
-    private void SetUserId(int userId)
+    public UserTransaction(string userId, string type, List<TransactionItem> transactionItems, List<Product> products)
     {
-        this.userId = Guard.Against.NegativeOrZero(userId, nameof(userId));
+        SetUserId(userId);
+        SetType(type);
+        SetProducts(products);
+        SetTransactionItems(transactionItems);
+    }
+
+    private void SetUserId(string userId)
+    {
+        this.userId = Guard.Against.NullOrWhiteSpace(userId, nameof(userId));
     }
 
     private void SetType(string type)
@@ -36,6 +46,18 @@ public class UserTransaction : Entity
         this.type = validatedType;
     }
 
-    public int UserId => userId;
+    public void SetTransactionItems(List<TransactionItem> transactionItems)
+    {
+        this.transactionItems = Guard.Against.Null(transactionItems, nameof(transactionItems));
+    }
+
+    private void SetProducts(List<Product> products)
+    {
+        this.products = Guard.Against.Null(products, nameof(products));
+    }
+
+    public string UserId => userId;
     public string Type => type;
+    public List<TransactionItem> TransactionItems => transactionItems;
+    public List<Product> Products => products;
 }

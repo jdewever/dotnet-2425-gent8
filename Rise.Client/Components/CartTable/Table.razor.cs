@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Cart;
+using Rise.Client.Products;
 using Rise.Client.Scan;
+
 namespace Rise.Client.Components.CartTable;
 public partial class Table : ComponentBase
 {
@@ -10,7 +12,7 @@ public partial class Table : ComponentBase
 
     [Parameter] public EventCallback<int> OnQuantityChanged { get; set; }
 
-    [Inject] private BarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private ScanService ScanService { get; set; } = null!;
     private void OnRemoveProduct(CartItem item)
     {
         RemoveProduct.InvokeAsync(item);
@@ -18,7 +20,7 @@ public partial class Table : ComponentBase
     private void OnRowClick(CartItem cartItem)
     {
         OnRemoveProduct(cartItem);
-        BarcodeService.Barcode = cartItem.Product.Barcode;
+        ScanService.Barcode = cartItem.Product.Barcode;
         OnQuantityChanged.InvokeAsync(cartItem.Quantity);
     }
 }

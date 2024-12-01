@@ -46,24 +46,6 @@ public class ProductController : ControllerBase
         await productService.AddProduct(product);
     }
 
-    // get a new barcode that's not in use
-    [HttpGet("barcode")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
-    public async Task<BarcodeResponse> GetNewBarcode()
-    {
-        return await productService.GetNewBarcode();
-    }
-
-    // get the image of a product by barcode
-    [HttpGet("{barcode}/image")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
-    public async Task<ActionResult> GetBarcodeImage(string barcode)
-    {
-        var imageBase64 = await productService.GetBarcodeImage(barcode);
-        var imageBytes = Convert.FromBase64String(imageBase64);
-        return File(imageBytes, "image/png");
-    }
-
     // get product by barcode
     [HttpGet("{barcode}")]
     public async Task<ProductDTO> GetProductByBarcode(string barcode)

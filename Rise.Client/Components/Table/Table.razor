@@ -1,0 +1,63 @@
+﻿@typeparam T
+@using Rise.Client.Components.Buttons;
+
+<div class="overflow-x-auto w-full">
+    <div class="hidden lg:block min-w-full">
+        <table class="table-auto border-collapse border border-gray-200 rounded-lg overflow-hidden w-full min-w-full">
+            <thead class="bg-gray-200">
+                <tr>
+                    @Columns
+                    @if(@Actions != null)
+                    {
+                        <th class="flex justify-end px-4 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500">
+                            Acties
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Items.Count() == 0)
+                {
+                    <tr>
+                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 text-center" colspan="100%">
+                            Geen items gevonden
+                        </td>
+                    </tr>
+                }
+                @foreach (var item in Items)
+                {
+                    <CascadingValue Value="item">
+                        <tr class="hover:bg-gray-100" @onclick="() => SelectItem(item)">
+                            @Columns
+                            @if (@Actions != null)
+                            {
+                                @* stopPropagation is needed to not execute the SelectItem on actions *@
+                                <td class="flex justify-end px-4 py-2 border-b border-gray-200 text-sm text-gray-700" @onclick:stopPropagation="true">
+                                    @Actions
+                                </td>
+                            }
+                        </tr>
+                    </CascadingValue>
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+    <div class="lg:hidden w-full">
+        @foreach (var item in Items)
+        {
+            <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full mx-auto relative" @onclick="() => SelectItem(item)">
+                <CascadingValue Value="item">
+                    @Columns
+                    @if (@Actions != null)
+                    {
+                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700" @onclick:stopPropagation="true">
+                            @Actions
+                        </td>
+                    }
+                </CascadingValue>
+            </div>
+        }
+    </div>
+</div>

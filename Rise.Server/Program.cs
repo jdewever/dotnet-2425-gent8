@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Persistence.Triggers;
 using Rise.Services.Products;
+using Rise.Services.Barcodes;
 using Rise.Shared.Products;
+using Rise.Shared.Barcodes;
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +15,10 @@ using Rise.Services.Cart;
 using Rise.Shared.Transaction;
 using Rise.Services.Transaction;
 using Auth0Net.DependencyInjection;
+using Rise.Server.Auth;
+using Rise.Services.Auth;
+using Rise.Services.Booking;
+using Rise.Shared.Booking;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,9 +79,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IBarcodeService, BarcodeService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<ITransactionItemService, TransactionItemService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddHttpContextAccessor()
+    .AddScoped<IAuthContextProvider, HttpContextAuthProvider>();
 
 builder.Services.AddAuth0AuthenticationClient(config =>
 {

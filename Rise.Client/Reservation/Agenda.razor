@@ -1,0 +1,156 @@
+@using Rise.Shared.Products
+@using Blazored.Toast.Services
+
+
+<div class="flex">
+    <div class="p-5 w-1/2">
+        <div class="flex justify-between mb-4">
+            <h2 class="text-xl font-semibold mx-4">@currentDate.ToString("d MMMM yyyy")</h2>
+            <div class="text-xl">
+                @if(currentDate.Date > DateTime.Now.Date)
+                {
+                    <button class="px-2 py-1" @onclick="PreviousDate">&lt;</button>
+                }
+                <button class="px-2 py-1" @onclick="NextDate">&gt;</button>
+            </div>
+        </div>
+        <div class="h-[calc(100vh-15rem)] overflow-y-auto mt-5 mx-10 no-scrollbar">
+            <div class="grid grid-cols-1">
+                @for (int hour = 0; hour < 24; hour++)
+                {
+                    int capturedHour = hour;
+                    <div class="h-24 flex items-top cursor-pointer hour-cell" data-hour="@capturedHour" @onclick="() => SelectHour(capturedHour)">
+                        <span class="font-bold w-16 select-none">@capturedHour:00</span>
+                        <div class="flex-grow border-t border-gray-300 ml-4 @GetHourClass(capturedHour)  @GetHourSelectableClass(capturedHour)"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="p-5 w-1/2">
+        <div class="flex items-center justify-center space-x-4">
+            @if(currentDate.Month > DateTime.Now.Month || currentDate.Year > DateTime.Now.Year)
+            {
+                <button class="px-2 py-1" @onclick="PreviousMonth">&lt;</button>
+            }
+            else
+            {
+                <div class="w-8"></div>
+            }
+            <h2 class="text-xl text-center font-semibold mx-4 w-40">@currentDate.ToString("MMMM yyyy")</h2>
+            <button class="px-2 py-1" @onclick="NextMonth">&gt;</button>
+        </div>
+        
+        <div class="h-1/3 overflow-y-auto mt-5 mx-10 no-scrollbar" id="calendarGrid">
+            <div class="grid grid-cols-7 text-center">
+                @foreach (var dayName in new[] { "Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo" })
+                {
+                    <span class="font-semibold">@dayName</span>
+                }
+            </div>
+            <div class="grid grid-cols-7 text-center mt-4">
+                @for (int day = 1; day <= getDaysInMonth() + (14 - getDaysInMonth() % 7); day++)
+                {
+                    DateTime date;
+                    if (day <= getDaysInMonth())
+                    {
+                        date = new DateTime(currentDate.Year, currentDate.Month, day);
+                        bool isPastDay = date < DateTime.Today;
+                        <span class="font-bold mt-4 select-none day-cell @GetDayClass(date) @(isPastDay ? "bg-gray-300 cursor-not-allowed" : "")" data-date="@date.ToString("yyyy-MM-dd")" @onclick="() => SelectDay(date, isPastDay)">
+                            @date.Day
+                            @if (HasBookings(date))
+                            {
+                                <span class="inline-block w-2 h-2 bg-gray-300 rounded-full ml-1"></span>
+                            }
+                        </span>
+                    }
+                    else
+                    {
+                        int nextMonthDay = day - getDaysInMonth();
+                        DateTime nextMonthDate = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1).AddDays(nextMonthDay - 1);
+                        bool isPastDay = nextMonthDate < DateTime.Today;
+                        <span class="font-bold mt-4 text-gray-400 select-none day-cell @GetDayClass(nextMonthDate) @(isPastDay ? "bg-gray-300 cursor-not-allowed" : "")" data-date="@nextMonthDate.ToString("yyyy-MM-dd")" @onclick="() => SelectDay(nextMonthDate, isPastDay)">
+                            @nextMonthDate.Day
+                            @if (HasBookings(nextMonthDate))
+                            {
+                                <span class="inline-block w-2 h-2 bg-gray-300 rounded-full ml-1"></span>
+                            }
+                        </span>
+                    }
+                }
+            </div>
+        </div>
+        <div class="p-5 pt-10 flex flex-col items-center justify-center">
+            <h2 class="text-xl text-center font-semibold mx-4 p-5">Reservatie details</h2>
+            @if (product != null)
+            {
+                <div class="flex items-center space-x-2 mb-4">
+                    <h2 class="text-l text-center font-semibold">Product :</h2>
+                    <p>@product.Name</p>
+                </div>
+            }
+            <div class="flex items-center space-x-4">
+                @if(DateTime.Compare(startDay.Date, endDay.Date) == 0)
+                {
+                    <p>@currentDate.ToString("MMMM d yyyy")</p>
+                    if(startHour  == null && endHour == null)
+                    {
+                        <p>00:00</p>
+                        <p>-</p>
+                        <p>00:00</p>
+                    }else{
+                        if(startHour < 10) {
+                            <p>@("0" + startHour + ":00")</p>
+                        }else{
+                            <p>@(startHour + ":00")</p>
+                        }
+                        <p>-</p>
+                        if(endHour == null) {
+                            <p>@("0" + (startHour+1) + ":00")</p>
+                        }else {
+                            if(endHour < 10) {
+                                <p>@("0" + (endHour+1) + ":00")</p>
+                            }else{
+                                <p>@((endHour+1) + ":00")</p>
+                            }
+                        } 
+                    }
+                } else {
+                    <div class="flex flex-col">
+                        <div class="flex items-center space-x-4">
+                            <p>@startDay.ToString("MMMM d yyyy")</p>
+                            <select @bind="startHour" class="text-center">
+                                <option value="" disabled selected>Kies een start uur</option>
+                                @for (int hour = 0; hour < 24; hour++)
+                                {
+                                    <option value="@hour">@hour:00</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-4 mt-2">
+                            <p>@endDay.ToString("MMMM d yyyy")</p>
+                            <select @bind="endHour" class="text-center">
+                                <option value="" disabled selected>Kies een eind uur</option>
+                                @for (int hour = 0; hour < 24; hour++)
+                                {
+                                    <option value="@(hour-1)">@hour:00</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                }
+            </div>
+            @if(hasConflict)
+            {
+                <p class="text-red-500">Er is een conflict met een andere reservatie</p>
+            }
+            @if(noHourSelected)
+            {
+                <p class="text-red-500">Gelieve een start en eind uur te selecteren</p>
+            }
+            
+            <button class="bg-gray-300 px-4 py-2 rounded-lg mt-4" @onclick="Reserve">Reserveer</button>
+        </div>
+    </div>
+</div>
