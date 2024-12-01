@@ -5,16 +5,16 @@
 namespace Rise.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateBarcodeProduct : Migration
+    public partial class UpdateCategoryName : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Barcode",
-                table: "Product",
-                type: "nvarchar(13)",
-                maxLength: 13,
+                name: "Name",
+                table: "Categories",
+                type: "nvarchar(50)",
+                maxLength: 50,
                 nullable: false
             );
         }
@@ -23,8 +23,8 @@ namespace Rise.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Barcode",
-                table: "Product",
+                name: "Name",
+                table: "Categories",
                 type: "nvarchar(4000)",
                 maxLength: 4000,
                 nullable: false
