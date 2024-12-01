@@ -6,6 +6,7 @@ public partial class Column<T> : ComponentBase
 {
     [Parameter] public required string Title { get; set; }
     [Parameter] public required string Value { get; set; }
+    [Parameter] public Func<T, string>? ValueSelector { get; set; }
     [CascadingParameter] public T? Item { get; set; }
 
     // we use object? as parameter because it gets updated in the for loop, prevents creating a new var for the loop
@@ -23,7 +24,7 @@ public partial class Column<T> : ComponentBase
         foreach (var property in properties)
         {
             var propInfo = type.GetProperty(property);
-            if (propInfo == null) 
+            if (propInfo == null)
             {
                 // a string (not optimal) is returned if a property is not found, we can't really throw an exception...
                 return "property not found " + property;
@@ -38,5 +39,15 @@ public partial class Column<T> : ComponentBase
         }
 
         return obj.ToString() ?? "";
+    }
+
+    // Adding a function to create a string object if nesting isn't enough
+    public string GetValue()
+    {
+        if (ValueSelector != null && Item != null)
+        {
+            return ValueSelector(Item);
+        }
+        return GetNestedValue(Item, Value);
     }
 }
