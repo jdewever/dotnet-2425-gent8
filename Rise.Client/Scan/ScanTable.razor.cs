@@ -19,6 +19,9 @@ namespace Rise.Client.Scan
         [Inject] private IToastService ToastService { get; set; } = null!;
 
         [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+        [Parameter] public bool IsMobileView { get; set; }
+        [Parameter] public bool ShowScanner { get; set; }
+        [Parameter] public bool ShowQuantityModal { get; set; }
 
         private Boolean selectedButton = true;
 

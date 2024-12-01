@@ -3,7 +3,15 @@
 @inject NavigationManager Navigation
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity?.Name!
+        @if (User != null)
+        {
+            <div class="w-full flex justify-end">
+                <div class="w-fit p-2 flex flex-row align-middle hover:bg-gray-100 cursor-pointer rounded-3xl" @onclick="_onclick">
+                    <img src="@User.Picture" width="25px" class="rounded-full me-1" alt="Profile Picture"/>
+                    <p>@User.FullName</p>
+                </div>
+            </div>
+        }
     </Authorized>
     <NotAuthorized>
         <a href="authentication/login">Log in</a>

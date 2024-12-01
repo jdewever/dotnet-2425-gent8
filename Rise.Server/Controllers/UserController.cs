@@ -8,7 +8,7 @@ using Rise.Shared.User;
 
 namespace Rise.Server.Controllers;
 [ApiController]
-[Route("[controller]")]
+[Route("api/user")]
 [Authorize]
 
 public class UserController : ControllerBase
@@ -32,11 +32,12 @@ public class UserController : ControllerBase
         return users.Select(x => new UserDto
         {
             Email = x.Email,
+            IsBlocked = x.Blocked ?? false,
             FullName = x.FullName,
             Picture = x.Picture,
-            IsBlocked = x.Blocked ?? false,
         });
     }
+
     [HttpGet("details")]
     public async Task<UserDto> GetUser()
     {

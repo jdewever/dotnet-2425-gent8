@@ -119,7 +119,7 @@ namespace Rise.Client.Products.AddProduct
 
         }
 
-        private async Task HandleFileSelected()
+        private static void HandleFileSelected()
         {
             //todo -> adding image to product, blob?
         }

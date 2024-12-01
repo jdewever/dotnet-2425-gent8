@@ -17,6 +17,7 @@ public class Seeder
             return;
 
         SeedProductsAndCategories();
+        SeedBookings();
     }
 
     private bool HasAlreadyBeenSeeded()
@@ -510,7 +511,7 @@ public class Seeder
     }
 };
 
-    var categories = new List<Category>
+        var categories = new List<Category>
     {
         new Category { Name = "Medical Devices" },
         new Category { Name = "Therapy Tools" },
@@ -574,6 +575,28 @@ public class Seeder
         categories[6].Products = [products[8], products[9]];
 
         dbContext.SaveChanges();
+    }
+
+    private void SeedBookings()
+    {
+        var firstReservableProduct = dbContext.Products.FirstOrDefault(p => p.IsReservable);
+
+        if (firstReservableProduct?.Id != null)
+        {
+            var bookings = new List<Booking>
+            {
+                new Booking(firstReservableProduct, "auth0|6708f85072e161294340f1fd", new DateTime(DateTime.UtcNow.Year, 11, 20, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 21, 16, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "auth0|6708f85072e161294340f1fd", new DateTime(DateTime.UtcNow.Year, 11, 3, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 6, 16, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "auth0|670d2d182ecfb6f5bdcca195", new DateTime(DateTime.UtcNow.Year, 11, 25, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 25, 10, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "auth0|670d2d182ecfb6f5bdcca195", new DateTime(DateTime.UtcNow.Year, 10, 18, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 10, 19, 10, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "auth0|670d2d182ecfb6f5bdcca195", new DateTime(DateTime.UtcNow.Year, 9, 21, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 9, 21, 10, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "auth0|670d2d182ecfb6f5bdcca195", new DateTime(DateTime.UtcNow.Year, 11, 20, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 21, 16, 0, 0, DateTimeKind.Utc)),
+                new Booking(firstReservableProduct, "auth0|670d2d182ecfb6f5bdcca195", new DateTime(DateTime.UtcNow.Year, 11, 3, 8, 0, 0, DateTimeKind.Utc), new DateTime(DateTime.UtcNow.Year, 11, 6, 16, 0, 0, DateTimeKind.Utc)),
+            };
+
+            dbContext.Booking.AddRange(bookings);
+            dbContext.SaveChanges();
+        }
     }
 
 }

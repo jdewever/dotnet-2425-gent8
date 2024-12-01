@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Rise.Client.Auth;
 
 namespace Rise.Client.Layout;
 
@@ -8,11 +9,12 @@ public partial class NavMenu : ComponentBase
 {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+    [Inject] public required IUserService UserService { get; set; }
 
     private bool collapseNavMenu = true;
     private string NavHeight => collapseNavMenu ? "sm:h-[calc(100vh-20rem)] sm:min-h-full" : "h-full min-h-full";
     private string? NavMenuCssClass => collapseNavMenu ? "hidden sm:flex" : null;
-    
+
     private string? userRole;
 
     private List<NavItem> NavItems => new() {
@@ -30,13 +32,21 @@ public partial class NavMenu : ComponentBase
         },
         new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
         new NavItem { Label = "Reserveringen", Href = "reservations", Icon = "reservation" },
+        new NavItem {
+            Label = "Beheren",
+            Href = "manage",
+            Icon = "settings",
+            IsVisible = userRole == "Inventory Manager" || userRole == "Administrator"
+        },
     };
 
-    private void ToggleNavMenu() {
+    private void ToggleNavMenu()
+    {
         collapseNavMenu = !collapseNavMenu;
     }
     public void BeginLogOut()
     {
+        UserService.ClearUser();
         Navigation.NavigateToLogout("authentication/logout");
     }
 
@@ -63,7 +73,8 @@ public partial class NavMenu : ComponentBase
     }
 
     // only used here, but maybe better in Rise.Shared once linked to users?
-    private class NavItem {
+    private class NavItem
+    {
         public required string Label { get; set; }
         public required string Href { get; set; }
         public string? Icon { get; set; }

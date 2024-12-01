@@ -10,8 +10,8 @@ namespace Rise.Client.Products;
 
 public partial class TableNavbar : ComponentBase
 {
-    [Parameter] public EventCallback OnShowTable { get; set; }
-    [Parameter] public EventCallback OnShowTable2 { get; set; }
+    [Parameter] public EventCallback OnShowRegularTable { get; set; }
+    [Parameter] public EventCallback OnShowColumnTable { get; set; }
     [CascadingParameter] public IModalService Modal { get; set; } = default!;
     [Parameter] public IList<int>? SelectedCategoriesIds { get; set; }
     [Parameter] public IEnumerable<CategoryDTO>? Categories { get; set; }
@@ -85,11 +85,11 @@ public partial class TableNavbar : ComponentBase
         }
         var request = new
         {
-            MaxInStock = MaxInStock,
-            MinInStock = MinInStock,
-            MaxOnOrder = MaxOnOrder,
-            MinOnOrder = MinOnOrder,
-            Location = Location,
+            MaxInStock,
+            MinInStock,
+            MaxOnOrder,
+            MinOnOrder,
+            Location,
         };
         var url = "";
         if(OnlyReservable)

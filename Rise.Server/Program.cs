@@ -17,6 +17,8 @@ using Rise.Services.Transaction;
 using Auth0Net.DependencyInjection;
 using Rise.Server.Auth;
 using Rise.Services.Auth;
+using Rise.Services.Booking;
+using Rise.Shared.Booking;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,7 +82,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IBarcodeService, BarcodeService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
-builder.Services.AddScoped<ITransactionItemService, TransactionItemService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddHttpContextAccessor()
     .AddScoped<IAuthContextProvider, HttpContextAuthProvider>();
 
