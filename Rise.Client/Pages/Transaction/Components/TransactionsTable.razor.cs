@@ -5,5 +5,5 @@ namespace Rise.Client.Pages.Transaction.Components;
 
 public partial class TransactionsTable : ComponentBase
 {
-    [Parameter] public IEnumerable<TransactionDto>? Transactions { get; set; }
+    [Parameter] public IEnumerable<TransactionDTO>? Transactions { get; set; }
 }

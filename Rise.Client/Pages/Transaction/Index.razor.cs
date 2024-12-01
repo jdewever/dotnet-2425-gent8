@@ -9,7 +9,7 @@ namespace Rise.Client.Pages.Transaction;
 public partial class Index : ComponentBase
 {
     [Inject] private ITransactionService TransactionService { get; set; } = null!;
-    private IEnumerable<TransactionDto>? Transactions { get; set; }
+    private IEnumerable<TransactionDTO>? Transactions { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
