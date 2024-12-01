@@ -6,5 +6,5 @@ public interface ITransactionService
 {
     Task AddTransactionScanOut(List<CartItem> cartItems);
     Task AddTransactionScanIn(List<CartItem> cartItems);
-    Task<List<TransactionDto.History>> GetRecentTransactions();
+    Task<List<TransactionDTO>> GetRecentTransactions();
 }
