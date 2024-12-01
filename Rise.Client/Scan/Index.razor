@@ -6,7 +6,16 @@
 
 <div class="flex flex-col lg:flex-row w-full items-center space-x-4">
 
-    <ScanProduct AddProduct="addProduct" GetProductCountByBarcode="getProductCountByBarcode" />
-    <ScanTable CartItems="products" RemoveProduct="removeProduct"/>
-
+    <ScanProduct AddProduct="addProduct"
+                 GetProductCountByBarcode="getProductCountByBarcode"
+                 IsMobileView="isMobileView"
+                 ShowScanner="showScanner"
+                 ShowScannerChanged="@(value => showScanner = value)"
+                 ShowQuantityModal="showQuantityModal"
+                 ShowQuantityModalChanged="@(value => showQuantityModal = value)" />
+    <ScanTable CartItems="products"
+               RemoveProduct="removeProduct"
+               IsMobileView="isMobileView"
+               ShowScanner="showScanner"
+               ShowQuantityModal="showQuantityModal" />
 </div>

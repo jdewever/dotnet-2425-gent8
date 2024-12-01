@@ -9,13 +9,21 @@
                     @Columns
                     @if(@Actions != null)
                     {
-                        <th class="px-4 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500 tracking-wider">
+                        <th class="flex justify-end px-4 py-2 border-b border-gray-200 text-left text-xs font-medium text-gray-500">
                             Acties
                         </th>
                     }
                 </tr>
             </thead>
             <tbody>
+                @if (Items.Count() == 0)
+                {
+                    <tr>
+                        <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700 text-center" colspan="100%">
+                            Geen items gevonden
+                        </td>
+                    </tr>
+                }
                 @foreach (var item in Items)
                 {
                     <CascadingValue Value="item">
@@ -24,7 +32,7 @@
                             @if (@Actions != null)
                             {
                                 @* stopPropagation is needed to not execute the SelectItem on actions *@
-                                <td class="px-4 py-2 border-b border-gray-200 text-sm text-gray-700" @onclick:stopPropagation="true">
+                                <td class="flex justify-end px-4 py-2 border-b border-gray-200 text-sm text-gray-700" @onclick:stopPropagation="true">
                                     @Actions
                                 </td>
                             }

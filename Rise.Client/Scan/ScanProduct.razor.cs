@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
+using BlazorBarcodeScanner.ZXing.JS;
+using Microsoft.JSInterop;
+using Rise.Shared.Barcodes;
 
 namespace Rise.Client.Scan;
 
@@ -10,6 +13,12 @@ public partial class ScanProduct : ComponentBase
     [Parameter] public required Func<string, int> GetProductCountByBarcode { get; set; }
     [Inject] private ScanService ScanService { get; set; } = null!;
     [Inject] private IProductService ProductService { get; set; } = null!;
+    [Parameter] public bool IsMobileView { get; set; }
+    [Parameter] public bool ShowScanner { get; set; }
+    [Parameter] public EventCallback<bool> ShowScannerChanged { get; set; }
+    [Parameter] public bool ShowQuantityModal { get; set; }
+    [Parameter] public EventCallback<bool> ShowQuantityModalChanged { get; set; }
+
     private int Quantity = 0;
 
     protected override async Task OnInitializedAsync()
@@ -29,19 +38,23 @@ public partial class ScanProduct : ComponentBase
         {
             Product = await ProductService.GetProductByBarcode(ScanService.Barcode);
             Quantity = 0;
+            await ShowQuantityModalChanged.InvokeAsync(true);
+            await ShowScannerChanged.InvokeAsync(false);
             StateHasChanged();
         }
     }
-    private void OnAddProduct()
+    private async void OnAddProduct()
     {
         if (Product == null)
         {
             return;
         }
-        AddProduct.InvokeAsync((Product, Quantity));
+        await AddProduct.InvokeAsync((Product, Quantity));
         Quantity = 0;
         ScanService.Barcode = "";
         Product = null;
+        await ShowQuantityModalChanged.InvokeAsync(false);
+        await ShowScannerChanged.InvokeAsync(true);
         StateHasChanged();
     }
 
@@ -49,5 +62,13 @@ public partial class ScanProduct : ComponentBase
     private int GetProductCount()
     {
         return GetProductCountByBarcode.Invoke(Product?.Barcode ?? "");
+    }
+
+    private async void LocalReceivedBarcodeText(BarcodeReceivedEventArgs args)
+    {
+        ScanService.Barcode = args.BarcodeText;
+        await ShowScannerChanged.InvokeAsync(false);
+        await ShowQuantityModalChanged.InvokeAsync(true);
+        StateHasChanged();
     }
 }

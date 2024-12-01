@@ -29,6 +29,13 @@ public class CategoryController : ControllerBase
         await _categoryService.AddCategory(category);
     }
 
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task Update(int id, [FromBody] CategoryDTO category)
+    {
+        await _categoryService.UpdateCategory(id, category);
+    }
+
     [HttpDelete("{id}")]
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task Delete(int id)

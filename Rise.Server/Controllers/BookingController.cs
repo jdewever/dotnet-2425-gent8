@@ -28,4 +28,10 @@ public class BookingController : ControllerBase
     {
         await bookingService.AddBookingAsync(booking);
     }
+
+    [HttpDelete("{id}")]
+    public async Task CancelBooking(int id)
+    {
+        await bookingService.CancelBooking(id);
+    }
 }
