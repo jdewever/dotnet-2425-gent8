@@ -3,5 +3,16 @@
 
 @if (!string.IsNullOrEmpty(Name))
 {
+    if (Type == "trash")
+    {
+        <TrashIconButton Text="@Name" OnClick="OnClick" />
+    }
+    else if (Type == "edit")
+    {
+        <EditIconButton Text="@Name" OnClick="OnClick" />
+    }
+    else
+    {
     <SmallButton Text="@Name" OnClick="OnClick" />
+    }
 }
