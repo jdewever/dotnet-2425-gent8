@@ -1,0 +1,18 @@
+using Microsoft.AspNetCore.Components;
+using Rise.Shared.Products;
+using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components.Web;
+using Rise.Shared.Transaction;
+
+namespace Rise.Client.Pages.Transaction;
+
+public partial class Index : ComponentBase
+{
+    [Inject] private ITransactionService TransactionService { get; set; } = null!;
+    private IEnumerable<TransactionDto>? Transactions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Transactions = await TransactionService.GetRecentTransactions();
+    }
+}

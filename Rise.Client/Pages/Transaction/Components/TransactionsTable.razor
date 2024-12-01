@@ -1,0 +1,10 @@
+@using Rise.Client.Components.Table
+@using Rise.Shared.Transaction
+
+<Table Items="Transactions">
+    <Columns>
+        <Column T="TransactionDto" Value="Products.Product.Name" Title="Producten" />
+        <Column T="TransactionDto" Value="Date" Title="Datum" />
+        <Column T="TransactionDto" Value="Type" Title="Type" />
+    </Columns>
+</Table>
