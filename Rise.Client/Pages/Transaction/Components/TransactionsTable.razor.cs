@@ -7,8 +7,13 @@ public partial class TransactionsTable : ComponentBase
 {
     [Parameter] public IEnumerable<TransactionDTO>? Transactions { get; set; }
 
-    private string GetProductNames(TransactionDTO transaction)
+    private static string GetProductNames(TransactionDTO transaction)
     {
-        return string.Join(", ", transaction.Products.Select(p => p.Product.Name));
+        return string.Join("\n", transaction.Products.Select(p => p.Product.Name));
+    }
+
+    private static string GetProductAmounts(TransactionDTO transaction)
+    {
+        return string.Join("\n", transaction.Products.Select(p => p.Quantity));
     }
 }
