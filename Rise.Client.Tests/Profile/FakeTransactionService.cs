@@ -9,7 +9,7 @@ namespace Rise.Client.Profile;
 
 public class FakeTransactionService : ITransactionService
 {
-    private readonly List<TransactionDto.History> _transactionHistory;
+    private readonly List<TransactionDTO> _transactionHistory;
 
     public FakeTransactionService()
     {
@@ -37,13 +37,13 @@ public class FakeTransactionService : ITransactionService
         };
         _transactionHistory =
         [
-            new TransactionDto.History()
+            new TransactionDTO()
             {
                 Id = 1,
                 Date = DateTime.MinValue,
                 Products =
                 [
-                    new TransactionItemDto
+                    new TransactionItemDTO
                     {
                         Product = product,
                         Quantity = 10
@@ -65,7 +65,7 @@ public class FakeTransactionService : ITransactionService
         throw new System.NotImplementedException();
     }
 
-    public Task<List<TransactionDto.History>> GetRecentTransactions()
+    public Task<List<TransactionDTO>> GetRecentTransactions()
     {
         return Task.FromResult(_transactionHistory);
     }

@@ -1,6 +1,4 @@
-using Xunit.Abstractions;
 using Rise.Shared.Booking;
-using Rise.Client.Profile;
 using Moq;
 using Blazored.Toast.Services;
 using System.Collections.Generic;
