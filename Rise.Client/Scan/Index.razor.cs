@@ -54,6 +54,7 @@ public partial class Index : ComponentBase
         {
             products.Add(new CartItem { Product = productInfo.product, Quantity = productInfo.quantity });
         }
+        await localStorage.SetItemAsync("products", products);
         showScanner = true;
         await InvokeAsync(StateHasChanged);
     }
@@ -83,6 +84,6 @@ public partial class Index : ComponentBase
         return barcode != "" ? products.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity) : 0;
     }
 
-    
+
 
 }
