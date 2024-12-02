@@ -33,7 +33,12 @@ public class CategoryController : ControllerBase
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task Update(int id, [FromBody] CategoryDTO category)
     {
-        await _categoryService.UpdateCategory(id, category);
+        // todo: throw bad request error
+        if (id != category.Id)
+        {
+            throw new Exception("Id's do not match");
+        }
+        await _categoryService.UpdateCategory(category);
     }
 
     [HttpDelete("{id}")]

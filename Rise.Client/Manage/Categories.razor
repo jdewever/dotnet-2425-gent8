@@ -1,0 +1,34 @@
+@page "/manage/categories"
+@using Rise.Client.Components.Table;
+@using Rise.Shared.Products;
+@using Rise.Client.Manage.Components;
+
+<PageTitle>Categorieën beheren</PageTitle>
+
+<ManageView T="CategoryDTO" ItemType="categorie" OnDelete="OnDelete" ShowAddModal="ShowAddModal" @ref="ManageViewComponent">
+    @if (categories == null)
+    {
+        <p>
+            <em>Loading...</em>
+        </p>
+    }
+    else
+    {
+        <div class="mt-8 overflow-x-auto w-full">
+            <Table Items="categories">
+                <Columns>
+                    <Column T="CategoryDTO" Value="Name" Title="Naam" />
+                </Columns>
+                <Actions>
+                    <TAction T="CategoryDTO" Type="edit" Name="Bewerken" Method="ShowEditModal" />
+                    <TAction T="CategoryDTO" Type="trash" Name="Verwijderen" Method="ShowDeleteModal" />
+                </Actions>
+            </Table>
+        </div>
+    }
+
+    @if (selectedCategory != null)
+    {
+        <EditCategoryModal Item="selectedCategory" OnClose="HideEditModal" OnConfirm="OnSave" />
+    }
+</ManageView>

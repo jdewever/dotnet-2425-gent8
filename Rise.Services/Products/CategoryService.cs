@@ -37,19 +37,19 @@ public class CategoryService : ICategoryService
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateCategory(int id, CategoryDTO category)
+    public async Task UpdateCategory(CategoryDTO category)
     {
         var existingCategory = await dbContext.Categories
             .Where(c => !c.IsDeleted)
             .Include(c => c.Products)
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .FirstOrDefaultAsync(c => c.Id == category.Id);
 
         if (existingCategory is not null)
         {
             existingCategory.Name = category.Name;
             await dbContext.SaveChangesAsync();
         } else {
-            throw new Exception($"Category with id {id} not found");
+            throw new Exception($"Category with id {category.Id} not found");
         }
     }
 

@@ -1,0 +1,25 @@
+@typeparam T
+@attribute [Authorize]
+@using Rise.Client.Pages;
+@using Rise.Client.Manage.Components;
+@using Rise.Client.Components.Buttons;
+
+<AuthorizeView Roles="Administrator,Inventory Manager">
+    <Authorized>
+        <Navigationbar />
+
+        <div class="flex justify-end">
+            <SmallButton OnClick="ShowAddModal" Text="Toevoegen" ExtraCss="bg-green-200 text-green-700 hover:bg-green-300" />
+        </div>
+
+        @ChildContent
+
+        @if (isDeleteModalVisible && selectedItem != null)
+        {
+            <DeleteModal ItemType="@ItemType" ItemName="@itemName" OnClose="HideDeleteModal" OnConfirm="DeleteItem" />
+        }
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToProducts />
+    </NotAuthorized>
+</AuthorizeView>
