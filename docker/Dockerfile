@@ -21,7 +21,7 @@ RUN dotnet test --no-build
 # Code coverage
 WORKDIR /App/Rise.Client.Tests
 RUN dotnet test --no-build --collect:"XPlat Code Coverage"
-RUN mv /root/.microsoft/coverage /App/coverage
+# RUN mv /root/.microsoft/coverage /App/coverage
 
 RUN dotnet restore
 RUN dotnet publish ./Rise.Server -c Release -o out
