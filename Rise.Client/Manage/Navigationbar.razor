@@ -1,0 +1,7 @@
+<div class="z-10 flex justify-center w-full">
+
+    @foreach (var button in Items)
+    {
+        <button class="@GetButtonClass(button.Href)" @onclick='() => OpenPage(button.Href)'>@button.Label</button>
+    }
+</div>
