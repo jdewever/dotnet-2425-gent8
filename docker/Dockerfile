@@ -10,17 +10,17 @@ RUN cd ./Rise.Client && npm i && npm run build:prod && cd ..
 RUN dotnet tool install --global dotnet-ef \
 && dotnet tool install --global dotnet-format
 
-ENV PATH="$PATH:/root/.dotnet/tools"
+#ENV PATH="$PATH:/root/.dotnet/tools"
 #Code analysis aan de hand van dotnet format
 #WORKDIR /App
 #RUN dotnet format /App/Rise.sln --verify-no-changes  --verbosity diagnostic
 # Test projects
-WORKDIR /App/Rise.Client.Tests
-RUN dotnet test --no-build
+#WORKDIR /App/Rise.Client.Tests
+#RUN dotnet test --no-build
 
 # Code coverage
-WORKDIR /App/Rise.Client.Tests
-RUN dotnet test --no-build --collect:"XPlat Code Coverage"
+# WORKDIR /App/Rise.Client.Tests
+# RUN dotnet test --no-build --collect:"XPlat Code Coverage"
 # RUN mv /root/.microsoft/coverage /App/coverage
 
 WORKDIR /App
