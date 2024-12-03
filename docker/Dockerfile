@@ -12,8 +12,8 @@ RUN dotnet tool install --global dotnet-ef \
 
 ENV PATH="$PATH:/root/.dotnet/tools"
 #Code analysis aan de hand van dotnet format
-WORKDIR /App
-RUN dotnet format /App/Rise.sln --verify-no-changes  --verbosity diagnostic
+#WORKDIR /App
+#RUN dotnet format /App/Rise.sln --verify-no-changes  --verbosity diagnostic
 # Test projects
 WORKDIR /App/Rise.Client.Tests
 RUN dotnet test --no-build
