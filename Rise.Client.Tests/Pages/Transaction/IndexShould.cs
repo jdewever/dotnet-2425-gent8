@@ -59,25 +59,25 @@ namespace Rise.Client.Pages.Transaction
 
             var component = RenderComponent<Index>();
 
-            var transactionsCount = await mockTransactionService.Object.GetRecentTransactions();
+            var transactions = await mockTransactionService.Object.GetRecentTransactions();
 
             var rows = component.FindAll("td");
 
-            Assert.Equal(3, transactionsCount.Count());
+            Assert.Equal(3, transactions.Count);
 
             Assert.Equal("productTestName", rows[0].TextContent.Trim());
             Assert.Equal("4", rows[1].TextContent.Trim());
-            Assert.Equal(DateTime.Now.AddDays(-1).AddHours(2).ToString(), rows[2].TextContent.Trim());
+            Assert.Equal(GetRoundedDate(-1, 2).ToString(), rows[2].TextContent.Trim());
             Assert.Equal("ScanOut", rows[3].TextContent.Trim());
 
-            Assert.Equal("productTestName, productTestName2", rows[4].TextContent.Trim());
-            Assert.Equal("4, 10", rows[5].TextContent.Trim());
-            Assert.Equal(DateTime.Now.AddDays(-4).AddHours(2).ToString(), rows[6].TextContent.Trim());
+            Assert.Equal("productTestNameproductTestName2", rows[4].TextContent.Trim());
+            Assert.Equal("410", rows[5].TextContent.Trim());
+            Assert.Equal(GetRoundedDate(-4, 2).ToString(), rows[6].TextContent.Trim());
             Assert.Equal("ScanOut", rows[7].TextContent.Trim());
 
-            Assert.Equal("productTestName, productTestName2", rows[8].TextContent.Trim());
-            Assert.Equal("2, 19", rows[9].TextContent.Trim());
-            Assert.Equal(DateTime.Now.AddDays(15).AddHours(2).ToString(), rows[10].TextContent.Trim());
+            Assert.Equal("productTestNameproductTestName2", rows[8].TextContent.Trim());
+            Assert.Equal("219", rows[9].TextContent.Trim());
+            Assert.Equal(GetRoundedDate(15, 2).ToString(), rows[10].TextContent.Trim());
             Assert.Equal("ScanIn", rows[11].TextContent.Trim());
         }
 
@@ -133,7 +133,7 @@ namespace Rise.Client.Pages.Transaction
                 {
                     Id = 1,
                     Type = "ScanOut",
-                    Date = DateTime.Now.AddDays(-1).AddHours(2),
+                    Date = GetRoundedDate(-1, 2),
                     UserId = "auth0|123456",
                     Products =
                     [
@@ -148,7 +148,7 @@ namespace Rise.Client.Pages.Transaction
                 {
                     Id = 2,
                     Type = "ScanOut",
-                    Date = DateTime.Now.AddDays(-4).AddHours(2),
+                    Date = GetRoundedDate(-4, 2),
                     UserId = "auth0|123456",
                     Products =
                     [
@@ -168,7 +168,7 @@ namespace Rise.Client.Pages.Transaction
                 {
                     Id = 3,
                     Type = "ScanIn",
-                    Date = DateTime.Now.AddDays(15).AddHours(2),
+                    Date = GetRoundedDate(15, 2),
                     UserId = "auth0|123456",
                     Products =
                     [
@@ -187,5 +187,12 @@ namespace Rise.Client.Pages.Transaction
             ];
             return FakeTransactions;
         }
+
+        public static DateTime GetRoundedDate(int daysDifference, int hoursToAdd)
+        {
+            var date = DateTime.Now.AddDays(daysDifference).AddHours(hoursToAdd);
+            return new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
+        }
+
     }
 }
