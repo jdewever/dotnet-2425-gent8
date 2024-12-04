@@ -6,7 +6,7 @@ public partial class Column<T> : ComponentBase
 {
     [Parameter] public required string Title { get; set; }
     [Parameter] public required string Value { get; set; }
-    [Parameter] public Func<T, string>? ValueSelector { get; set; }
+    [Parameter] public Func<T, MarkupString>? ValueSelector { get; set; }
     [CascadingParameter] public T? Item { get; set; }
 
     // we use object? as parameter because it gets updated in the for loop, prevents creating a new var for the loop
@@ -42,12 +42,12 @@ public partial class Column<T> : ComponentBase
     }
 
     // Adding a function to create a string object if nesting isn't enough
-    public string GetValue()
+    public MarkupString GetValue()
     {
         if (ValueSelector != null && Item != null)
         {
             return ValueSelector(Item);
         }
-        return GetNestedValue(Item, Value);
+        return (MarkupString)GetNestedValue(Item, Value);
     }
 }

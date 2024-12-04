@@ -7,15 +7,16 @@ public partial class TransactionsTable : ComponentBase
 {
     [Parameter] public IEnumerable<TransactionDTO>? Transactions { get; set; }
 
-    private static string GetProductNames(TransactionDTO transaction)
+    private static MarkupString GetProductNames(TransactionDTO transaction)
     {
         var productNames = transaction.Products.Select(p => p.Product.Name).ToList();
+        MarkupString result = new(string.Join("<br />", productNames));
 
-        return string.Join(", ", transaction.Products.Select(p => p.Product.Name));
+        return result;
     }
 
-    private static string GetProductAmounts(TransactionDTO transaction)
+    private static MarkupString GetProductAmounts(TransactionDTO transaction)
     {
-        return string.Join(", ", transaction.Products.Select(p => p.Quantity));
+        return new(string.Join("<br />", transaction.Products.Select(p => p.Quantity)));
     }
 }
