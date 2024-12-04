@@ -1,8 +1,6 @@
 using Rise.Shared.Booking;
 using Moq;
 using Blazored.Toast.Services;
-using System.Collections.Generic;
-using Rise.Shared.Products;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
