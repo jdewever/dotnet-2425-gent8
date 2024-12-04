@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Client.Auth;
-using Rise.Client.Profile;
 using Rise.Shared.Booking;
 using Rise.Shared.Products;
 using Rise.Shared.Transaction;
@@ -15,7 +14,7 @@ public partial class Profile : ComponentBase
     [Inject] public required IBookingService BookingService { get; set; }
     private bool _loading;
     private UserDto? User { get; set; }
-    private IEnumerable<TransactionDto.History> TransactionsList { get; set; } = [];
+    private IEnumerable<TransactionDTO> TransactionsList { get; set; } = [];
     private IEnumerable<BookingDTO> BookingsList { get; set; } = [];
 
     protected override async Task OnInitializedAsync()

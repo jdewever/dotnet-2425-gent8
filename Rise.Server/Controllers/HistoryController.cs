@@ -21,7 +21,7 @@ public class HistoryController
     }
 
     [HttpGet("recent/transactions")]
-    public async Task<List<TransactionDto.History>> GetRecentTransactionHistory()
+    public async Task<List<TransactionDTO>> GetRecentTransactionHistory()
     {
         return await _transactionService.GetRecentTransactions();
     }

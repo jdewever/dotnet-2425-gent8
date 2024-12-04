@@ -32,6 +32,7 @@ public partial class NavMenu : ComponentBase
         },
         new NavItem { Label = "Scannen", Href = "scan", Icon = "scan" },
         new NavItem { Label = "Reserveringen", Href = "reservations", Icon = "reservation" },
+        new NavItem { Label = "Transacties", Href = "transactions", Icon = "reservation" },
         new NavItem {
             Label = "Beheren",
             Href = "manage/categories",

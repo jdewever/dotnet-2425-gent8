@@ -5,7 +5,7 @@ using Rise.Shared.Transaction;
 
 namespace Rise.Client.Profile;
 
-public class TransactionService: ITransactionService
+public class TransactionService : ITransactionService
 {
     private readonly HttpClient _httpClient;
 
@@ -24,9 +24,9 @@ public class TransactionService: ITransactionService
         throw new NotImplementedException();
     }
 
-    public async Task<List<TransactionDto.History>> GetRecentTransactions()
+    public async Task<List<TransactionDTO>> GetRecentTransactions()
     {
-        var response = await _httpClient.GetFromJsonAsync<List<TransactionDto.History>>("history/recent/transactions");
+        var response = await _httpClient.GetFromJsonAsync<List<TransactionDTO>>("history/recent/transactions");
         return response ?? [];
     }
 }
