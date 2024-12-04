@@ -9,10 +9,7 @@ public partial class TransactionsTable : ComponentBase
 
     private static MarkupString GetProductNames(TransactionDTO transaction)
     {
-        var productNames = transaction.Products.Select(p => p.Product.Name).ToList();
-        MarkupString result = new(string.Join("<br />", productNames));
-
-        return result;
+        return new(string.Join("<br />", transaction.Products.Select(p => p.Product.Name)));
     }
 
     private static MarkupString GetProductAmounts(TransactionDTO transaction)
