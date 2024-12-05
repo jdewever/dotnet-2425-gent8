@@ -2,23 +2,22 @@
 @using Rise.Client.Components.Table
 @using Rise.Shared.Products
 
-<div class="grid grid-cols-1 space-y-2 lg:space-y-0 lg:grid-cols-3 lg:space-x-2">
-    <Card Title="Vandaag gebruikt" Value="xxx" IconUrl="/images/icons/calendar.svg" />
-    <Card Title="In kritieke voorraad" Value="@lowStockProductCount.ToString()" IconUrl="/images/icons/warning.svg" />
-    <Card Title="Vandaag uitgeleend" Value="xxx" IconUrl="/images/icons/out.svg" />
-</div>
-<h1 class="text-2xl font-light py-8">Producten met beperkte voorraad</h1>
-
 <div class="w-full" style="height: 70vh;">
-    @if (lowStockProducts == null)
+    @if (Dashboard == null)
     {
         <p>
-            <em>Loading...</em>
+            <TableSkeleton ColumnCount="3" RowCount="5" />
         </p>
     }
     else
     {
-        <Table Items="lowStockProducts">
+        <div class="grid grid-cols-1 space-y-2 lg:space-y-0 lg:grid-cols-3 lg:space-x-2">
+            <Card Title="In kritieke voorraad" Value="@LowStockProductCount" IconUrl="/images/icons/warning.svg" />
+            <Card Title="Vandaag uitgeleend" Value="@ProductsReserverd" IconUrl="/images/icons/out.svg" />
+            <Card Title="Vandaag terug te brengen" Value="@ProductsReturning" IconUrl="/images/icons/calendar.svg" />
+        </div>
+        <h1 class="text-2xl font-light py-8">Producten met beperkte voorraad</h1>
+        <Table Items="Dashboard.LowStockProducts">
             <Columns>
                 <Column T="ProductDTO" Value="Barcode" Title="Barcode" />
                 <Column T="ProductDTO" Value="Name" Title="Naam" />

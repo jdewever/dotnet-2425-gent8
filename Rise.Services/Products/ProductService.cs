@@ -3,6 +3,7 @@ using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
 using Rise.Services.Barcodes;
+using Rise.Shared.Transaction;
 
 namespace Rise.Services.Products;
 
@@ -74,11 +75,11 @@ public class ProductService : IProductService
         {
             if (request.OnlyReservable == true)
             {
-                query = query.Where(x => x.IsReservable); 
+                query = query.Where(x => x.IsReservable);
             }
             else
             {
-                query = query.Where(x => !x.IsReservable); 
+                query = query.Where(x => !x.IsReservable);
             }
         }
 
@@ -192,11 +193,10 @@ public class ProductService : IProductService
 
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    public async Task<DashboardDTO> GetDashboardInfo()
     {
-        // todo: decide if we want to show hidden products
-        IQueryable<ProductDTO> query = dbContext.Products
-            .Where(p => p.QuantityInStock + p.QuantityOnOrder < p.LowStock && !p.IsDeleted)
+        IQueryable<ProductDTO> productlist = dbContext.Products
+            .Where(p => p.QuantityInStock + p.QuantityOnOrder < p.LowStock && !p.IsDeleted && p.IsHidden == false)
             .Select(p => new ProductDTO
             {
                 Id = p.Id,
@@ -212,7 +212,12 @@ public class ProductService : IProductService
                 IsHidden = p.IsHidden,
             });
 
-        return await query.ToListAsync();
+        return new DashboardDTO
+        {
+            LowStockProducts = await productlist.ToListAsync(),
+            ProductsReturning = GetProductsReturning(),
+            ProductsReserved = GetProductsReserved()
+        };
     }
 
     public async Task ToggleHideProduct(string barcode)
@@ -245,7 +250,7 @@ public class ProductService : IProductService
 
     public async Task AddProduct(ProductCreationDTO product)
     {
-     
+
         var categories = await dbContext.Categories
                                     .Where(c => product.CategoryIds.Contains(c.Id))
                                     .ToListAsync();
@@ -276,5 +281,18 @@ public class ProductService : IProductService
 
         dbContext.Products.Add(newProduct);
         await dbContext.SaveChangesAsync();
+    }
+
+    private int GetProductsReturning()
+    {
+        int query = dbContext.Booking
+            .Where(b => b.EndDate.Date == DateTime.Today).Count();
+        return query;
+    }
+
+    private int GetProductsReserved()
+    {
+        return dbContext.Booking
+            .Where(b => b.StartDate.Date <= DateTime.Today && b.EndDate.Date >= DateTime.Today).Count();
     }
 }
