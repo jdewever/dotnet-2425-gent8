@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Rise.Domain.DomainClasses;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Pages.Admindashboard;

@@ -12,9 +12,12 @@
     else
     {
         <div class="grid grid-cols-1 space-y-2 lg:space-y-0 lg:grid-cols-3 lg:space-x-2">
-            <Card Title="In kritieke voorraad" Value="@LowStockProductCount" IconUrl="/images/icons/warning.svg" />
-            <Card Title="Vandaag uitgeleend" Value="@ProductsReserverd" IconUrl="/images/icons/out.svg" />
-            <Card Title="Vandaag terug te brengen" Value="@ProductsReturning" IconUrl="/images/icons/calendar.svg" />
+            <Card ID="low-stock-card" Title="In kritieke voorraad" Value="@LowStockProductCount"
+                IconUrl="/images/icons/warning.svg" />
+            <Card ID="reserved-products-card" Title="Vandaag uitgeleend" Value="@ProductsReserverd"
+                IconUrl="/images/icons/out.svg" />
+            <Card ID="returning-products-card" Title="Vandaag terug te brengen" Value="@ProductsReturning"
+                IconUrl="/images/icons/calendar.svg" />
         </div>
         <h1 class="text-2xl font-light py-8">Producten met beperkte voorraad</h1>
         <Table Items="Dashboard.LowStockProducts">
