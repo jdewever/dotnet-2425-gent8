@@ -11,7 +11,8 @@ public class FakeProductService : IProductService
     public Task<ProductResponse> GetAllProducts(ProductRequest.Index request)
     {
         var products = Enumerable.Range(1, 7)
-                                 .Select(i => new ProductDTO { Id = i, Name = $"Product {i}",Barcode = $"Barcode {i}",Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null,IsReservable=false }).ToList();
+                                 .Select(i => new ProductDTO { Id = i, Name = $"Product {i}", Barcode = $"Barcode {i}", Description = $"Description {i}", ClassRoomCode = $"ClassRoom {i}", QuantityInStock = i, QuantityOnOrder = i, LowStock = i, Categories = null, IsReservable = false }).ToList();
+        products.Add(new ProductDTO { Id = 8, Name = "Product 8", Barcode = "Barcode 8", Description = "Description 8", ClassRoomCode = "ClassRoom 8", QuantityInStock = 8, QuantityOnOrder = 8, LowStock = 32, Categories = null, IsReservable = false });
 
         return Task.FromResult(new ProductResponse { Products = products, TotalPages = 1 });
     }
@@ -58,6 +59,16 @@ public class FakeProductService : IProductService
     public Task DeleteProduct(string barcode)
     {
         throw new System.NotImplementedException();
+    }
+
+    public Task<DashboardDTO> GetDashboardInfo()
+    {
+        return Task.FromResult(new DashboardDTO
+        {
+            LowStockProducts = GetProductsHavingLowStock().Result,
+            ProductsReserved = 5,
+            ProductsReturning = 3
+        });
     }
 }
 

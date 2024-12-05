@@ -31,11 +31,11 @@ public class ProductController : ControllerBase
         return await productService.GetAllLocations();
     }
 
-    // get products with low stock
-    [HttpGet("lowstock")]
-    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    // get dashboard info
+    [HttpGet("dashboard")]
+    public async Task<DashboardDTO> GetDashboardInfo()
     {
-        return await productService.GetProductsHavingLowStock();
+        return await productService.GetDashboardInfo();
     }
 
     // add a product
@@ -52,7 +52,7 @@ public class ProductController : ControllerBase
     {
         return await productService.GetProductByBarcode(barcode);
     }
-    
+
     // delete a product by barcode
     [HttpDelete("{barcode}")]
     [Authorize(Roles = "Administrator, InventoryManager")]

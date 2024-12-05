@@ -40,10 +40,10 @@ public class ProductService : IProductService
         return product!;
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetProductsHavingLowStock()
+    public async Task<DashboardDTO> GetDashboardInfo()
     {
-        var products = await httpClient.GetFromJsonAsync<IEnumerable<ProductDTO>>($"product/lowstock");
-        return products!;
+        var dash = await httpClient.GetFromJsonAsync<DashboardDTO>($"product/dashboard");
+        return dash!;
     }
 
     public async Task AddProduct(ProductCreationDTO product)
