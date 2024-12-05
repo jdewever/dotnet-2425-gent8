@@ -10,4 +10,8 @@
 		<ProjectReference Include="..\Rise.Shared\Rise.Shared.csproj" />
 		<ProjectReference Include="..\Rise.Persistence\Rise.Persistence.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Auth0Net.DependencyInjection" Version="4.0.0" />
+	</ItemGroup>
 </Project>
