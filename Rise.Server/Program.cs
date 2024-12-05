@@ -19,6 +19,8 @@ using Rise.Server.Auth;
 using Rise.Services.Auth;
 using Rise.Services.Booking;
 using Rise.Shared.Booking;
+using Rise.Services.User;
+using Rise.Shared.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +85,8 @@ builder.Services.AddScoped<IBarcodeService, BarcodeService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddHttpContextAccessor()
     .AddScoped<IAuthContextProvider, HttpContextAuthProvider>();
 

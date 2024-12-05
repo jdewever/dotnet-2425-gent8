@@ -6,5 +6,6 @@ namespace Rise.Shared.User
         public required bool IsBlocked { get; set; }
         public required string Picture { get; set; }
         public required string FullName { get; set; }
+        public required string Role { get; set; }
     }
 }

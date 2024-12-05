@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Rise.Client.Auth;
 using Rise.Shared.Booking;
 using Rise.Shared.Products;
 using Rise.Shared.Transaction;
@@ -9,7 +8,7 @@ namespace Rise.Client.Pages;
 
 public partial class Profile : ComponentBase
 {
-    [Inject] public required IUserService UserService { get; set; }
+    [Inject] public required Auth.IUserService UserService { get; set; }
     [Inject] public required ITransactionService TransactionService { get; set; }
     [Inject] public required IBookingService BookingService { get; set; }
     private bool _loading;
