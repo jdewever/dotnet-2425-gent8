@@ -34,30 +34,30 @@ public class ProductCreationDTO
 
     [Required(ErrorMessage = "Naam is verplicht.")]
     [StringLength(50, ErrorMessage = "Naam mag niet langer zijn dan 50 tekens.")]
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Omschrijving is verplicht.")]
     [StringLength(500, ErrorMessage = "Omschrijving mag niet langer zijn dan 500 tekens.")]
-    public required string Description { get; set; }
-    public required string Barcode { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public string Barcode { get; set; } = string.Empty;
 
     [Range(0, int.MaxValue, ErrorMessage = "Aantal in stock moet positief zijn.")]
-    public required int QuantityInStock { get; set; }
+    public int QuantityInStock { get; set; } = 0;
 
     [Range(0, int.MaxValue, ErrorMessage = "Aantal in bestelling moet positief zijn.")]
-    public required int QuantityOnOrder { get; set; }
+    public int QuantityOnOrder { get; set; } = 0;
 
     [Range(0, int.MaxValue, ErrorMessage = "Min aantal moet positief zijn.")]
-    public required int LowStock { get; set; }
+    public int LowStock { get; set; } = 0;
 
     [Required(ErrorMessage = "Lokaal is verplicht.")]
-    public required string ClassRoomCode { get; set; }
+    public string ClassRoomCode { get; set; } = string.Empty;
 
-    public required bool IsReservable { get; set; }
-    public required bool IsHidden { get; set; } = false;
+    public bool IsReservable { get; set; } = false;
+    public bool IsHidden { get; set; } = false;
 
     [Required]
-    public required List<int> CategoryIds
+    public List<int> CategoryIds
     {
         get => _categoryIds;
         set
