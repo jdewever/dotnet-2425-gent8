@@ -5,6 +5,7 @@ public partial class Button : ComponentBase
 {
     [Parameter] public required string Text { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
+    [Parameter] public string Type { get; set; } = "";
     [Parameter] public string ExtraCss { get; set; } = "";
 
     protected async Task HandleClick()

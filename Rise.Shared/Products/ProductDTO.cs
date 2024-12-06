@@ -30,6 +30,8 @@ public class ProductDTO
 // used so a list of category ids so that no complete category object has to be provided
 public class ProductCreationDTO
 {
+    private List<int> _categoryIds = new();
+
     [Required(ErrorMessage = "Naam is verplicht.")]
     [StringLength(50, ErrorMessage = "Naam mag niet langer zijn dan 50 tekens.")]
     public required string Name { get; set; }
@@ -49,11 +51,22 @@ public class ProductCreationDTO
     public required int LowStock { get; set; }
 
     [Required(ErrorMessage = "Lokaal is verplicht.")]
-    [RegularExpression(@"^[A-Z]\d{3}$", ErrorMessage = "Lokaal moet beginnen met een letter en gevolgd worden door drie cijfers (bijv. A101).")]
     public required string ClassRoomCode { get; set; }
 
     public required bool IsReservable { get; set; }
     public required bool IsHidden { get; set; } = false;
 
-    public required List<int> CategoryIds { get; set; }
+    [Required]
+    public required List<int> CategoryIds
+    {
+        get => _categoryIds;
+        set
+        {
+            if (value.Count < 0 || value.Count > 3)
+            {
+                throw new ValidationException("Aantal categorieën moet tussen 0 en 3 zijn.");
+            }
+            _categoryIds = value;
+        }
+    }
 }

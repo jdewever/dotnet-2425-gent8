@@ -17,12 +17,10 @@ public partial class Index
     [Inject] public required IBarcodeService BarcodeService { get; set; }
     [Inject] private IToastService ToastService { get; set; } = null!;
     private int selectedCategory;
-    private bool showCategoryError = false;
     private bool showAddCategoryError = false;
     private string newCategoryName = string.Empty;
-    private BarcodeResponse barcode = null!;
-    private List<CategoryDTO> CategoryOptions = new List<CategoryDTO>();
-    private ProductCreationDTO newProduct = new ProductCreationDTO
+    private IEnumerable<CategoryDTO> CategoryOptions = [];
+    private ProductCreationDTO newProduct = new()
     {
         Name = string.Empty,
         Description = string.Empty,
@@ -33,7 +31,7 @@ public partial class Index
         ClassRoomCode = string.Empty,
         IsReservable = false,
         IsHidden = false,
-        CategoryIds = new List<int>()
+        CategoryIds = []
     };
 
     private string GetQueryParm(string parmName)
@@ -46,13 +44,13 @@ public partial class Index
     protected override async Task OnInitializedAsync()
     {
         SelectedProduct = await ProductService.GetProductByBarcode(GetQueryParm("barcode"));
+        CategoryOptions = await CategoryService.GetAllCategories();
     }
 
     // AddProduct methods
     private async Task HandleValidSubmit()
     {
         await ProductService.AddProduct(newProduct);
-        ToastService.ShowSuccess("Product succesvol toegevoegd!");
 
         newProduct = new ProductCreationDTO
         {
@@ -68,29 +66,13 @@ public partial class Index
             CategoryIds = new List<int>()
         };
 
-        selectedCategory = 0;
-        newCategoryName = string.Empty;
-        showCategoryError = false;
-        showAddCategoryError = false;
-
-        barcode = await BarcodeService.GetNewBarcode();
-        newProduct.Barcode = barcode.Barcode;
-
         StateHasChanged();
+        ToastService.ShowSuccess("Product succesvol toegevoegd!");
     }
 
     private void AddCategory()
     {
-        if (newProduct.CategoryIds.Count == 3)
-        {
-            showCategoryError = true;
-        }
-        if (newProduct.CategoryIds.Count < 3 && selectedCategory > 0)
-        {
-            showCategoryError = false;
-            newProduct.CategoryIds.Add(selectedCategory);
-            selectedCategory = 0;
-        }
+        newProduct.CategoryIds.Add(selectedCategory);
     }
 
     private void RemoveCategory(int categoryId)
@@ -107,11 +89,10 @@ public partial class Index
         else
         {
             showAddCategoryError = false;
-            CategoryDTO newCategory = new CategoryDTO { Name = newCategoryName, Products = new List<ProductDTO>() };
+            CategoryDTO newCategory = new() { Name = newCategoryName, Products = [] };
             await CategoryService.AddCategory(newCategory);
 
-            var updatedCategories = await CategoryService.GetAllCategories();
-            CategoryOptions = updatedCategories.ToList();
+            CategoryOptions = await CategoryService.GetAllCategories();
             selectedCategory = CategoryOptions.FirstOrDefault(c => c.Name == newCategoryName)?.Id ?? 0;
             newCategoryName = string.Empty;
 
@@ -129,5 +110,11 @@ public partial class Index
     private void HandleInvalidSubmit()
     {
         ToastService.ShowError("Vergeet niet alle velden in te vullen!");
+    }
+
+    private async Task HandleDelete()
+    {
+        await ProductService.DeleteProduct(SelectedProduct.Barcode);
+        NavigationManager.NavigateTo("/products");
     }
 }
