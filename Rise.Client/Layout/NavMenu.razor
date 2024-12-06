@@ -13,7 +13,7 @@
         <nav class="flex min-w-[240px] flex-col gap-1 p-2 text-base font-normal text-blue-gray-700 flex-grow">
             @* to be filtered for admins *@
             @foreach (var item in NavItems.Where(i => i.IsVisible)) {
-                <NavLink class="nav-item" href="@item.Href" Match="NavLinkMatch.All">
+                <NavLink class="nav-item" href="@item.Href" Match="NavLinkMatch.All" @onclick="ToggleNavMenu">
                     <div class="grid mr-4 place-items-center">
                         <img src="/images/icons/@(item.Icon).svg" alt="@item.Label" class="w-6 h-auto" />
                     </div>
@@ -21,7 +21,7 @@
                 </NavLink>
 
                     @foreach (var child in item.Children) {
-                        <NavLink class="nav-item" href="@child.Href">
+                        <NavLink class="nav-item" href="@child.Href" @onclick="ToggleNavMenu">
                             <div class="grid mr-4 place-items-center ml-8">
                                 @if (child.Icon != null) {
                                     <img src="/images/icons/@(child.Icon).svg" alt="@child.Label" class="w-6 h-auto" />
