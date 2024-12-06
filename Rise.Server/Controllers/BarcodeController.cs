@@ -5,7 +5,7 @@ using Rise.Shared.Barcodes;
 namespace Rise.Server.Controllers;
 
 [ApiController]
-[Route("api/barcodes/")]
+[Route("api/[controller]")]
 [Authorize]
 public class BarcodeController : ControllerBase
 {
