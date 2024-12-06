@@ -34,7 +34,7 @@
                                 <label for="barcodeImage" class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
                                 @if (!string.IsNullOrEmpty(newProduct.Barcode))
                                 {
-                                    <img src="@($"{NavigationManager.BaseUri}api/barcodes/{newProduct.Barcode}/image")" alt="Barcode" class="w-full h-auto" />
+                                    <img src="@($"{NavigationManager.BaseUri}api/barcode/{newProduct.Barcode}/image")" alt="Barcode" class="w-full h-auto" />
                                 }
                                 else
                                 {
