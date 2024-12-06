@@ -8,7 +8,7 @@
 
 <body class="flex items-center justify-center min-h-screen">
     <div class="max-w-3xl">
-        @if (newProduct is null)
+        @if (SelectedProduct is null)
         {
             <p class="text-center text-2xl">Selecteer een product om te bewerken.</p>
         }
@@ -26,12 +26,12 @@
                             <ValidationMessage For="@(() => newProduct.Name)" class="validation-message" />
 
                             <label for="location" class="label-form mt-5">Lokaal</label>
-                            <InputText @bind-Value="newProduct.ClassRoomCode" class="input-text-form"
+                            <InputText @bind-Value="SelectedProduct.ClassRoomCode" class="input-text-form"
                                 placeholder="@newProduct.ClassRoomCode" />
                             <ValidationMessage For="@(() => newProduct.ClassRoomCode)" class="validation-message" />
 
                             <label for="description" class="label-form mt-5">Omschrijving</label>
-                            <InputTextArea @bind-Value="newProduct.Description" rows="4" class="input-text-area-form"
+                            <InputTextArea @bind-Value="SelectedProduct.Description" rows="4" class="input-text-area-form"
                                 placeholder="@newProduct.Description" />
                             <ValidationMessage For="@(() => newProduct.Description)" class="validation-message" />
                         </div>
@@ -40,7 +40,7 @@
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div>
                             <label for="barcodeImage" class="label-form">Barcode</label>
-                            <img src="@($"{NavigationManager.BaseUri}api/barcodes/{newProduct.Barcode}/image")"
+                            <img src="@($"{NavigationManager.BaseUri}api/barcodes/{SelectedProduct.Barcode}/image")"
                                 alt="Barcode" class="w-full h-auto" />
                         </div>
                         <div>
@@ -56,21 +56,21 @@
                     <div>
                         <label for="lowStock" class="label-form">Aantal toevoegen
                             in stock</label>
-                        <InputNumber @bind-Value="newProduct.QuantityInStock" class="input-text-form"
+                        <InputNumber @bind-Value="SelectedProduct.QuantityInStock" class="input-text-form"
                             placeholder="@newProduct.QuantityInStock" />
                         <ValidationMessage For="@(() => newProduct.QuantityInStock)" class="validation-message" />
                     </div>
                     <div>
                         <label for="lowStock" class="label-form">Aantal nog op
                             bestelling</label>
-                        <InputNumber @bind-Value="newProduct.QuantityOnOrder" class="input-text-form"
+                        <InputNumber @bind-Value="SelectedProduct.QuantityOnOrder" class="input-text-form"
                             placeholder="@newProduct.QuantityOnOrder" />
                         <ValidationMessage For="@(() => newProduct.QuantityOnOrder)" class="validation-message" />
                     </div>
                     <div>
                         <label for="lowStock" class="label-form">Min gewenste
                             voorraad</label>
-                        <InputNumber @bind-Value="newProduct.LowStock" class="input-text-form"
+                        <InputNumber @bind-Value="SelectedProduct.LowStock" class="input-text-form"
                             placeholder="@newProduct.LowStock" />
                         <ValidationMessage For="@(() => newProduct.LowStock)" class="validation-message" />
                     </div>
@@ -79,11 +79,11 @@
                 <div class="grid md:grid-cols-3 md:gap-6 mt-5">
                     <div>
                         <div class="flex row-span-2">
-                            <InputCheckbox @bind-Value="newProduct.IsReservable" class="input-checkbox-form" />
+                            <InputCheckbox @bind-Value="SelectedProduct.IsReservable" class="input-checkbox-form" />
                             <label for="checkbox-3" class="label-form">Product is reserveerbaar</label>
                         </div>
                         <div>
-                            <InputCheckbox @bind-Value="newProduct.IsHidden" class="input-checkbox-form" />
+                            <InputCheckbox @bind-Value="SelectedProduct.IsHidden" class="input-checkbox-form" />
                             <label for="checkbox-3" class="label-form">Product verbergen</label>
                         </div>
                     </div>
@@ -115,7 +115,8 @@
                     </div>
 
                     <div class="flex-wrap gap-2 mt-4">
-                        @foreach (var selectedCategory in newProduct.CategoryIds)
+                        @foreach (var selectedCategory in SelectedProduct.Categories?.Select(c => c.Id) ??
+                       Enumerable.Empty<int>())
                         {
                             <div class="flex items-center bg-gray-200 px-3 py-1 rounded-full justify-between w-full mb-2">
                                 <span>@CategoryOptions.FirstOrDefault(c => c.Id == selectedCategory)?.Name</span>
@@ -124,6 +125,7 @@
                         }
                     </div>
                 </div>
+
                 <hr class="my-12 h-0.5 border-t-0 bg-neutral-200" />
 
                 <div class="flex justify-between mb-5 mx-20">
