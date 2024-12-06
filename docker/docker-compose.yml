@@ -1,10 +1,8 @@
 services:
   webapp:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
     image: rise-gent-gr08
     container_name: rise8-webapp
+    restart: always
     ports:
       - "80:8080"
     networks:
