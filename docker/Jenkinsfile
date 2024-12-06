@@ -7,28 +7,6 @@ pipeline {
         DISCORD_WEBHOOK_URL= credentials('dotnet_discord_webhook')
     }
     stages {
-        stage('Preparation') {
-            steps {
-                script {
-                    echo "Checking for running Docker containers"
-
-                    def containerExists = sh(
-                        script: "docker ps -a -q -f name=${CONTAINER_NAME}",
-                        returnStdout: true
-                    ).trim()
-
-                    if (containerExists) {
-                        echo "Container ${CONTAINER_NAME} is running. Stopping and removing it..."
-                        sh "docker stop ${CONTAINER_NAME}"
-                        sh "docker rm ${CONTAINER_NAME}"
-                        sh "docker rmi ${CONTAINER_IMAGE}"
-                        sh "docker system prune -a -f"
-                    } else {
-                        echo "No running container named ${CONTAINER_NAME} found."
-                    }
-                }
-            }
-        }
         stage('Test'){
             steps {
                 echo "Running Domain Tests"
@@ -41,16 +19,28 @@ pipeline {
                 //     sh "dotnet test"
                 // }
             }
-
-
         }
 
         stage('Build'){
             steps {
-                echo "Starting Docker Compose services..."
+                echo "Building Docker image..."
                 dir("docker/") {
-                    sh "docker compose up -d"
+                    sh "docker build -t ${CONTAINER_IMAGE} -f Dockerfile ../"
                 }
+            }
+        }
+
+        stage('Restart Container'){
+            steps {
+                echo "Restart Docker container ${CONTAINER_NAME}"
+                sh "docker restart ${CONTAINER_NAME}"
+            }
+        }
+
+        stage('Prune Build Cache'){
+            steps {
+                echo "Prune Docker builder cache"
+                sh "docker builder prune -f"
             }
         }
     }
@@ -69,4 +59,4 @@ pipeline {
 
         }
     }
-}   
+}
