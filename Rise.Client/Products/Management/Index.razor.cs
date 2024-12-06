@@ -20,8 +20,6 @@ public partial class Index
     [Inject] public required IBarcodeService BarcodeService { get; set; }
     [Inject] private IToastService ToastService { get; set; } = null!;
     private int selectedCategory;
-    private bool showAddCategoryError = false;
-    private string newCategoryName = string.Empty;
     private IEnumerable<CategoryDTO> CategoryOptions = [];
     private ProductCreationDTO newProduct = new();
 
@@ -47,34 +45,20 @@ public partial class Index
 
     private void AddCategory()
     {
-        newProduct.CategoryIds.Add(selectedCategory);
+        var categoryToAdd = CategoryOptions.FirstOrDefault(c => c.Id == selectedCategory);
+        if (categoryToAdd != null && SelectedProduct.Categories != null && !SelectedProduct.Categories.Any(c => c.Id == categoryToAdd.Id))
+        {
+            SelectedProduct.Categories.Add(categoryToAdd);
+        }
     }
 
     private void RemoveCategory(int categoryId)
     {
-        newProduct.CategoryIds.Remove(categoryId);
-    }
-
-    private async Task AddNewCategory()
-    {
-        if (string.IsNullOrWhiteSpace(newCategoryName))
+        var categoryToRemove = CategoryOptions.FirstOrDefault(c => c.Id == categoryId);
+        if (categoryToRemove != null && SelectedProduct.Categories != null)
         {
-            showAddCategoryError = true;
+            SelectedProduct.Categories.Remove(categoryToRemove);
         }
-        else
-        {
-            showAddCategoryError = false;
-            CategoryDTO newCategory = new() { Name = newCategoryName, Products = [] };
-            await CategoryService.AddCategory(newCategory);
-
-            CategoryOptions = await CategoryService.GetAllCategories();
-            selectedCategory = CategoryOptions.FirstOrDefault(c => c.Name == newCategoryName)?.Id ?? 0;
-            newCategoryName = string.Empty;
-
-            StateHasChanged();
-            ToastService.ShowSuccess("Categorie succesvol toegevoegd!");
-        }
-
     }
 
     private static void HandleFileSelected()
