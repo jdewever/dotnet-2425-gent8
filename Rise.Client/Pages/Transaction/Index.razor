@@ -1,0 +1,24 @@
+@page "/transactions"
+@attribute [Authorize]
+@using Rise.Client.Pages.Transaction.Components
+@using Rise.Client.Components.Buttons
+@using Rise.Client.Components.Table
+
+<PageTitle>Transacties</PageTitle>
+
+<body>
+    <section>
+        <h1 class="text-2xl font-light py-8">Transacties</h1>
+    </section>
+
+    <div class="w-full">
+        @if (Transactions == null)
+        {
+            <TableSkeleton ColumnCount="3" RowCount="6" />
+        }
+        else
+        {
+            <TransactionsTable Transactions="Transactions" />
+        }
+    </div>
+</body>

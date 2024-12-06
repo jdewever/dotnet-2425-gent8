@@ -57,21 +57,21 @@ public class TransactionService : ITransactionService
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<TransactionDto.History>> GetRecentTransactions()
+    public async Task<List<TransactionDTO>> GetRecentTransactions()
     {
         var userid = authContextProvider.User?.Identity?.Name ??
                      throw new InvalidOperationException("User name is null");
         var query = dbContext.Transaction.Where(t => t.UserId == userid)
             .Include(t => t.TransactionItems)
             .Include(t => t.Products)
-            .OrderByDescending(transaction => transaction.CreatedAt); 
-        return await query.Select(transaction => new TransactionDto.History
+            .OrderByDescending(transaction => transaction.CreatedAt);
+        return await query.Select(transaction => new TransactionDTO
         {
             Id = transaction.Id,
             Date = transaction.CreatedAt,
             Type = transaction.Type,
             UserId = transaction.UserId,
-            Products = transaction.TransactionItems.Select(item => new TransactionItemDto
+            Products = transaction.TransactionItems.Select(item => new TransactionItemDTO
             {
                 Quantity = item.Quantity,
                 Product = new ProductDTO

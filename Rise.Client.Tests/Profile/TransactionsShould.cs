@@ -57,7 +57,7 @@ public class TransactionsShould : TestContext
     [Fact]
     public void ShowsEmptyState_WhenTransactionsListIsEmpty()
     {
-        var transactions = new List<TransactionDto.History>();
+        var transactions = new List<TransactionDTO>();
 
         var component = RenderComponent<Transactions>(parameters => parameters
             .Add(p => p.TransactionsList, transactions)
