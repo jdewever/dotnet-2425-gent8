@@ -67,4 +67,9 @@ public class ProductService : IProductService
             // Log error
         }
     }
+
+    public async Task UpdateProduct(string barcode, ProductCreationDTO product)
+    {
+        await httpClient.PutAsJsonAsync($"product/{barcode}", product);
+    }
 }

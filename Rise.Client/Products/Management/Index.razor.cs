@@ -29,10 +29,9 @@ public partial class Index
 
     private async Task HandleValidSubmit()
     {
-        // TODO
-        await Task.Delay(2000);
+        await ProductService.UpdateProduct(SelectedProduct.Barcode, SelectedProduct);
         StateHasChanged();
-        ToastService.ShowSuccess("Product succesvol toegevoegd!");
+        ToastService.ShowSuccess("Product succesvol gewijzigd!");
     }
 
     private void HandleInvalidSubmit()
