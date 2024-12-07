@@ -22,6 +22,7 @@ public partial class Index
     protected override async Task OnInitializedAsync()
     {
         InitProduct = await ProductService.GetProductByBarcode(Barcode ?? string.Empty);
+        await Task.Delay(10000);
         SelectedProduct = new(InitProduct);
         CategoryOptions = await CategoryService.GetAllCategories();
     }
