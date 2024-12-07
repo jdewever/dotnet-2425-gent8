@@ -2,6 +2,7 @@
 @attribute [Authorize(Roles = "Administrator")]
 @using Rise.Client.Components.Buttons
 @using Rise.Shared.Products
+@using Rise.Client.Manage.Components
 
 
 <PageTitle>Product Management</PageTitle>
@@ -108,7 +109,11 @@
 
                     @* Changing field Categories *@
                     <div class="col-span-2">
-                        <label class="label-form">Categorieën</label>
+                        <div class="flex items-center justify-between">
+                            <label class="label-form">Categorieën</label>
+                            <SmallButton Type="button" OnClick="ShowAddModal" Text="Toevoegen"
+                                ExtraCss="bg-green-200 text-green-700 hover:bg-green-300" />
+                        </div>
                         <div>
                             <section class="flex items-center">
                                 <InputSelect @bind-Value="SelectedProduct.CategoryOneId" class="input-text-form my-2 mx-4">
@@ -162,3 +167,8 @@
         }
     </div>
 </body>
+
+@if (selectedCategory != null)
+{
+    <EditCategoryModal Item="selectedCategory" OnClose="HideEditModal" OnConfirm="OnSave" />
+}

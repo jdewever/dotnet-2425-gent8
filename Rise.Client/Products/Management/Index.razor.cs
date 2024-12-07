@@ -17,6 +17,7 @@ public partial class Index
     public required ProductCreationDTO SelectedProduct { get; set; }
     public required ProductDTO InitProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
+    private CategoryDTO? selectedCategory;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,5 +62,34 @@ public partial class Index
             SelectedProduct.CategoryThreeId = -2;
             return;
         }
+    }
+
+    // Adding new category
+    public void ShowAddModal()
+    {
+        selectedCategory = new CategoryDTO { Id = -1, Name = string.Empty };
+    }
+
+    public void HideEditModal()
+    {
+        selectedCategory = null;
+    }
+
+    private async Task OnSave()
+    {
+        if (selectedCategory is not null)
+            if (selectedCategory.Id == -1)
+            {
+                // new category
+                await CategoryService.AddCategory(selectedCategory);
+                ToastService.ShowSuccess($"Categorie {selectedCategory.Name} toegevoegd!");
+            }
+            else
+            {
+                await CategoryService.UpdateCategory(selectedCategory);
+                ToastService.ShowSuccess($"Categorie {selectedCategory.Name} bijgewerkt!");
+            }
+        CategoryOptions = await CategoryService.GetAllCategories();
+        HideEditModal();
     }
 }
