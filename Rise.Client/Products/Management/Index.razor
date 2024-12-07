@@ -102,7 +102,7 @@
                         <label class="label-form">Categorieën</label>
                         <div class="flex items-center justify-between">
                             <select @bind="selectedCategoryID" class="input-text-form">
-                                <option value="">Selecteer een categorie</option>
+                                <option value="-1">Selecteer een categorie</option>
                                 @foreach (var category in CategoryOptions)
                                 {
                                     <option value="@category.Id">@category.Name</option>

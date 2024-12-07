@@ -18,7 +18,7 @@ public partial class Index
     [Inject] public ICategoryService CategoryService { get; set; } = null!;
     [Inject] public IBarcodeService BarcodeService { get; set; } = null!;
     [Inject] private IToastService ToastService { get; set; } = null!;
-    private int selectedCategoryID;
+    private int selectedCategoryID = -1;
     public required ProductDTO SelectedProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
     private ProductCreationDTO newProduct = new();
