@@ -6,6 +6,8 @@
 
 <PageTitle>Product Management</PageTitle>
 
+<h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Product beheren</h2>
+
 <body class="flex items-center justify-center min-h-screen">
     <div class="max-w-3xl">
         @if (SelectedProduct is null)
@@ -81,23 +83,26 @@
 
                 <div class="grid md:grid-cols-3 md:gap-6 mt-5">
                     @* Changing fields IsReservable, IsHidden *@
-                    <div>
-                        <div class="flex row-span-2">
-                            <InputCheckbox @bind-Value="SelectedProduct.IsReservable" class="input-checkbox-form" />
-                            <label for="checkbox-3" class="label-form">Product is reserveerbaar</label>
+                    <div class="flex flex-col align-middle">
+                        <label class="label-form">Productopties</label>
+                        <div class="flex flex-row space-x-4">
+                            <InputCheckbox id="isReservable" @bind-Value="SelectedProduct.IsReservable"
+                                class="input-checkbox-form mt-0" />
+                            <label for="isReservable" class="peer label-form">Product is reserveerbaar</label>
                         </div>
-                        <div>
-                            <InputCheckbox @bind-Value="SelectedProduct.IsHidden" class="input-checkbox-form" />
-                            <label for="checkbox-3" class="label-form">Product verbergen</label>
+                        <div class="flex flex-row space-x-4">
+                            <InputCheckbox id="isHidden" @bind-Value="SelectedProduct.IsHidden"
+                                class="input-checkbox-form mt-0" />
+                            <label for="isHidden" class="peer label-form">Product verbergen</label>
                         </div>
                     </div>
 
                     @* Changing field Categories *@
                     <div>
-                        <label for="categories" class="label-form">Categorieën</label>
+                        <label class="label-form">Categorieën</label>
                         <div class="flex items-center justify-between">
-                            <select @bind="selectedCategory" class="input-text-form">
-                                <option value="">Selecteer categorie</option>
+                            <select @bind="selectedCategoryID" class="input-text-form">
+                                <option value="">Selecteer een categorie</option>
                                 @foreach (var category in CategoryOptions)
                                 {
                                     <option value="@category.Id">@category.Name</option>
@@ -108,13 +113,13 @@
                         <ValidationMessage For="@(() => newProduct.CategoryIds)" class="validation-message" />
                     </div>
 
+                    @* Showing Categories *@
                     <div class="flex-wrap gap-2 mt-4">
-                        @foreach (var selectedCategory in SelectedProduct.Categories?.Select(c => c.Id) ??
-                       Enumerable.Empty<int>())
+                        @foreach (var cat in SelectedProduct.Categories!)
                         {
                             <div class="flex items-center bg-gray-200 px-3 py-1 rounded-full justify-between w-full mb-2">
-                                <span>@CategoryOptions.FirstOrDefault(c => c.Id == selectedCategory)?.Name</span>
-                                <RemoveButton OnClick="() => RemoveCategory(selectedCategory)" />
+                                <span>@cat.Name</span>
+                                <RemoveButton OnClick="() => RemoveCategory(cat)" />
                             </div>
                         }
                     </div>

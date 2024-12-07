@@ -41,8 +41,7 @@
   }
 
   .input-checkbox-form {
-    @apply w-4 h-4 text-gray-300 bg-gray-100 border-gray-300 rounded focus:ring-gray-300 mt-8;
-    @apply peer-checked:bg-gray-300 peer-checked:border-gray-300;
+    @apply w-4 h-4 text-gray-300 bg-gray-100 border-gray-300 rounded focus:ring-gray-300 peer-checked:bg-gray-300 peer-checked:border-gray-300;
   }
 
   .validation-message {
