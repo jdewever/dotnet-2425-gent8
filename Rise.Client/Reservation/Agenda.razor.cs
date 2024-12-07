@@ -329,19 +329,40 @@ namespace Rise.Client.Reservation
             endHour = hour;
             StateHasChanged();
         }
-        private void SelectDay(DateTime date, bool isPastDay)
+        private async Task<bool> IsMobile()
+        {
+            return await JSRuntime.InvokeAsync<bool>("matchMediaQuery", "(max-width: 1279px)").AsTask();
+        }
+        private async Task HandleDayClick(DateTime date, bool isPastDay)
         {
             if (isPastDay)
             {
-                return;   
+                return;
             }
 
+            if (await IsMobile())
+            {
+                SelectDayMobile(date);
+            }
+            else
+            {
+                SelectDayDesktop(date);
+            }
+        }
+
+        private void SelectDayDesktop(DateTime date)
+        {
             currentDate = date;
             startDay = date;
             endDay = date;
             endHour = null;
             startHour = null;
             StateHasChanged();
+        }
+
+        private void SelectDayMobile(DateTime date)
+        {
+           
         }
         
         [JSInvokable]
