@@ -54,19 +54,9 @@ public class ProductCreationDTO
     public bool IsReservable { get; set; } = false;
     public bool IsHidden { get; set; } = false;
 
-    [Required]
-    public List<int> CategoryIds { get; set; } = [];
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (CategoryIds.Count < 0 || CategoryIds.Count > 3)
-        {
-            yield return new ValidationResult(
-                "Aantal categorieën moet tussen 0 en 3 zijn.",
-                [nameof(CategoryIds)]
-            );
-        }
-    }
+    public int CategoryOneId { get; set; } = -1;
+    public int CategoryTwoId { get; set; } = -1;
+    public int CategoryThreeId { get; set; } = -1;
 
     public ProductCreationDTO()
     {
@@ -83,7 +73,35 @@ public class ProductCreationDTO
         ClassRoomCode = product.ClassRoomCode;
         IsReservable = product.IsReservable;
         IsHidden = product.IsHidden;
-        CategoryIds = product.Categories?.Select(c => c.Id).ToList() ?? new List<int>();
+        if (product.Categories != null)
+        {
+            SetCategoryIds(product.Categories);
+        }
+    }
+
+    public List<int> GetCategoryIds()
+    {
+        List<int> categoryIds = [];
+        if (CategoryOneId != -1)
+        {
+            categoryIds.Add(CategoryOneId);
+        }
+        if (CategoryTwoId != -1)
+        {
+            categoryIds.Add(CategoryTwoId);
+        }
+        if (CategoryThreeId != -1)
+        {
+            categoryIds.Add(CategoryThreeId);
+        }
+        return categoryIds;
+    }
+
+    private void SetCategoryIds(List<CategoryDTO> categories)
+    {
+        CategoryOneId = categories.ElementAtOrDefault(0)?.Id ?? -1;
+        CategoryTwoId = categories.ElementAtOrDefault(1)?.Id ?? -1;
+        CategoryThreeId = categories.ElementAtOrDefault(2)?.Id ?? -1;
     }
 }
 

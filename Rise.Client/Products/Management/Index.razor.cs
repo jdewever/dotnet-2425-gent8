@@ -16,7 +16,6 @@ public partial class Index
     [Inject] public ICategoryService CategoryService { get; set; } = null!;
     [Inject] public IBarcodeService BarcodeService { get; set; } = null!;
     [Inject] private IToastService ToastService { get; set; } = null!;
-    private int selectedCategoryID = -1;
     public required ProductCreationDTO SelectedProduct { get; set; }
     public required ProductDTO InitProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
@@ -41,19 +40,6 @@ public partial class Index
         ToastService.ShowError("Vergeet niet alle velden in te vullen!");
     }
 
-    private void AddCategory()
-    {
-        if (!SelectedProduct.CategoryIds.Contains(selectedCategoryID))
-        {
-            SelectedProduct.CategoryIds = [.. SelectedProduct.CategoryIds, selectedCategoryID];
-        }
-    }
-
-    private void RemoveCategory(int category)
-    {
-        SelectedProduct.CategoryIds.Remove(category);
-    }
-
     private static void HandleFileSelected()
     {
         //todo -> adding image to product, blob?
@@ -63,5 +49,6 @@ public partial class Index
     {
         await ProductService.DeleteProduct(SelectedProduct.Barcode);
         NavigationManager.NavigateTo("/products");
+        ToastService.ShowSuccess("Product succesvol verwijderd!");
     }
 }

@@ -51,13 +51,22 @@
                         </div>
                         <div>
                             <label for="product_avatar" class="label-form">Foto</label>
-                            <InputFile id="product_avatar" OnChange="HandleFileSelected"
-                                class="input-text-form cursor-pointer" />
+                            @if (SelectedProduct.Barcode is not null)
+                            {
+                                <img id="product_avatar"
+                                    src="@($"{NavigationManager.BaseUri}api/barcodes/{SelectedProduct.Barcode}/image")"
+                                    alt="Product" class="w-full h-auto" />
+                            }
+                            else
+                            {
+                                <InputFile id="product_avatar" OnChange="HandleFileSelected"
+                                    class="input-text-form cursor-pointer" />
+                            }
                         </div>
                     </div>
                 </div>
 
-                <hr class="my-12 h-0.5 border-t-0 bg-neutral-200" />
+                <hr class="my-6 h-0.5 border-t-0 bg-neutral-200" />
 
                 @* Changing Amounts for QuantityInStock, QuantityOnOrder, LowStock *@
                 <div class="grid md:grid-cols-3 md:gap-6">
@@ -98,37 +107,38 @@
                     </div>
 
                     @* Changing field Categories *@
-                    <div>
+                    <div class="col-span-2">
                         <label class="label-form">Categorieën</label>
-                        <div class="flex items-center justify-between">
-                            <select @bind="selectedCategoryID" class="input-text-form">
-                                <option value="-1">Selecteer een categorie</option>
+                        <div>
+                            <InputSelect @bind-Value="SelectedProduct.CategoryOneId" class="input-text-form m-4">
+                                <option value="-1">Geen categorie</option>
                                 @foreach (var category in CategoryOptions)
                                 {
                                     <option value="@category.Id">@category.Name</option>
                                 }
-                            </select>
-                            <AddButton OnClick="AddCategory" />
+                            </InputSelect>
+                            <InputSelect @bind-Value="SelectedProduct.CategoryTwoId" class="input-text-form m-4">
+                                <option value="-1">Geen categorie</option>
+                                @foreach (var category in CategoryOptions)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </InputSelect>
+                            <InputSelect @bind-Value="SelectedProduct.CategoryThreeId" class="input-text-form m-4">
+                                <option value="-1">Geen categorie</option>
+                                @foreach (var category in CategoryOptions)
+                                {
+                                    <option value="@category.Id">@category.Name</option>
+                                }
+                            </InputSelect>
                         </div>
-                        <ValidationMessage For="@(() => SelectedProduct.CategoryIds)" class="validation-message" />
-                    </div>
-
-                    @* Showing Categories *@
-                    <div class="flex-wrap gap-2 mt-4">
-                        @foreach (var cat in SelectedProduct.CategoryIds)
-                        {
-                            <div class="flex items-center bg-gray-200 px-3 py-1 rounded-full justify-between w-full mb-2">
-                                <span>@CategoryOptions.First(c => c.Id == cat).Name</span>
-                                <RemoveButton OnClick="() => RemoveCategory(cat)" />
-                            </div>
-                        }
                     </div>
                 </div>
 
-                <hr class="my-12 h-0.5 border-t-0 bg-neutral-200" />
+                <hr class="my-6 h-0.5 border-t-0 bg-neutral-200" />
 
                 @* Buttons *@
-                <div class="flex justify-between mb-5 mx-20">
+                <div class="flex justify-between mb-5 md:mx-20">
                     <BigButton OnClick="HandleDelete" Text="Verwijderen" />
                     <BigButton Type="submit" Text="Wijzigen" />
                 </div>
