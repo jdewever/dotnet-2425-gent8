@@ -13,27 +13,25 @@ public partial class Index
     public string Barcode { get; set; } = null!;
     [Inject] private IProductService ProductService { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
-
-    // AddProduct params
     [Inject] public ICategoryService CategoryService { get; set; } = null!;
     [Inject] public IBarcodeService BarcodeService { get; set; } = null!;
     [Inject] private IToastService ToastService { get; set; } = null!;
     private int selectedCategoryID = -1;
-    public required ProductDTO SelectedProduct { get; set; }
+    public required ProductCreationDTO SelectedProduct { get; set; }
+    public required ProductDTO InitProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
-    private ProductCreationDTO newProduct = new();
 
     protected override async Task OnInitializedAsync()
     {
-        SelectedProduct = await ProductService.GetProductByBarcode(Barcode ?? string.Empty);
+        InitProduct = await ProductService.GetProductByBarcode(Barcode ?? string.Empty);
+        SelectedProduct = new(InitProduct);
         CategoryOptions = await CategoryService.GetAllCategories();
     }
 
     private async Task HandleValidSubmit()
     {
         // TODO
-        await ProductService.AddProduct(newProduct);
-        newProduct = new ProductCreationDTO();
+        await Task.Delay(2000);
         StateHasChanged();
         ToastService.ShowSuccess("Product succesvol toegevoegd!");
     }
@@ -45,16 +43,15 @@ public partial class Index
 
     private void AddCategory()
     {
-        var categoryToAdd = CategoryOptions.FirstOrDefault(c => c.Id == selectedCategoryID);
-        if (categoryToAdd != null && SelectedProduct.Categories != null && !SelectedProduct.Categories.Any(c => c == categoryToAdd))
+        if (!SelectedProduct.CategoryIds.Contains(selectedCategoryID))
         {
-            SelectedProduct.Categories.Add(categoryToAdd);
+            SelectedProduct.CategoryIds = [.. SelectedProduct.CategoryIds, selectedCategoryID];
         }
     }
 
-    private void RemoveCategory(CategoryDTO category)
+    private void RemoveCategory(int category)
     {
-        SelectedProduct.Categories!.Remove(category);
+        SelectedProduct.CategoryIds.Remove(category);
     }
 
     private static void HandleFileSelected()

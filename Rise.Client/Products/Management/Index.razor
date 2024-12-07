@@ -16,7 +16,7 @@
         }
         else
         {
-            <EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+            <EditForm Model="@SelectedProduct" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
                 <DataAnnotationsValidator />
 
                 <div class="grid md:grid-cols-1 md:gap-6">
@@ -26,18 +26,18 @@
                         <div>
                             <label for="name" class="label-form">Naam</label>
                             <InputText id="name" @bind-Value="SelectedProduct.Name" class="input-text-form"
-                                placeholder="@newProduct.Name" />
-                            <ValidationMessage For="@(() => newProduct.Name)" class="validation-message" />
+                                placeholder="@InitProduct.Name" />
+                            <ValidationMessage For="@(() => SelectedProduct.Name)" class="validation-message" />
 
                             <label for="location" class="label-form mt-5">Lokaal</label>
                             <InputText id="location" @bind-Value="SelectedProduct.ClassRoomCode" class="input-text-form"
-                                placeholder="@newProduct.ClassRoomCode" />
-                            <ValidationMessage For="@(() => newProduct.ClassRoomCode)" class="validation-message" />
+                                placeholder="@InitProduct.ClassRoomCode" />
+                            <ValidationMessage For="@(() => SelectedProduct.ClassRoomCode)" class="validation-message" />
 
                             <label for="description" class="label-form mt-5">Omschrijving</label>
                             <InputTextArea id="description" @bind-Value="SelectedProduct.Description" rows="4"
-                                class="input-text-area-form" placeholder="@newProduct.Description" />
-                            <ValidationMessage For="@(() => newProduct.Description)" class="validation-message" />
+                                class="input-text-area-form" placeholder="@InitProduct.Description" />
+                            <ValidationMessage For="@(() => SelectedProduct.Description)" class="validation-message" />
                         </div>
                     </div>
 
@@ -46,7 +46,7 @@
                         <div>
                             <label for="barcodeImage" class="label-form">Barcode</label>
                             <img id="barcodeImage"
-                                src="@($"{NavigationManager.BaseUri}api/barcodes/{SelectedProduct.Barcode}/image")"
+                                src="@($"{NavigationManager.BaseUri}api/barcodes/{InitProduct.Barcode}/image")"
                                 alt="Barcode" class="w-full h-auto" />
                         </div>
                         <div>
@@ -64,20 +64,20 @@
                     <div>
                         <label for="QuantityInStock" class="label-form">Aantal toevoegen in stock</label>
                         <InputNumber id="QuantityInStock" @bind-Value="SelectedProduct.QuantityInStock"
-                            class="input-text-form" placeholder="@newProduct.QuantityInStock" />
-                        <ValidationMessage For="@(() => newProduct.QuantityInStock)" class="validation-message" />
+                            class="input-text-form" placeholder="@InitProduct.QuantityInStock" />
+                        <ValidationMessage For="@(() => SelectedProduct.QuantityInStock)" class="validation-message" />
                     </div>
                     <div>
                         <label for="QuantityOnOrder" class="label-form">Aantal nog op bestelling</label>
                         <InputNumber id="QuantityOnOrder" @bind-Value="SelectedProduct.QuantityOnOrder"
-                            class="input-text-form" placeholder="@newProduct.QuantityOnOrder" />
-                        <ValidationMessage For="@(() => newProduct.QuantityOnOrder)" class="validation-message" />
+                            class="input-text-form" placeholder="@InitProduct.QuantityOnOrder" />
+                        <ValidationMessage For="@(() => SelectedProduct.QuantityOnOrder)" class="validation-message" />
                     </div>
                     <div>
                         <label for="LowStock" class="label-form">Min gewenste voorraad</label>
                         <InputNumber id="LowStock" @bind-Value="SelectedProduct.LowStock" class="input-text-form"
-                            placeholder="@newProduct.LowStock" />
-                        <ValidationMessage For="@(() => newProduct.LowStock)" class="validation-message" />
+                            placeholder="@InitProduct.LowStock" />
+                        <ValidationMessage For="@(() => SelectedProduct.LowStock)" class="validation-message" />
                     </div>
                 </div>
 
@@ -110,15 +110,15 @@
                             </select>
                             <AddButton OnClick="AddCategory" />
                         </div>
-                        <ValidationMessage For="@(() => newProduct.CategoryIds)" class="validation-message" />
+                        <ValidationMessage For="@(() => SelectedProduct.CategoryIds)" class="validation-message" />
                     </div>
 
                     @* Showing Categories *@
                     <div class="flex-wrap gap-2 mt-4">
-                        @foreach (var cat in SelectedProduct.Categories!)
+                        @foreach (var cat in SelectedProduct.CategoryIds)
                         {
                             <div class="flex items-center bg-gray-200 px-3 py-1 rounded-full justify-between w-full mb-2">
-                                <span>@cat.Name</span>
+                                <span>@CategoryOptions.First(c => c.Id == cat).Name</span>
                                 <RemoveButton OnClick="() => RemoveCategory(cat)" />
                             </div>
                         }

@@ -30,8 +30,6 @@ public class ProductDTO
 // used so a list of category ids so that no complete category object has to be provided
 public class ProductCreationDTO
 {
-    private List<int> _categoryIds = new();
-
     [Required(ErrorMessage = "Naam is verplicht.")]
     [StringLength(50, ErrorMessage = "Naam mag niet langer zijn dan 50 tekens.")]
     public string Name { get; set; } = string.Empty;
@@ -57,16 +55,36 @@ public class ProductCreationDTO
     public bool IsHidden { get; set; } = false;
 
     [Required]
-    public List<int> CategoryIds
+    public List<int> CategoryIds { get; set; } = [];
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        get => _categoryIds;
-        set
+        if (CategoryIds.Count < 0 || CategoryIds.Count > 3)
         {
-            if (value.Count < 0 || value.Count > 3)
-            {
-                throw new ValidationException("Aantal categorieën moet tussen 0 en 3 zijn.");
-            }
-            _categoryIds = value;
+            yield return new ValidationResult(
+                "Aantal categorieën moet tussen 0 en 3 zijn.",
+                [nameof(CategoryIds)]
+            );
         }
     }
+
+    public ProductCreationDTO()
+    {
+    }
+
+    public ProductCreationDTO(ProductDTO product)
+    {
+        Name = product.Name;
+        Description = product.Description;
+        Barcode = product.Barcode;
+        QuantityInStock = product.QuantityInStock;
+        QuantityOnOrder = product.QuantityOnOrder;
+        LowStock = product.LowStock;
+        ClassRoomCode = product.ClassRoomCode;
+        IsReservable = product.IsReservable;
+        IsHidden = product.IsHidden;
+        CategoryIds = product.Categories?.Select(c => c.Id).ToList() ?? new List<int>();
+    }
 }
+
+
