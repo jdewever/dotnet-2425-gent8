@@ -8,9 +8,7 @@ namespace Rise.Client.Products.Management;
 
 public partial class Index
 {
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "barcode")]
-    public string Barcode { get; set; } = null!;
+    [Parameter, SupplyParameterFromQuery(Name = "barcode")] public string Barcode { get; set; } = null!;
     [Inject] private IProductService ProductService { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public ICategoryService CategoryService { get; set; } = null!;
@@ -49,5 +47,19 @@ public partial class Index
         await ProductService.DeleteProduct(SelectedProduct.Barcode);
         NavigationManager.NavigateTo("/products");
         ToastService.ShowSuccess("Product succesvol verwijderd!");
+    }
+
+    private void AddCategory()
+    {
+        if (SelectedProduct.CategoryTwoId == -1)
+        {
+            SelectedProduct.CategoryTwoId = -2;
+            return;
+        }
+        else if (SelectedProduct.CategoryThreeId == -1)
+        {
+            SelectedProduct.CategoryThreeId = -2;
+            return;
+        }
     }
 }

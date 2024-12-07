@@ -110,27 +110,43 @@
                     <div class="col-span-2">
                         <label class="label-form">Categorieën</label>
                         <div>
-                            <InputSelect @bind-Value="SelectedProduct.CategoryOneId" class="input-text-form m-4">
-                                <option value="-1">Geen categorie</option>
-                                @foreach (var category in CategoryOptions)
-                                {
-                                    <option value="@category.Id">@category.Name</option>
-                                }
-                            </InputSelect>
-                            <InputSelect @bind-Value="SelectedProduct.CategoryTwoId" class="input-text-form m-4">
-                                <option value="-1">Geen categorie</option>
-                                @foreach (var category in CategoryOptions)
-                                {
-                                    <option value="@category.Id">@category.Name</option>
-                                }
-                            </InputSelect>
-                            <InputSelect @bind-Value="SelectedProduct.CategoryThreeId" class="input-text-form m-4">
-                                <option value="-1">Geen categorie</option>
-                                @foreach (var category in CategoryOptions)
-                                {
-                                    <option value="@category.Id">@category.Name</option>
-                                }
-                            </InputSelect>
+                            <section class="flex items-center">
+                                <InputSelect @bind-Value="SelectedProduct.CategoryOneId" class="input-text-form my-2 mx-4">
+                                    <option value="-1">Geen categorie</option>
+                                    @foreach (var category in CategoryOptions)
+                                    {
+                                        <option value="@category.Id">@category.Name</option>
+                                    }
+                                </InputSelect>
+                                <AddCategoryButton Type="button" OnClick="AddCategory" Text="+" />
+                            </section>
+                            @if (SelectedProduct.CategoryTwoId != -1)
+                            {
+                                <section class="flex items-center">
+                                    <InputSelect @bind-Value="SelectedProduct.CategoryTwoId" class="input-text-form my-2 mx-4">
+                                        <option value="-1">Geen categorie</option>
+                                        @foreach (var category in CategoryOptions.Where(c => c.Id !=
+                                SelectedProduct.CategoryOneId && c.Id != SelectedProduct.CategoryThreeId))
+                                        {
+                                            <option value="@category.Id">@category.Name</option>
+                                        }
+                                    </InputSelect>
+                                </section>
+                            }
+                            @if (SelectedProduct.CategoryThreeId != -1)
+                            {
+                                <section class="flex items-center">
+                                    <InputSelect @bind-Value="SelectedProduct.CategoryThreeId"
+                                        class="input-text-form my-2 mx-4">
+                                        <option value="-1">Geen categorie</option>
+                                        @foreach (var category in CategoryOptions.Where(c => c.Id !=
+                                SelectedProduct.CategoryOneId && c.Id != SelectedProduct.CategoryTwoId))
+                                        {
+                                            <option value="@category.Id">@category.Name</option>
+                                        }
+                                    </InputSelect>
+                                </section>
+                            }
                         </div>
                     </div>
                 </div>
