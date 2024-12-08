@@ -1,7 +1,5 @@
-
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
-using Rise.Shared.Barcodes;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products.Management;
@@ -12,7 +10,6 @@ public partial class Index
     [Inject] private IProductService ProductService { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     [Inject] public ICategoryService CategoryService { get; set; } = null!;
-    [Inject] public IBarcodeService BarcodeService { get; set; } = null!;
     [Inject] private IToastService ToastService { get; set; } = null!;
     public required ProductCreationDTO SelectedProduct { get; set; }
     public required ProductDTO InitProduct { get; set; }
@@ -22,7 +19,6 @@ public partial class Index
     protected override async Task OnInitializedAsync()
     {
         InitProduct = await ProductService.GetProductByBarcode(Barcode ?? string.Empty);
-        await Task.Delay(10000);
         SelectedProduct = new(InitProduct);
         CategoryOptions = await CategoryService.GetAllCategories();
     }
