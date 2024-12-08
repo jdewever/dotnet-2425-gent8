@@ -1,127 +1,95 @@
-using Microsoft.AspNetCore.Components;
-using Rise.Shared.Products;
 using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components;
 using Rise.Shared.Barcodes;
+using Rise.Shared.Products;
 
-namespace Rise.Client.Products.AddProduct
+namespace Rise.Client.Products.AddProduct;
+
+public partial class AddProduct : ComponentBase
 {
-    public partial class AddProduct
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] private IProductService ProductService { get; set; } = null!;
+    [Inject] public ICategoryService CategoryService { get; set; } = null!;
+    [Inject] private IBarcodeService BarcodeService { get; set; } = null!;
+    [Inject] private IToastService ToastService { get; set; } = null!;
+    public required ProductCreationDTO NewProduct { get; set; } = new();
+    public required ProductCreationDTO InitProduct { get; set; } = new();
+    private IEnumerable<CategoryDTO> CategoryOptions = [];
+    private CategoryDTO? selectedCategory;
+
+    protected override async Task OnInitializedAsync()
     {
-        private BarcodeResponse barcode = null!;
-        [Inject] public required ICategoryService CategoryService { get; set; }
-        [Inject] public required IProductService ProductService { get; set; }
-        [Inject] public required IBarcodeService BarcodeService { get; set; }
-        [Inject] private IToastService ToastService { get; set; } = null!;
+        CategoryOptions = await CategoryService.GetAllCategories();
+        NewProduct.Barcode = (await BarcodeService.GetNewBarcode()).Barcode;
+        InitProduct.Name = "Product naam";
+        InitProduct.ClassRoomCode = "Lokaalcode";
+        InitProduct.Description = "Product beschrijving";
+    }
 
-        private int selectedCategory;
-        private bool showCategoryError = false;
-        private bool showAddCategoryError = false;
-        private string newCategoryName = string.Empty;
-        private List<CategoryDTO> CategoryOptions = new List<CategoryDTO>();
-
-        private ProductCreationDTO newProduct = new ProductCreationDTO
+    private async Task HandleValidSubmit()
+    {
+        await ProductService.AddProduct(NewProduct);
+        if (NewProduct.IsReservable)
         {
-            Name = string.Empty,
-            Description = string.Empty,
-            Barcode = string.Empty,
-            QuantityInStock = 0,
-            QuantityOnOrder = 0,
-            LowStock = 0,
-            ClassRoomCode = string.Empty,
-            IsReservable = false,
-            IsHidden = false,
-            CategoryIds = new List<int>()
-        };
-
-        protected override async Task OnInitializedAsync()
-        {
-            var categories = await CategoryService.GetAllCategories();
-            CategoryOptions = categories.ToList();
-
-            barcode = await BarcodeService.GetNewBarcode();
-            newProduct.Barcode = barcode.Barcode;
+            NavigationManager.NavigateTo("/reserve");
         }
-
-        private async Task HandleValidSubmit()
+        else
         {
-            await ProductService.AddProduct(newProduct);
-            ToastService.ShowSuccess("Product succesvol toegevoegd!");
+            NavigationManager.NavigateTo("/products");
+        }
+        ToastService.ShowSuccess("Product succesvol toegevoegd!");
+    }
 
-            newProduct = new ProductCreationDTO
+    private void HandleInvalidSubmit()
+    {
+        ToastService.ShowError("Vergeet niet alle velden in te vullen!");
+    }
+
+    private static void HandleFileSelected()
+    {
+        //todo -> adding image to product, blob?
+    }
+
+    private void AddCategory()
+    {
+        if (NewProduct.CategoryTwoId == -1)
+        {
+            NewProduct.CategoryTwoId = -2;
+            return;
+        }
+        else if (NewProduct.CategoryThreeId == -1)
+        {
+            NewProduct.CategoryThreeId = -2;
+            return;
+        }
+    }
+
+    // Adding new category
+    public void ShowAddModal()
+    {
+        selectedCategory = new CategoryDTO { Id = -1, Name = string.Empty };
+    }
+
+    public void HideEditModal()
+    {
+        selectedCategory = null;
+    }
+
+    private async Task OnSave()
+    {
+        if (selectedCategory is not null)
+            if (selectedCategory.Id == -1)
             {
-                Name = string.Empty,
-                Description = string.Empty,
-                Barcode = await BarcodeService.GetNewBarcode().ContinueWith(t => t.Result.Barcode),
-                QuantityInStock = 0,
-                QuantityOnOrder = 0,
-                LowStock = 0,
-                ClassRoomCode = string.Empty,
-                IsReservable = false,
-                IsHidden = false,
-                CategoryIds = new List<int>()
-            };
-
-            selectedCategory = 0;
-            newCategoryName = string.Empty;
-            showCategoryError = false;
-            showAddCategoryError = false;
-
-            barcode = await BarcodeService.GetNewBarcode();
-            newProduct.Barcode = barcode.Barcode;
-
-            StateHasChanged();
-        }
-
-        private void HandleInvalidSubmit()
-        {
-            ToastService.ShowError("Vergeet niet alle velden in te vullen!");
-        }
-
-        private void AddCategory()
-        {
-            if (newProduct.CategoryIds.Count == 3)
-            {
-                showCategoryError = true;
-            }
-            if (newProduct.CategoryIds.Count < 3 && selectedCategory > 0)
-            {
-                showCategoryError = false;
-                newProduct.CategoryIds.Add(selectedCategory);
-                selectedCategory = 0;
-            }
-        }
-
-        private void RemoveCategory(int categoryId)
-        {
-            newProduct.CategoryIds.Remove(categoryId);
-        }
-
-        private async Task AddNewCategory()
-        {
-            if (string.IsNullOrWhiteSpace(newCategoryName))
-            {
-                showAddCategoryError = true;
+                // new category
+                await CategoryService.AddCategory(selectedCategory);
+                ToastService.ShowSuccess($"Categorie {selectedCategory.Name} toegevoegd!");
             }
             else
             {
-                showAddCategoryError = false;
-                CategoryDTO newCategory = new CategoryDTO { Name = newCategoryName, Products = new List<ProductDTO>() };
-                await CategoryService.AddCategory(newCategory);
-
-                var updatedCategories = await CategoryService.GetAllCategories();
-                CategoryOptions = updatedCategories.ToList();
-                selectedCategory = CategoryOptions.FirstOrDefault(c => c.Name == newCategoryName)?.Id ?? 0;
-                newCategoryName = string.Empty;
-
-                StateHasChanged();
-                ToastService.ShowSuccess("Categorie succesvol toegevoegd!");
+                await CategoryService.UpdateCategory(selectedCategory);
+                ToastService.ShowSuccess($"Categorie {selectedCategory.Name} bijgewerkt!");
             }
-
-        }
-
-        private static void HandleFileSelected()
-        {
-            //todo -> adding image to product, blob?
-        }
+        CategoryOptions = await CategoryService.GetAllCategories();
+        HideEditModal();
     }
 }
