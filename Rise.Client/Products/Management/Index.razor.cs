@@ -43,7 +43,14 @@ public partial class Index
     private async Task HandleDelete()
     {
         await ProductService.DeleteProduct(SelectedProduct.Barcode);
-        NavigationManager.NavigateTo("/products");
+        if (SelectedProduct.IsReservable)
+        {
+            NavigationManager.NavigateTo("/reserve");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/products");
+        }
         ToastService.ShowSuccess("Product succesvol verwijderd!");
     }
 
