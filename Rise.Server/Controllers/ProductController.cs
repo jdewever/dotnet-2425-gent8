@@ -33,6 +33,7 @@ public class ProductController : ControllerBase
 
     // get dashboard info
     [HttpGet("dashboard")]
+    [Authorize(Roles = "Administrator")]
     public async Task<DashboardDTO> GetDashboardInfo()
     {
         return await productService.GetDashboardInfo();
@@ -67,5 +68,12 @@ public class ProductController : ControllerBase
     public async Task ToggleHideProduct(string barcode)
     {
         await productService.ToggleHideProduct(barcode);
+    }
+
+    [HttpPut("{barcode}")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task UpdateProduct(string barcode, [FromBody] ProductCreationDTO product)
+    {
+        await productService.UpdateProduct(barcode, product);
     }
 }

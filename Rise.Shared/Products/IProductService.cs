@@ -9,4 +9,5 @@ public interface IProductService
     Task AddProduct(ProductCreationDTO product);
     Task ToggleHideProduct(string barcode);
     Task DeleteProduct(string barcode);
+    Task UpdateProduct(string barcode, ProductCreationDTO product);
 }

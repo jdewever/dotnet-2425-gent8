@@ -24,6 +24,7 @@ namespace Rise.Domain.DomainClasses
             this.lowStock = lowStock;
             this.classRoomCode = classRoomCode;
             this.barcode = barcode;
+            this.isReservable = isReservable;
             this.isHidden = isHidden;
         }
 

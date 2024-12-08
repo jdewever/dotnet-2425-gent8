@@ -4,6 +4,7 @@ using Rise.Persistence;
 using Rise.Shared.Products;
 using Rise.Services.Barcodes;
 using Rise.Shared.Transaction;
+using Ardalis.GuardClauses;
 
 namespace Rise.Services.Products;
 
@@ -250,33 +251,28 @@ public class ProductService : IProductService
 
     public async Task AddProduct(ProductCreationDTO product)
     {
-
-        var categories = await dbContext.Categories
-                                    .Where(c => product.CategoryIds.Contains(c.Id))
-                                    .ToListAsync();
-
-        // todo: validate categories & product
-
-        // checks if barcode is not already in use and generates a new one if it is.
-        // Maybe we should return an error instead?
+        /* TODO: Is dit nog nodig? de barcode service geeft al een unieke barcode terug,
+                 maar als 2 mensen tegelijk een product toevoegen kan het zijn dat ze dezelfde barcode krijgen.
+                 Daarnaast bestaat de BadRequestException nog niet, Jens hier mee bezig?
         BarcodeService barcodeService = new BarcodeService(dbContext);
         if (!barcodeService.IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
         {
-            product.Barcode = (await barcodeService.GetNewBarcode()).Barcode;
+            throw new BadRequestException("Barcode is not valid or already in use.", product.Name);
         }
+        */
 
         var newProduct = new Product
         {
             Name = product.Name,
+            ClassRoomCode = product.ClassRoomCode,
             Description = product.Description,
             Barcode = product.Barcode,
             QuantityInStock = product.QuantityInStock,
             QuantityOnOrder = product.QuantityOnOrder,
             LowStock = product.LowStock,
-            ClassRoomCode = product.ClassRoomCode,
             IsReservable = product.IsReservable,
             IsHidden = product.IsHidden,
-            Categories = categories
+            Categories = GetCategoriesFromIds(product.GetCategoryIds())
         };
 
         dbContext.Products.Add(newProduct);
@@ -294,5 +290,43 @@ public class ProductService : IProductService
     {
         return dbContext.Booking
             .Where(b => b.StartDate.Date <= DateTime.Today && b.EndDate.Date >= DateTime.Today).Count();
+    }
+
+    public async Task UpdateProduct(string barcode, ProductCreationDTO product)
+    {
+        var productToUpdate = await dbContext.Products
+            .Include(p => p.Categories)
+            .Where(p => p.Barcode == barcode)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException($"Product with barcode '{barcode}' not found.", product.Name);
+
+        productToUpdate.Name = product.Name;
+        productToUpdate.ClassRoomCode = product.ClassRoomCode;
+        productToUpdate.Description = product.Description;
+        productToUpdate.QuantityInStock = product.QuantityInStock;
+        productToUpdate.QuantityOnOrder = product.QuantityOnOrder;
+        productToUpdate.LowStock = product.LowStock;
+        productToUpdate.IsReservable = product.IsReservable;
+        productToUpdate.IsHidden = product.IsHidden;
+        productToUpdate.Categories = GetCategoriesFromIds(product.GetCategoryIds());
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    private List<Category> GetCategoriesFromIds(List<int> categoryIds)
+    {
+        var categories = new List<Category>();
+        for (int i = 0; i < categoryIds.Count; i++)
+        {
+            var category = dbContext.Categories.Find(categoryIds[i]);
+            if (category is not null)
+            {
+                categories.Add(category);
+            }
+            else
+            {
+                throw new NotFoundException($"Category with id {categoryIds[i]} not found.", categoryIds[i].ToString());
+            }
+        }
+        return categories;
     }
 }
