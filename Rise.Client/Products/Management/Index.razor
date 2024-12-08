@@ -47,15 +47,15 @@
                         <div>
                             <label for="barcodeImage" class="label-form">Barcode</label>
                             <img id="barcodeImage"
-                                src="@($"{NavigationManager.BaseUri}api/barcodes/{InitProduct.Barcode}/image")"
-                                alt="Barcode" class="w-full h-auto" />
+                                src="@($"{NavigationManager.BaseUri}api/barcode/{InitProduct.Barcode}/image")" alt="Barcode"
+                                class="w-full h-auto" />
                         </div>
                         <div>
                             <label for="product_avatar" class="label-form">Foto</label>
                             @if (SelectedProduct.Barcode is not null)
                             {
                                 <img id="product_avatar"
-                                    src="@($"{NavigationManager.BaseUri}api/barcodes/{SelectedProduct.Barcode}/image")"
+                                    src="@($"{NavigationManager.BaseUri}api/barcode/{SelectedProduct.Barcode}/image")"
                                     alt="Product" class="w-full h-auto" />
                             }
                             else

@@ -37,17 +37,26 @@
                     @* Showing Barcode and Image *@
                     <div class="grid md:grid-cols-2 md:gap-6">
                         <div>
-                            <label for="barcodeImage" class="label-form">Barcode</label>
-                            <img id="barcodeImage"
-                                src="@($"{NavigationManager.BaseUri}api/barcodes/{NewProduct.Barcode}/image")"
-                                alt="Barcode" class="w-full h-auto" />
+                            <div>
+                                <label for="barcodeImage"
+                                    class="block mb-2 text-sm font-medium text-gray-900">Barcode</label>
+                                @if (!string.IsNullOrEmpty(NewProduct.Barcode))
+                                {
+                                    <img src="@($"{NavigationManager.BaseUri}api/barcode/{NewProduct.Barcode}/image")"
+                                        alt="Barcode" class="w-full h-auto" />
+                                }
+                                else
+                                {
+                                    <p class="text-sm text-gray-500">Geen barcode beschikbaar</p>
+                                }
+                            </div>
                         </div>
                         <div>
                             <label for="product_avatar" class="label-form">Foto</label>
-                            @if (NewProduct.Barcode is not null)
+                            @if (InitProduct.Barcode is not null)
                             {
                                 <img id="product_avatar"
-                                    src="@($"{NavigationManager.BaseUri}api/barcodes/{NewProduct.Barcode}/image")"
+                                    src="@($"{NavigationManager.BaseUri}api/barcode/{NewProduct.Barcode}/image")"
                                     alt="Product" class="w-full h-auto" />
                             }
                             else

@@ -6,7 +6,7 @@ namespace Rise.Client.Products;
 public class BarcodeService : IBarcodeService
 {
     private readonly HttpClient httpClient;
-    private const string barcodeEndpoint = "barcodes";
+    private const string barcodeEndpoint = "barcode";
 
     public BarcodeService(HttpClient httpClient)
     {
@@ -23,7 +23,7 @@ public class BarcodeService : IBarcodeService
 
     public async Task<string> GetImage(string barcode)
     {
-        var image = await httpClient.GetStringAsync($"barcodes/{barcode}/image");
+        var image = await httpClient.GetStringAsync($"barcode/{barcode}/image");
         return image;
     }
 
