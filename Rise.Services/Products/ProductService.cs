@@ -4,6 +4,7 @@ using Rise.Persistence;
 using Rise.Shared.Products;
 using Rise.Services.Barcodes;
 using Rise.Shared.Transaction;
+using Ardalis.GuardClauses;
 
 namespace Rise.Services.Products;
 
@@ -230,7 +231,7 @@ public class ProductService : IProductService
         }
         else
         {
-            throw new Exception($"Product with barcode {barcode} not found.");
+            throw new NotFoundException($"Product with barcode {barcode} not found.", barcode);
         }
     }
 
