@@ -59,7 +59,7 @@
                         <span class="font-bold mt-4 select-none day-cell @GetDayClass(date) 
                             @(isPastDay ? "bg-gray-300 cursor-not-allowed" : "")" 
                             data-date="@date.ToString("yyyy-MM-dd")" 
-                            @onclick="@(async () => await HandleDayClick(date, isPastDay))">
+                            @onclick="() => HandleDayClick(date, isPastDay)">
                             @date.Day
                             @if (HasBookings(date))
                             {
@@ -72,7 +72,7 @@
                         int nextMonthDay = day - getDaysInMonth();
                         DateTime nextMonthDate = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(1).AddDays(nextMonthDay - 1);
                         bool isPastDay = nextMonthDate < DateTime.Today;
-                        <span class="font-bold mt-4 text-gray-400 select-none day-cell @GetDayClass(nextMonthDate) @(isPastDay ? "bg-gray-300 cursor-not-allowed" : "")" data-date="@nextMonthDate.ToString("yyyy-MM-dd")" @onclick="@(async () => await HandleDayClick(nextMonthDate, isPastDay))">
+                        <span class="font-bold mt-4 text-gray-400 select-none day-cell @GetDayClass(nextMonthDate) @(isPastDay ? "bg-gray-300 cursor-not-allowed" : "")" data-date="@nextMonthDate.ToString("yyyy-MM-dd")" @onclick="() => HandleDayClick(nextMonthDate, isPastDay)">
                             @nextMonthDate.Day
                             @if (HasBookings(nextMonthDate))
                             {
@@ -93,35 +93,12 @@
                 </div>
             }
             <div class="flex items-center space-x-4">
-                @if(DateTime.Compare(startDay.Date, endDay.Date) == 0)
-                {
-                    <p>@currentDate.ToString("MMMM d yyyy")</p>
-                    if(startHour  == null && endHour == null)
-                    {
-                        <p>00:00</p>
-                        <p>-</p>
-                        <p>00:00</p>
-                    }else{
-                        if(startHour < 10) {
-                            <p>@("0" + startHour + ":00")</p>
-                        }else{
-                            <p>@(startHour + ":00")</p>
-                        }
-                        <p>-</p>
-                        if(endHour == null) {
-                            <p>@("0" + (startHour+1) + ":00")</p>
-                        }else {
-                            if(endHour < 10) {
-                                <p>@("0" + (endHour+1) + ":00")</p>
-                            }else{
-                                <p>@((endHour+1) + ":00")</p>
-                            }
-                        } 
-                    }
-                } else {
+                @if(isMobile) {
                     <div class="flex flex-col">
                         <div class="flex items-center space-x-4">
-                            <p>@startDay.ToString("MMMM d yyyy")</p>
+                            <div class="flex items-center space-x-4">
+                                <input class="text-center p-2 border rounded-lg" type="date" @bind="StartDay" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@(startDay != endDay ? endDay.ToString("yyyy-MM-dd") : null)" />
+                            </div>
                             <select @bind="startHour" class="text-center">
                                 <option value="" disabled selected>Kies een start uur</option>
                                 @for (int hour = 0; hour < 24; hour++)
@@ -131,7 +108,9 @@
                             </select>
                         </div>
                         <div class="flex items-center space-x-4 mt-2">
-                            <p>@endDay.ToString("MMMM d yyyy")</p>
+                            <div class="flex items-center space-x-4">
+                                <input class="text-center p-2 border rounded-lg" type="date" @bind="EndDay" min="@startDay.ToString("yyyy-MM-dd")" />
+                            </div>
                             <select @bind="endHour" class="text-center">
                                 <option value="" disabled selected>Kies een eind uur</option>
                                 @for (int hour = 0; hour < 24; hour++)
@@ -141,7 +120,57 @@
                             </select>
                         </div>
                     </div>
-                    
+                }else {
+                    @if(DateTime.Compare(startDay.Date, endDay.Date) == 0)
+                    {
+                        <p>@currentDate.ToString("MMMM d yyyy")</p>
+                        if(startHour  == null && endHour == null)
+                        {
+                            <p>00:00</p>
+                            <p>-</p>
+                            <p>00:00</p>
+                        }else{
+                            if(startHour < 10) {
+                                <p>@("0" + startHour + ":00")</p>
+                            }else{
+                                <p>@(startHour + ":00")</p>
+                            }
+                            <p>-</p>
+                            if(endHour == null) {
+                                <p>@("0" + (startHour+1) + ":00")</p>
+                            }else {
+                                if(endHour < 10) {
+                                    <p>@("0" + (endHour+1) + ":00")</p>
+                                }else{
+                                    <p>@((endHour+1) + ":00")</p>
+                                }
+                            } 
+                        }
+                    } else {
+                        <div class="flex flex-col">
+                            <div class="flex items-center space-x-4">
+                                <p>@startDay.ToString("MMMM d yyyy")</p>
+                                <select @bind="startHour" class="text-center">
+                                    <option value="" disabled selected>Kies een start uur</option>
+                                    @for (int hour = 0; hour < 24; hour++)
+                                    {
+                                        <option value="@hour">@hour:00</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <p>@endDay.ToString("MMMM d yyyy")</p>
+                                <select @bind="endHour" class="text-center">
+                                    <option value="" disabled selected>Kies een eind uur</option>
+                                    @for (int hour = 0; hour < 24; hour++)
+                                    {
+                                        <option value="@(hour-1)">@hour:00</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        
+                    }
                 }
             </div>
             @if(hasConflict)
@@ -157,3 +186,8 @@
         </div>
     </div>
 </div>
+
+@if (showBookingModal)
+{
+    <BookingModal HideModal="@HideModal" BookedHours="@GetBookedHours()"/>
+}

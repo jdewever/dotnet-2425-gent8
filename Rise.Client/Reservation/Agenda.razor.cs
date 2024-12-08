@@ -23,6 +23,10 @@ namespace Rise.Client.Reservation
 
         private bool noHourSelected = false;
 
+        private bool showBookingModal = false;
+
+        private bool isMobile = false;
+
         [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
         [Inject] private ScanService ScanService { get; set; } = null!;
         [Inject] private IProductService ProductService { get; set; } = null!;
@@ -44,6 +48,7 @@ namespace Rise.Client.Reservation
                 bookings = await BookingService.GetBookingsByProductIdAsync(product.Id);
                 InitializeBookedHours();
             }
+            isMobile = await IsMobile();
         }
         private void InitializeBookedHours()
         {
@@ -333,14 +338,14 @@ namespace Rise.Client.Reservation
         {
             return await JSRuntime.InvokeAsync<bool>("matchMediaQuery", "(max-width: 1279px)").AsTask();
         }
-        private async Task HandleDayClick(DateTime date, bool isPastDay)
+        private void HandleDayClick(DateTime date, bool isPastDay)
         {
             if (isPastDay)
             {
                 return;
             }
 
-            if (await IsMobile())
+            if (isMobile)
             {
                 SelectDayMobile(date);
             }
@@ -362,7 +367,11 @@ namespace Rise.Client.Reservation
 
         private void SelectDayMobile(DateTime date)
         {
-           
+           // Show modal with booked hours
+            currentDate = date;
+            showBookingModal = true;
+            StateHasChanged();
+            
         }
         
         [JSInvokable]
@@ -409,5 +418,45 @@ namespace Rise.Client.Reservation
                 StateHasChanged();
             }
         }
+
+        private DateTime StartDay
+        {
+            get => startDay;
+            set
+            {
+                hasConflict = false;
+                startDay = value;
+                if (startDay > endDay)
+                {
+                    endDay = startDay;
+                }
+            }
+        }
+
+        private DateTime EndDay
+        {
+            get => endDay;
+            set
+            {
+                hasConflict = false;
+                endDay = value;
+                if (endDay < startDay)
+                {
+                    startDay = endDay;
+                }
+            }
+        }
+
+        private void HideModal()
+        {
+            showBookingModal = false;
+            StateHasChanged();
+        }
+
+        private List<int> GetBookedHours()
+        {
+            return bookedHoursByDate.TryGetValue(currentDate.Date, out var hours) ? hours : new List<int>();
+        }
+        
     }
 }
