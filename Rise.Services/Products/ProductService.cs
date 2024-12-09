@@ -5,6 +5,7 @@ using Rise.Shared.Products;
 using Rise.Services.Barcodes;
 using Rise.Shared.Transaction;
 using Ardalis.GuardClauses;
+using System.Collections.Immutable;
 
 namespace Rise.Services.Products;
 
@@ -231,7 +232,7 @@ public class ProductService : IProductService
         }
         else
         {
-            throw new Exception($"Product with barcode {barcode} not found.");
+            throw new NotFoundException($"Product with barcode {barcode} not found.", barcode);
         }
     }
 
@@ -328,5 +329,29 @@ public class ProductService : IProductService
             }
         }
         return categories;
+    }
+
+    public async Task<List<ProductDTO>> GetHiddenProducts(ProductRequest.Hidden request)
+    {
+        IQueryable<ProductDTO> query = dbContext.Products
+            .Where(p => p.IsHidden == request.HiddenProducts)
+            .Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Barcode = p.Barcode,
+                QuantityInStock = p.QuantityInStock,
+                QuantityOnOrder = p.QuantityOnOrder,
+                LowStock = p.LowStock,
+                ClassRoomCode = p.ClassRoomCode,
+                Categories = CategoryEntityToDto(p.Categories),
+                IsReservable = p.IsReservable,
+                IsHidden = p.IsHidden,
+            })
+            .OrderBy(p => p.Barcode);
+
+        var products = await query.ToListAsync();
+        return products;
     }
 }

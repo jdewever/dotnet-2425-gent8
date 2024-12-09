@@ -11,6 +11,7 @@ public partial class Navigationbar : ComponentBase
         new NavItem { Label = "Categorieën", Href = "categories" },
         new NavItem { Label = "Locaties", Href = "locations" },
         new NavItem { Label = "Gebruikers", Href = "users" },
+        new NavItem { Label = "Verborgen Producten", Href = "hiddenproducts" },
     };
 
     public void OpenPage(string path)

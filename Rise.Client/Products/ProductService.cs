@@ -72,4 +72,9 @@ public class ProductService : IProductService
     {
         await httpClient.PutAsJsonAsync($"product/{barcode}", product);
     }
+
+    public async Task<List<ProductDTO>> GetHiddenProducts(ProductRequest.Hidden request)
+    {
+        return await httpClient.GetFromJsonAsync<List<ProductDTO>>($"product/hidden?" + request.AsQueryString()) ?? [];
+    }
 }
