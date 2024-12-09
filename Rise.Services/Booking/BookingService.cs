@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Services.Auth;
@@ -68,6 +67,11 @@ namespace Rise.Services.Booking
         {
             var userid = _authContextProvider.User?.Identity?.Name ??
                          throw new InvalidOperationException("User name is null");
+            var roles = GetRoles();
+            if (roles.Contains("Administrator") || roles.Contains("Inventory Manager"))
+            {
+                return await GetAllBookings();
+            }
             var bookings = _dbContext.Booking.Where(b => b.UserId == userid).OrderByDescending(b => b.StartDate)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
             var now = DateTime.UtcNow;
@@ -92,12 +96,11 @@ namespace Rise.Services.Booking
             return _dbContext.SaveChangesAsync();
         }
 
-    
+
         public async Task<IEnumerable<BookingDTO>> GetAllBookings()
         {
             var bookings = _dbContext.Booking.OrderByDescending(b => b.StartDate)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
-            var now = DateTime.UtcNow;
             return await bookings
                 .Where(b => b.IsDeleted == false)
                 .Select(b => new BookingDTO
@@ -108,6 +111,13 @@ namespace Rise.Services.Booking
                     EndDate = b.EndDate,
                     Product = ProductEntityConverter.EntityToDto(b.Product)
                 }).ToListAsync();
+        }
+
+        private List<string> GetRoles()
+        {
+            var rolesClaim = _authContextProvider.User?.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+            var roles = rolesClaim?.Split(',') ?? [];
+            return [.. roles];
         }
     }
 }
