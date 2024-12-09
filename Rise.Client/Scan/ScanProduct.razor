@@ -7,7 +7,7 @@
 
 @if (ShowQuantityModal && IsMobileView)
 {
-    <div class="min-h-screen w-full bg-gray-900">
+    <div className="min-h-screen w-full bg-gray-900">
         <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-lg shadow-2xl p-6 w-full max-w-xs text-center space-y-4">
                 <h2 class="text-2xl font-semibold text-gray-800">Aantal</h2>
@@ -129,8 +129,8 @@
     }
     else if (IsMobileView && ShowScanner)
     {
-        <div class="w-full lg:w-2/3 bg-white rounded-lg shadow-md pt-32 pb-32">
-            <div class="w-full flex justify-center items-center rounded-lg">
+        <div class="w-full lg:w-2/3 bg-white rounded-lg shadow-md p-2">
+            <div class="w-full h-[60vh] max-h-[600px] flex justify-center items-center rounded-lg">
                 <BlazorBarcodeScanner.ZXing.JS.BarcodeReader Title="" StartCameraAutomatically="true" ShowStart="false"
                     ShowStop="false" ShowReset="false" ShowToggleTorch="false" ShowResult="false" ShowVideoDeviceList="false"
                     OnBarcodeReceived="LocalReceivedBarcodeText" />
