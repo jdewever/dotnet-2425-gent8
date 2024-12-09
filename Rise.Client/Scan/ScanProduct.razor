@@ -141,8 +141,6 @@
     else if (IsMobileView && ShowScanner)
     {
         <div class="flex flex-col items-center w-full lg:w-1/2 p-5">
-            @if (IsMobileView && ShowScanner)
-            {
                 <div id="cameraContainer" class="w-full lg:w-2/3 bg-white rounded-lg shadow-md p-2">
                     <div class="w-full flex justify-center items-center rounded-lg">
                         <BlazorBarcodeScanner.ZXing.JS.BarcodeReader Title="" StartCameraAutomatically="true" ShowStart="false"
@@ -150,7 +148,6 @@
                             OnBarcodeReceived="LocalReceivedBarcodeText" />
                     </div>
                 </div>
-            }
         </div>
     }
 </div>
