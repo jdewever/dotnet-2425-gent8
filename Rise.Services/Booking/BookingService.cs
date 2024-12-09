@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Services.Auth;
@@ -89,6 +90,24 @@ namespace Rise.Services.Booking
             var booking = _dbContext.Booking.Find(id) ?? throw new InvalidOperationException("Booking not found");
             _dbContext.Booking.Remove(booking);
             return _dbContext.SaveChangesAsync();
+        }
+
+    
+        public async Task<IEnumerable<BookingDTO>> GetAllBookings()
+        {
+            var bookings = _dbContext.Booking.OrderByDescending(b => b.StartDate)
+                .Include(b => b.Product).Include(b => b.Product.Categories);
+            var now = DateTime.UtcNow;
+            return await bookings
+                .Where(b => b.IsDeleted == false)
+                .Select(b => new BookingDTO
+                {
+                    Id = b.Id,
+                    UserId = b.UserId,
+                    StartDate = b.StartDate,
+                    EndDate = b.EndDate,
+                    Product = ProductEntityConverter.EntityToDto(b.Product)
+                }).ToListAsync();
         }
     }
 }

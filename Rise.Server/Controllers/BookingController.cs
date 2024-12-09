@@ -34,4 +34,11 @@ public class BookingController : ControllerBase
     {
         await bookingService.CancelBooking(id);
     }
+
+    [HttpGet]
+    [Authorize(Roles = "Administrator")]
+    public async Task<IEnumerable<BookingDTO>> GetAllBookings()
+    {
+        return await bookingService.GetAllBookings();
+    }
 }

@@ -15,7 +15,7 @@ public partial class Index : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        Reservations = await BookingService.GetRecentBookings(false);
+        Reservations = await BookingService.GetAllBookings();
     }
 
     private async Task ToggleHistory()
