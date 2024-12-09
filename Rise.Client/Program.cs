@@ -24,7 +24,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Logging.ClearProviders();
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Error()
+    .MinimumLevel.Information()
     .WriteTo.Console()
     .CreateLogger();
 
