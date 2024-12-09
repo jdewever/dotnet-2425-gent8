@@ -1,0 +1,26 @@
+<div class="fixed inset-0 flex items-center justify-center z-50">
+    <div class="fixed inset-0 bg-black opacity-50" @onclick="@HideModal"></div>
+
+    <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 relative mx-auto"
+         style="min-width: 300px; min-height: 335px; max-width: 500px; max-height: 600px;">
+        <button class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700" aria-label="Close modal" @onclick="@HideModal">
+            &#x2715;
+        </button>
+        <div>
+            <h2 class="text-xl font-semibold mb-4">Booked Hours</h2>
+            @if (BookedHours != null && BookedHours.Any())
+            {
+                <ul>
+                    @foreach (var range in GetHourRanges(BookedHours))
+                    {
+                        <li>@range.Start:00 - @(range.End+1 % 24):00</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No booked hours.</p>
+            }
+        </div>
+    </div>
+</div>
