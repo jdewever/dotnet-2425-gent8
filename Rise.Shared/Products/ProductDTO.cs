@@ -32,28 +32,77 @@ public class ProductCreationDTO
 {
     [Required(ErrorMessage = "Naam is verplicht.")]
     [StringLength(50, ErrorMessage = "Naam mag niet langer zijn dan 50 tekens.")]
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Omschrijving is verplicht.")]
     [StringLength(500, ErrorMessage = "Omschrijving mag niet langer zijn dan 500 tekens.")]
-    public required string Description { get; set; }
-    public required string Barcode { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public string Barcode { get; set; } = string.Empty;
 
     [Range(0, int.MaxValue, ErrorMessage = "Aantal in stock moet positief zijn.")]
-    public required int QuantityInStock { get; set; }
+    public int QuantityInStock { get; set; } = 0;
 
     [Range(0, int.MaxValue, ErrorMessage = "Aantal in bestelling moet positief zijn.")]
-    public required int QuantityOnOrder { get; set; }
+    public int QuantityOnOrder { get; set; } = 0;
 
     [Range(0, int.MaxValue, ErrorMessage = "Min aantal moet positief zijn.")]
-    public required int LowStock { get; set; }
+    public int LowStock { get; set; } = 0;
 
     [Required(ErrorMessage = "Lokaal is verplicht.")]
-    [RegularExpression(@"^[A-Z]\d{3}$", ErrorMessage = "Lokaal moet beginnen met een letter en gevolgd worden door drie cijfers (bijv. A101).")]
-    public required string ClassRoomCode { get; set; }
+    public string ClassRoomCode { get; set; } = string.Empty;
 
-    public required bool IsReservable { get; set; }
-    public required bool IsHidden { get; set; } = false;
+    public bool IsReservable { get; set; } = false;
+    public bool IsHidden { get; set; } = false;
 
-    public required List<int> CategoryIds { get; set; }
+    public int CategoryOneId { get; set; } = -1;
+    public int CategoryTwoId { get; set; } = -1;
+    public int CategoryThreeId { get; set; } = -1;
+
+    public ProductCreationDTO()
+    {
+    }
+
+    public ProductCreationDTO(ProductDTO product)
+    {
+        Name = product.Name;
+        Description = product.Description;
+        Barcode = product.Barcode;
+        QuantityInStock = product.QuantityInStock;
+        QuantityOnOrder = product.QuantityOnOrder;
+        LowStock = product.LowStock;
+        ClassRoomCode = product.ClassRoomCode;
+        IsReservable = product.IsReservable;
+        IsHidden = product.IsHidden;
+        if (product.Categories != null)
+        {
+            SetCategoryIds(product.Categories);
+        }
+    }
+
+    public List<int> GetCategoryIds()
+    {
+        List<int> categoryIds = [];
+        if (CategoryOneId != -1)
+        {
+            categoryIds.Add(CategoryOneId);
+        }
+        if (CategoryTwoId != -1)
+        {
+            categoryIds.Add(CategoryTwoId);
+        }
+        if (CategoryThreeId != -1)
+        {
+            categoryIds.Add(CategoryThreeId);
+        }
+        return categoryIds;
+    }
+
+    private void SetCategoryIds(List<CategoryDTO> categories)
+    {
+        CategoryOneId = categories.ElementAtOrDefault(0)?.Id ?? -1;
+        CategoryTwoId = categories.ElementAtOrDefault(1)?.Id ?? -1;
+        CategoryThreeId = categories.ElementAtOrDefault(2)?.Id ?? -1;
+    }
 }
+
+
