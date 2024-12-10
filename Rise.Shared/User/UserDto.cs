@@ -2,6 +2,7 @@ namespace Rise.Shared.User
 {
     public class UserDto
     {
+        public required string UserID { get; set; }
         public required string Email { get; set; }
         public required bool IsBlocked { get; set; }
         public required string Picture { get; set; }

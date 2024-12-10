@@ -3,6 +3,7 @@ using Rise.Persistence;
 using Rise.Services.Auth;
 using Rise.Shared.Booking;
 using Rise.Shared.Products;
+using Rise.Shared.User;
 
 namespace Rise.Services.Booking
 {
@@ -10,11 +11,13 @@ namespace Rise.Services.Booking
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IAuthContextProvider _authContextProvider;
+        private IUserService _userService;
 
-        public BookingService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider)
+        public BookingService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider, IUserService userService)
         {
             _dbContext = dbContext;
             _authContextProvider = authContextProvider;
+            _userService = userService;
         }
 
         public async Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
@@ -99,9 +102,11 @@ namespace Rise.Services.Booking
 
         public async Task<IEnumerable<BookingDTO>> GetAllBookings()
         {
-            var bookings = _dbContext.Booking.OrderByDescending(b => b.StartDate)
+            var query = _dbContext.Booking.OrderByDescending(b => b.StartDate)
+                .OrderBy(b => b.UserId)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
-            return await bookings
+            var users = await _userService.GetUsers();
+            var bookings = await query
                 .Where(b => b.IsDeleted == false)
                 .Select(b => new BookingDTO
                 {
@@ -110,7 +115,13 @@ namespace Rise.Services.Booking
                     StartDate = b.StartDate,
                     EndDate = b.EndDate,
                     Product = ProductEntityConverter.EntityToDto(b.Product)
-                }).ToListAsync();
+                })
+                .ToListAsync();
+            foreach (var booking in bookings)
+            {
+                booking.UserId = users.FirstOrDefault(u => u.UserID == booking.UserId)?.FullName ?? "Unknown";
+            }
+            return bookings;
         }
 
         private List<string> GetRoles()

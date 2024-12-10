@@ -2,9 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Services.Auth;
+using Rise.Services.User;
 using Rise.Shared.Cart;
 using Rise.Shared.Products;
 using Rise.Shared.Transaction;
+using Rise.Shared.User;
 
 namespace Rise.Services.Transaction;
 
@@ -12,13 +14,15 @@ public class TransactionService : ITransactionService
 {
     private readonly ApplicationDbContext dbContext;
     private readonly IAuthContextProvider authContextProvider;
+    private readonly IUserService _userService;
 
-    public TransactionService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider)
+    public TransactionService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider, IUserService userService)
     {
         if (authContextProvider.User is null)
             throw new ArgumentNullException($"{nameof(TransactionService)} requires a {nameof(authContextProvider)}");
         this.dbContext = dbContext;
         this.authContextProvider = authContextProvider;
+        _userService = userService;
     }
 
     public async Task AddTransactionScanOut(List<CartItem> cartItems)
@@ -102,8 +106,10 @@ public class TransactionService : ITransactionService
         var query = dbContext.Transaction
             .Include(t => t.TransactionItems)
             .Include(t => t.Products)
-            .OrderByDescending(transaction => transaction.CreatedAt);
-        return await query.Select(transaction => new TransactionDTO
+            .OrderByDescending(transaction => transaction.CreatedAt)
+            .OrderBy(t => t.UserId);
+        var users = await _userService.GetUsers();
+        var transactions = await query.Select(transaction => new TransactionDTO
         {
             Id = transaction.Id,
             Date = transaction.CreatedAt,
@@ -128,6 +134,11 @@ public class TransactionService : ITransactionService
                 }
             })
         }).ToListAsync();
+        foreach (var trans in transactions)
+        {
+            trans.UserId = users.FirstOrDefault(u => u.UserID == trans.UserId)?.FullName ?? "Unknown";
+        }
+        return transactions;
     }
 
     private List<string> GetRoles()

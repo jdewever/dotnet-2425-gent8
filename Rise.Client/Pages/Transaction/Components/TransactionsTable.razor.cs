@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Transaction;
+using Rise.Shared.User;
 
 namespace Rise.Client.Pages.Transaction.Components;
 
 public partial class TransactionsTable : ComponentBase
 {
-    [Parameter] public IEnumerable<TransactionDTO>? Transactions { get; set; }
+    [Parameter] public IEnumerable<TransactionDTO> Transactions { get; set; } = null!;
 
     private static MarkupString GetProductNames(TransactionDTO transaction)
     {
