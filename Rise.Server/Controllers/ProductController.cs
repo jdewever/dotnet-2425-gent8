@@ -26,7 +26,7 @@ public class ProductController : ControllerBase
 
     // get all hidden products
     [HttpGet("hidden")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task<List<ProductDTO>> GetHidden([FromQuery] ProductRequest.Hidden request)
     {
         return await productService.GetHiddenProducts(request);
@@ -49,7 +49,7 @@ public class ProductController : ControllerBase
 
     // add a product
     [HttpPost]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task AddProduct([FromBody] ProductCreationDTO product)
     {
         await productService.AddProduct(product);
@@ -64,7 +64,7 @@ public class ProductController : ControllerBase
 
     // delete a product by barcode
     [HttpDelete("{barcode}")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task DeleteProduct(string barcode)
     {
         await productService.DeleteProduct(barcode);
@@ -72,14 +72,14 @@ public class ProductController : ControllerBase
 
     // hide/unhide a product by barcode
     [HttpPost("{barcode}/hide")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task ToggleHideProduct(string barcode)
     {
         await productService.ToggleHideProduct(barcode);
     }
 
     [HttpPut("{barcode}")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task UpdateProduct(string barcode, [FromBody] ProductCreationDTO product)
     {
         await productService.UpdateProduct(barcode, product);
