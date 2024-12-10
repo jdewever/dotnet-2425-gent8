@@ -61,18 +61,17 @@
                         </div>
 
                         <div>
-                            <label for="product_avatar" class="label-form">Foto</label>
-                            @if (SelectedProduct.Barcode is not null)
+                            <label for="image" class="label-form">Foto</label>
+                            @if (SelectedProduct.ImageUrl != null)
                             {
-                                <img id="product_avatar"
+                                <img
                                     src="@($"{NavigationManager.BaseUri}api/barcode/{SelectedProduct.Barcode}/image")"
                                     alt="Product" class="w-full h-auto" />
+                            } else {
+                                <img src="@($"{NavigationManager.BaseUri}images/no-image.png")" alt="Product"
+                                    class="w-full h-auto" />
                             }
-                            else
-                            {
-                                <InputFile id="product_avatar" OnChange="HandleFileSelected"
-                                    class="input-text-form cursor-pointer" />
-                            }
+                            <InputFile id="image" accept="image/*" OnChange="HandleFileSelected" class="input-text-form cursor-pointer"/>
                         </div>
                     </div>
                 </div>

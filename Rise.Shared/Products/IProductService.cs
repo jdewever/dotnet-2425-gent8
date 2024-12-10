@@ -11,4 +11,5 @@ public interface IProductService
     Task DeleteProduct(string barcode);
     Task UpdateProduct(string barcode, ProductCreationDTO product);
     Task<List<ProductDTO>> GetHiddenProducts(ProductRequest.Hidden request);
+    Task<string> UploadImage(Stream fileStream, string contentType);
 }

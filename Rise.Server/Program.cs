@@ -21,6 +21,9 @@ using Rise.Services.Booking;
 using Rise.Shared.Booking;
 using Rise.Services.User;
 using Rise.Shared.User;
+using Rise.Services.Minio;
+using Rise.Shared.Minio;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +100,33 @@ builder.Services.AddAuth0AuthenticationClient(config =>
     config.ClientSecret = builder.Configuration["Auth0:M2MClientSecret"];
 });
 builder.Services.AddAuth0ManagementClient().AddManagementAccessToken();
+
+// minio
+string endpoint = builder.Configuration["Minio:Endpoint"]!;
+string region = builder.Configuration["Minio:Region"]!;
+string accessKey = builder.Configuration["Minio:AccessKey"]!;
+string secretKey = builder.Configuration["Minio:SecretKey"]!;
+bool useSSL = builder.Configuration.GetValue<bool>("Minio:Secure") || false;
+string bucket = builder.Configuration["Minio:BucketName"]!;
+string domain = builder.Configuration["Minio:PublicDomain"]!;
+
+if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(region) || string.IsNullOrWhiteSpace(accessKey) || string.IsNullOrWhiteSpace(secretKey) || string.IsNullOrWhiteSpace(bucket))
+{
+    throw new ArgumentNullException("Minio configuration is invalid, please check your appsettings.json");
+}
+if (string.IsNullOrWhiteSpace(domain))
+{
+    domain = useSSL ? $"https://{endpoint}" : $"http://{endpoint}";
+}
+
+builder.Services.AddScoped<IMinioService>(provider =>
+    new MinioService(endpoint, region, accessKey, secretKey, useSSL, bucket, domain)
+);
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024;
+});
 
 var app = builder.Build();
 

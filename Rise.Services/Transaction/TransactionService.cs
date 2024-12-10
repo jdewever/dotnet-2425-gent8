@@ -85,6 +85,7 @@ public class TransactionService : ITransactionService
                     ClassRoomCode = item.Product.ClassRoomCode,
                     QuantityInStock = item.Quantity,
                     QuantityOnOrder = item.Quantity,
+                    ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(item.Product.ImageUrl),
                     IsHidden = item.Product.IsHidden,
                     Categories = CategoryEntityConverter.CategoryEntityListToDtoList(item.Product.Categories),
                 }

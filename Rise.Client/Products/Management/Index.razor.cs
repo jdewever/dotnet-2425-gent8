@@ -1,5 +1,6 @@
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products.Management;
@@ -14,6 +15,7 @@ public partial class Index
     public required ProductCreationDTO SelectedProduct { get; set; }
     public required ProductDTO InitProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
+    private IBrowserFile? image;
     private CategoryDTO? selectedCategory;
 
     protected override async Task OnInitializedAsync()
@@ -25,6 +27,13 @@ public partial class Index
 
     private async Task HandleValidSubmit()
     {
+        if (image is not null)
+        {
+            var fileStream = image.OpenReadStream();
+            string imageUrl = await ProductService.UploadImage(fileStream, image.ContentType);
+            SelectedProduct.ImageUrl = imageUrl;
+        }
+
         await ProductService.UpdateProduct(SelectedProduct.Barcode, SelectedProduct);
         StateHasChanged();
         ToastService.ShowSuccess("Product succesvol gewijzigd!");
@@ -48,9 +57,9 @@ public partial class Index
         ToastService.ShowError("Vergeet niet alle velden in te vullen!");
     }
 
-    private static void HandleFileSelected()
+    private void HandleFileSelected(InputFileChangeEventArgs e)
     {
-        //todo -> adding image to product, blob?
+        image = e.File;
     }
 
     private async Task HandleDelete()

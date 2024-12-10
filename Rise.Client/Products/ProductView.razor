@@ -6,8 +6,7 @@
     <span class="text-sm font-bold text-gray-700 mb-2 h-10 overflow-hidden">@Product.Name</span>
     
     <!-- Image -->
-    @* todo: add default image when not provided? *@
-    <img src="@ImageUrl" alt="Item Image" class="h-32 w-32 object-contain mb-2 cursor-pointer" @onclick="OnClick">
+    <img src="@Product.ImageUrl" alt="Item Image" class="h-32 w-32 object-contain mb-2 cursor-pointer" @onclick="OnClick">
 
     <!-- Barcode 
     <span class="text-sm font-light text-gray-350 mb-2">@Product.Barcode</span>-->

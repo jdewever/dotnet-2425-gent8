@@ -13,5 +13,6 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Auth0Net.DependencyInjection" Version="4.0.0" />
+	  <PackageReference Include="Minio" Version="6.0.3" />
 	</ItemGroup>
 </Project>
