@@ -10,7 +10,7 @@
 @if (products == null || categories == null)
 {
     <p>
-        <em>Loading...</em>
+        <em>Laden...</em>
     </p>
 }
 else
@@ -53,7 +53,7 @@ else
                     <Column T="ProductDTO" Value="ClassRoomCode" Title="Lokaal" />
                 </Columns>
                 <Actions>
-                    <TAction T="ProductDTO" Name="@(OnlyReservable ? "Reserveren" : "Uitlenen")" Method="OnProductClick" />
+                    <TAction T="ProductDTO" Name="@(OnlyReservable ? "Reserveren" : "Scannen")" Method="OnProductClick" />
                 </Actions>
             </Table>
         </div>
