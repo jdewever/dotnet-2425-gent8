@@ -28,6 +28,19 @@ public partial class Index
         await ProductService.UpdateProduct(SelectedProduct.Barcode, SelectedProduct);
         StateHasChanged();
         ToastService.ShowSuccess("Product succesvol gewijzigd!");
+        if (SelectedProduct.IsHidden)
+        {
+            NavigationManager.NavigateTo("/manage/hiddenproducts");
+        }
+        else if (SelectedProduct.IsReservable)
+        {
+            NavigationManager.NavigateTo("/reserve");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/products");
+        }
+
     }
 
     private void HandleInvalidSubmit()

@@ -1,0 +1,33 @@
+@page "/manage/hiddenproducts"
+@using Rise.Client.Components.Table;
+@using Rise.Shared.Products;
+@using Rise.Client.Manage.Components;
+@using Rise.Client.Manage;
+
+<PageTitle>Verborgen producten beheren</PageTitle>
+
+<ManageView T="ProductDTO" ItemType="product" ShowAddModal="NavigateToAddProduct" @ref="ManageViewComponent">
+    @if (Products == null)
+    {
+        <TableSkeleton ColumnCount="4" RowCount="7" />
+    }
+    else
+    {
+        <div class="mt-8 overflow-x-auto w-full">
+            <Table Items="Products">
+                <Columns>
+                    <Column T="ProductDTO" Value="Barcode" Title="Barcode" />
+                    <Column T="ProductDTO" Value="Name" Title="Naam" />
+                    <Column T="ProductDTO" Value="Description" Title="Beschrijving" />
+                    <Column T="ProductDTO" Value="QuantityInStock" Title="In Stock" />
+                    <Column T="ProductDTO" Value="QuantityOnOrder" Title="In Bestelling" />
+                    <Column T="ProductDTO" Value="ClassRoomCode" Title="Lokaal" />
+                </Columns>
+                <Actions>
+                    <TAction T="ProductDTO" Type="edit" Name="Bewerken" Method="(p) => HandleEdit(p)" />
+                    <TAction T="ProductDTO" Name="Tonen" Method="HandleIsHidden" />
+                </Actions>
+            </Table>
+        </div>
+    }
+</ManageView>

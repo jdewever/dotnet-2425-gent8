@@ -24,6 +24,14 @@ public class ProductController : ControllerBase
         return productResponse;
     }
 
+    // get all hidden products
+    [HttpGet("hidden")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<List<ProductDTO>> GetHidden([FromQuery] ProductRequest.Hidden request)
+    {
+        return await productService.GetHiddenProducts(request);
+    }
+
     // get all locations
     [HttpGet("location")]
     public async Task<IEnumerable<string>> GetLocations()
