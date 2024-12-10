@@ -11,13 +11,6 @@
         <InventoryView />
     </Authorized>
     <NotAuthorized>
-        <AuthorizeView Roles="Inventory Manager" Context="innerContext">
-            <Authorized>
-                <InventoryView />
-            </Authorized>
-            <NotAuthorized>
-                <RedirectToProducts />
-            </NotAuthorized>
-        </AuthorizeView>
+        <RedirectToProducts />
     </NotAuthorized>
 </AuthorizeView>

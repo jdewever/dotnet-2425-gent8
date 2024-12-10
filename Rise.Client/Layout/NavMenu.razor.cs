@@ -22,7 +22,7 @@ public partial class NavMenu : ComponentBase
             Label = "Dashboard",
             Href = "",
             Icon = "dashboard",
-            IsVisible = userRole == "Inventory Manager" || userRole == "Administrator"
+            IsVisible = userRole == "Administrator"
         },
         new NavItem { Label = "Voorraadbeheer", Href = "products", Icon = "inventory",
             Children = new[] {
