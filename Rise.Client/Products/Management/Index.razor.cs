@@ -27,9 +27,14 @@ public partial class Index
 
     private async Task HandleValidSubmit()
     {
+        // remove /api/proxy/image/ from the image url
+        SelectedProduct.ImageUrl = SelectedProduct.ImageUrl.Replace("/api/proxy/image/", "");
+        // decode the image url
+        SelectedProduct.ImageUrl = System.Net.WebUtility.UrlDecode(SelectedProduct.ImageUrl);
+
         if (image is not null)
         {
-            var fileStream = image.OpenReadStream();
+            var fileStream = image.OpenReadStream(20 * 1024 * 1024); // 20MB
             string imageUrl = await ProductService.UploadImage(fileStream, image.ContentType);
             SelectedProduct.ImageUrl = imageUrl;
         }

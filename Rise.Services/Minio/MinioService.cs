@@ -105,7 +105,15 @@ public class MinioService : IMinioService
         }
         catch (Exception e)
         {
-            throw new Exception("An error occurred while retrieving the image", e);
+            // get the default image if the image is not found
+            if (url == "default.png")
+            {
+                throw new Exception("An error occurred while getting the default image", e);
+            }
+            else
+            {
+                return await GetImageAsync("default.png");
+            }
         }
     }
 }

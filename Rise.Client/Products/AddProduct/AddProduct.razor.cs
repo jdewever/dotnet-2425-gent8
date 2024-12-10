@@ -33,7 +33,7 @@ public partial class AddProduct : ComponentBase
     {
         if (image is not null)
         {
-            var fileStream = image.OpenReadStream();
+            var fileStream = image.OpenReadStream(20 * 1024 * 1024); // 20MB
             string imageUrl = await ProductService.UploadImage(fileStream, image.ContentType);
             NewProduct.ImageUrl = imageUrl;
         }

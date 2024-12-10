@@ -62,15 +62,9 @@
 
                         <div>
                             <label for="image" class="label-form">Foto</label>
-                            @if (SelectedProduct.ImageUrl != null)
-                            {
-                                <img
-                                    src="@($"{NavigationManager.BaseUri}api/barcode/{SelectedProduct.Barcode}/image")"
-                                    alt="Product" class="w-full h-auto" />
-                            } else {
-                                <img src="@($"{NavigationManager.BaseUri}images/no-image.png")" alt="Product"
-                                    class="w-full h-auto" />
-                            }
+                            <img
+                                src="@(SelectedProduct.ImageUrl)"
+                                alt="Product" class="w-full h-auto mb-2" />
                             <InputFile id="image" accept="image/*" OnChange="HandleFileSelected" class="input-text-form cursor-pointer"/>
                         </div>
                     </div>
