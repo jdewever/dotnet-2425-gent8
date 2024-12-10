@@ -26,7 +26,7 @@ public partial class NavMenu : ComponentBase
         },
         new NavItem { Label = "Voorraadbeheer", Href = "products", Icon = "inventory",
             Children = new[] {
-                new NavItem { Label = "Uitlenen", Href = "products" },
+                new NavItem { Label = "Scannen", Href = "products" },
                 new NavItem { Label = "Reserveren", Href = "reserve" },
             },
         },

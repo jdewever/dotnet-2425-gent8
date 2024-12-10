@@ -28,18 +28,18 @@
 
                     <div class="mb-2">
                         <div class="flex justify-between items-center">
-                            <p class="text-xs sm:text-sm text-gray-500"><strong>In Stock:</strong></p>
+                            <p class="text-xs sm:text-sm text-gray-500"><strong>In stock:</strong></p>
                             <p
                                 class="text-xs sm:text-sm @(SelectedProduct.QuantityInStock + SelectedProduct.QuantityOnOrder < SelectedProduct.LowStock ? "text-orange-400" : "text-green-600")">
                                 @SelectedProduct.QuantityInStock
                             </p>
                         </div>
                         <div class="flex justify-between items-center">
-                            <p class="text-xs sm:text-sm text-gray-500"><strong>On Order:</strong></p>
+                            <p class="text-xs sm:text-sm text-gray-500"><strong>Op bestelling:</strong></p>
                             <p class="text-xs sm:text-sm text-gray-500">@SelectedProduct.QuantityOnOrder</p>
                         </div>
                         <div class="flex justify-between items-center">
-                            <p class="text-xs sm:text-sm text-gray-500"><strong>ClassRoom:</strong></p>
+                            <p class="text-xs sm:text-sm text-gray-500"><strong>Lokaal:</strong></p>
                             <p class="text-xs sm:text-sm text-gray-500">@SelectedProduct.ClassRoomCode</p>
                         </div>
                     </div>
@@ -88,10 +88,10 @@
 
         <div class="absolute right-4 bottom-4 flex items-center space-x-2">
             <AuthorizeView Roles="Administrator">
-                <SmallButton Text="Beheren" OnClick="ProductManagement" />
+                <SmallButton Text="Wijzigen" OnClick="ProductManagement" />
             </AuthorizeView>
 
-            <SmallButton Text="@(Reserve ? "Reserveren" : "Uitscannen")" OnClick="@OnActionClick" />
+            <SmallButton Text="@(Reserve ? "Reserveren" : "Scannen")" OnClick="@OnActionClick" />
         </div>
     </div>
 </div>
