@@ -16,6 +16,7 @@ public partial class Index
     public required ProductDTO InitProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
     private IBrowserFile? image;
+    public string ImageUrl = string.Empty;
     private CategoryDTO? selectedCategory;
 
     protected override async Task OnInitializedAsync()
@@ -23,6 +24,7 @@ public partial class Index
         InitProduct = await ProductService.GetProductByBarcode(Barcode ?? string.Empty);
         SelectedProduct = new(InitProduct);
         CategoryOptions = await CategoryService.GetAllCategories();
+        ImageUrl = SelectedProduct.ImageUrl;
     }
 
     private async Task HandleValidSubmit()
@@ -62,9 +64,14 @@ public partial class Index
         ToastService.ShowError("Vergeet niet alle velden in te vullen!");
     }
 
-    private void HandleFileSelected(InputFileChangeEventArgs e)
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
         image = e.File;
+
+        using var stream = new MemoryStream();
+        await image.OpenReadStream().CopyToAsync(stream);
+        var imageBytes = stream.ToArray();
+        ImageUrl = $"data:{image.ContentType};base64,{Convert.ToBase64String(imageBytes)}";
     }
 
     private async Task HandleDelete()
