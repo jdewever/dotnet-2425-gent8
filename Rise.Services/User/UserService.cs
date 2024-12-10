@@ -19,6 +19,7 @@ public class UserService : IUserService
         var rawUsers = await managementApiClient.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
         return await Task.WhenAll(rawUsers.Select(async user => new UserDto
         {
+            UserID = user.UserId,
             Email = user.Email,
             IsBlocked = user.Blocked ?? false,
             FullName = user.FullName,
@@ -32,6 +33,7 @@ public class UserService : IUserService
         var user = await managementApiClient.Users.GetAsync(userId);
         return new UserDto
         {
+            UserID = user.UserId,
             Email = user.Email,
             IsBlocked = user.Blocked ?? false,
             FullName = user.FullName,

@@ -3,6 +3,9 @@
 
 <Table Items="Reservations">
     <Columns>
+        <AuthorizeView Roles="Administrator, Inventory Manager">
+            <Column T="BookingDTO" Value="UserId" Title="Naam" />
+        </AuthorizeView>
         <Column T="BookingDTO" Value="Product.Name" Title="Naam" />
         <Column T="BookingDTO" Value="StartDate" Title="Startdatum" />
         <Column T="BookingDTO" Value="EndDate" Title="Einddatum" />
