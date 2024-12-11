@@ -18,6 +18,7 @@ public static class ProductEntityConverter
             QuantityInStock = product.QuantityInStock,
             QuantityOnOrder = product.QuantityOnOrder,
             IsHidden = product.IsHidden,
+            ImageUrl = product.ImageUrl,
             Categories = CategoryEntityConverter.CategoryEntityListToDtoList(product.Categories),
         };
     }

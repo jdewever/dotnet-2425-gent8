@@ -41,6 +41,7 @@ namespace Rise.Services.Booking
                         }).ToList(),
                         LowStock = b.Product.LowStock,
                         IsReservable = b.Product.IsReservable,
+                        ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(b.Product.ImageUrl),
                         IsHidden = b.Product.IsHidden,
                         ClassRoomCode = b.Product.ClassRoomCode,
                         Barcode = b.Product.Barcode,

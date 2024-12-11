@@ -106,7 +106,7 @@ public class ScannenShould : TestContext
         // Assert
         var img = scanProductComponent!.Find("img");
         img.ShouldNotBeNull();
-        img.GetAttribute("src").ShouldBe("images/testafbeelding.png");
+        img.GetAttribute("src").ShouldContain("/api/proxy/image?url=");
 
         var label = scanProductComponent!.Find("label.quantity-in-stock");
         label.TextContent.ShouldBe("1");
