@@ -131,6 +131,7 @@ public class TransactionService : ITransactionService
                     QuantityInStock = item.Quantity,
                     QuantityOnOrder = item.Quantity,
                     IsHidden = item.Product.IsHidden,
+                    ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(item.Product.ImageUrl),
                     Categories = CategoryEntityConverter.CategoryEntityListToDtoList(item.Product.Categories),
                 }
             })
