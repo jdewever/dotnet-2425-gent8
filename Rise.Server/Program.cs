@@ -158,16 +158,18 @@ app.MapFallbackToFile("index.html");
 using (var scope = app.Services.CreateScope())
 { // Require a DbContext from the service provider and seed the database.
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+    bool isDevelopment = env.IsDevelopment();
 
-    // drop and recreate the database if date is before 11-12-2024 at 12:00 for client demo
-    if (DateTime.Now < new DateTime(2024, 12, 11, 12, 0, 0))
+    // drop and recreate the database if date is before 11-12-2024 at 12:35 for client demo
+    if (DateTime.Now < new DateTime(2024, 12, 11, 12, 35, 0))
     {
         dbContext.Database.EnsureDeleted();
     }
     dbContext.Database.Migrate();
 
     IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build(); 
-    Seeder seeder = new(dbContext, minioClient, domain, bucket);
+    Seeder seeder = new(dbContext, minioClient, domain, bucket, isDevelopment);
     await seeder.Seed();
 }
 
