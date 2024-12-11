@@ -299,6 +299,7 @@ public class ProductService : IProductService
         // delete old image if new image is uploaded
         if (productToUpdate.ImageUrl != product.ImageUrl)
         {
+            // get the old image url without the proxy
             if (productToUpdate.ImageUrl != null && productToUpdate.ImageUrl != "")
             {
                 await minioService.DeleteImageAsync(productToUpdate.ImageUrl);
