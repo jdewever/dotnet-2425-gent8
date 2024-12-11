@@ -24,6 +24,7 @@ using Rise.Shared.User;
 using Rise.Services.Minio;
 using Rise.Shared.Minio;
 using Microsoft.AspNetCore.Http.Features;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -157,9 +158,17 @@ app.MapFallbackToFile("index.html");
 using (var scope = app.Services.CreateScope())
 { // Require a DbContext from the service provider and seed the database.
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    // drop and recreate the database if date is before 11-12-2024 at 12:00 for client demo
+    if (DateTime.Now < new DateTime(2024, 12, 11, 12, 0, 0))
+    {
+        dbContext.Database.EnsureDeleted();
+    }
     dbContext.Database.Migrate();
-    Seeder seeder = new(dbContext);
-    seeder.Seed();
+
+    IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build(); 
+    Seeder seeder = new(dbContext, minioClient, domain, bucket);
+    await seeder.Seed();
 }
 
 app.Run();
