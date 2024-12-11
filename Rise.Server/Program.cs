@@ -102,13 +102,13 @@ builder.Services.AddAuth0AuthenticationClient(config =>
 builder.Services.AddAuth0ManagementClient().AddManagementAccessToken();
 
 // minio
-string endpoint = builder.Configuration["Minio:Endpoint"]!;
-string region = builder.Configuration["Minio:Region"]!;
-string accessKey = builder.Configuration["Minio:AccessKey"]!;
-string secretKey = builder.Configuration["Minio:SecretKey"]!;
-bool useSSL = builder.Configuration.GetValue<bool>("Minio:Secure") || false;
-string bucket = builder.Configuration["Minio:BucketName"]!;
-string domain = builder.Configuration["Minio:PublicDomain"]!;
+string endpoint = "minio.xpandity.com";
+string region = "eu-central";
+string accessKey = "K6i0NRfkTPfEqTTc5c6s";
+string secretKey = "HZMubuMSMesQEsLGxdxEdDc0pgvWGKOU5XdhN8cE";
+bool useSSL = true;
+string bucket = "rise";
+string domain = builder.Configuration["Minio:PublicDomain"] ?? "";
 
 if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(region) || string.IsNullOrWhiteSpace(accessKey) || string.IsNullOrWhiteSpace(secretKey) || string.IsNullOrWhiteSpace(bucket))
 {
