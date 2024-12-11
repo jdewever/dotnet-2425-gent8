@@ -31,6 +31,15 @@ public class UserService : IUserService
         }));
     }
 
+    public async Task<IEnumerable<UserDto>> GetUsersCached()
+    {
+        return await _cache.GetOrCreateAsync(
+            $"GET-USERINFO-ALL", // Unique key for the cache
+            async cancel => await GetUsers(),
+            cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token
+        );
+    }
+
     public async Task<UserDto> GetUser(string userId)
     {
         var user = await managementApiClient.Users.GetAsync(userId);
