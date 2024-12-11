@@ -36,6 +36,6 @@ public class UserController : ControllerBase
         if (userid is null)
             throw new ArgumentNullException("User not found");
 
-        return await userService.GetUser(userid);
+        return await userService.GetUserCache(userid);
     }
 }
