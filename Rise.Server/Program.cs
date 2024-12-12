@@ -160,11 +160,10 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 
-    // drop and recreate the database if date is before 11-12-2024 at 17:35 for client demo
-    if (DateTime.Now < new DateTime(2024, 12, 12, 17, 35, 0))
-    {
-        dbContext.Database.EnsureDeleted();
-    }
+    // this code allows to drop the database if the date is before a certain date, can be useful to reseed production
+    // if (DateTime.Now < new DateTime(2024, 12, 12, 17, 35, 0))
+        // dbContext.Database.EnsureDeleted();
+
     dbContext.Database.Migrate();
 
     IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build(); 
