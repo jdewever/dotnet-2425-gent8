@@ -18,6 +18,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Rise.Domain\Rise.Domain.csproj" />
+		<EmbeddedResource Include="Seeding\*" />
 	</ItemGroup>
 
 </Project>

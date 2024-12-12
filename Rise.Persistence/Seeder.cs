@@ -519,10 +519,26 @@ public class Seeder
 
         try
         {
-            await minio.PutObjectAsync(new PutObjectArgs()
-                .WithBucket(minioBucket)
-                .WithObject(objectName)
-                .WithFileName(filePath));
+            var assembly = typeof(Seeder).Assembly;
+            var resourceName = "Rise.Persistence.Seeding." + objectName;
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream != null)
+            {
+                Console.WriteLine($"Uploading {objectName} to Minio from embedded resource");
+                await minio.PutObjectAsync(new PutObjectArgs()
+                    .WithBucket(minioBucket)
+                    .WithObject(objectName)
+                    .WithStreamData(stream)
+                    .WithObjectSize(stream.Length));
+            }
+            else
+            {
+                Console.WriteLine($"Uploading {objectName} to Minio from file");
+                await minio.PutObjectAsync(new PutObjectArgs()
+                    .WithBucket(minioBucket)
+                    .WithObject(objectName)
+                    .WithFileName(filePath));
+            }
             return $"{minioUrl}/{minioBucket}/{objectName}";
         }
         catch (Exception e)
