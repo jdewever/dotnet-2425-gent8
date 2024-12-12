@@ -129,6 +129,8 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 10 * 1024 * 1024;
 });
 
+builder.Services.AddHybridCache();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -109,7 +109,7 @@ public class TransactionService : ITransactionService
             .Include(t => t.Products)
             .OrderByDescending(transaction => transaction.CreatedAt)
             .OrderBy(t => t.UserId);
-        var users = await _userService.GetUsers();
+        var users = await _userService.GetUsersCached();
         var transactions = await query.Select(transaction => new TransactionDTO
         {
             Id = transaction.Id,
