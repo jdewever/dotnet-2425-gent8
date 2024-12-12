@@ -103,12 +103,12 @@ builder.Services.AddAuth0AuthenticationClient(config =>
 builder.Services.AddAuth0ManagementClient().AddManagementAccessToken();
 
 // minio
-string endpoint = "minio.xpandity.com";
-string region = "eu-central";
-string accessKey = "K6i0NRfkTPfEqTTc5c6s";
-string secretKey = "HZMubuMSMesQEsLGxdxEdDc0pgvWGKOU5XdhN8cE";
-bool useSSL = true;
-string bucket = "rise";
+string endpoint = builder.Configuration["Minio:Endpoint"] ?? "";
+string region = builder.Configuration["Minio:Region"] ?? "";
+string accessKey = builder.Configuration["Minio:AccessKey"] ?? "";
+string secretKey = builder.Configuration["Minio:SecretKey"] ?? "";
+bool useSSL = builder.Configuration.GetValue<bool>("Minio:Secure") || false;
+string bucket = builder.Configuration["Minio:BucketName"] ?? "";
 string domain = builder.Configuration["Minio:PublicDomain"] ?? "";
 
 if (string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(region) || string.IsNullOrWhiteSpace(accessKey) || string.IsNullOrWhiteSpace(secretKey) || string.IsNullOrWhiteSpace(bucket))
@@ -159,17 +159,16 @@ using (var scope = app.Services.CreateScope())
 { // Require a DbContext from the service provider and seed the database.
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-    bool isDevelopment = env.IsDevelopment();
 
-    // drop and recreate the database if date is before 11-12-2024 at 12:35 for client demo
-    if (DateTime.Now < new DateTime(2024, 12, 11, 12, 35, 0))
+    // drop and recreate the database if date is before 11-12-2024 at 17:35 for client demo
+    if (DateTime.Now < new DateTime(2024, 12, 12, 17, 35, 0))
     {
         dbContext.Database.EnsureDeleted();
     }
     dbContext.Database.Migrate();
 
     IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build(); 
-    Seeder seeder = new(dbContext, minioClient, domain, bucket, isDevelopment);
+    Seeder seeder = new(dbContext, minioClient, domain, bucket);
     await seeder.Seed();
 }
 
