@@ -159,7 +159,6 @@ using (var scope = app.Services.CreateScope())
 { // Require a DbContext from the service provider and seed the database.
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-    bool isDevelopment = env.IsDevelopment();
 
     // drop and recreate the database if date is before 11-12-2024 at 17:35 for client demo
     if (DateTime.Now < new DateTime(2024, 12, 12, 17, 35, 0))
@@ -169,7 +168,7 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
 
     IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build(); 
-    Seeder seeder = new(dbContext, minioClient, domain, bucket, isDevelopment);
+    Seeder seeder = new(dbContext, minioClient, domain, bucket);
     await seeder.Seed();
 }
 

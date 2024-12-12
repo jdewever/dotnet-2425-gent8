@@ -11,15 +11,13 @@ public class Seeder
     private readonly IMinioClient minio;
     private readonly string minioBucket;
     private readonly string minioUrl;
-    private readonly bool isDevelopment;
 
-    public Seeder(ApplicationDbContext dbContext, IMinioClient minio, string minioUrl, string minioBucket, bool isDevelopment)
+    public Seeder(ApplicationDbContext dbContext, IMinioClient minio, string minioUrl, string minioBucket)
     {
         this.dbContext = dbContext;
         this.minio = minio;
         this.minioBucket = minioBucket;
         this.minioUrl = minioUrl;
-        this.isDevelopment = isDevelopment;
     }
 
     public async Task Seed()
@@ -494,9 +492,6 @@ public class Seeder
     // Minio helpers
     public async Task DeleteAllImagesAsync()
     {
-        if (!isDevelopment)
-            return;
-
         try
         {
             IAsyncEnumerable<Item> observable = minio.ListObjectsEnumAsync(new ListObjectsArgs().WithBucket(minioBucket));
@@ -514,9 +509,6 @@ public class Seeder
     // upload local image to minio from ./Seeding/
     public async Task<string> UploadImageAsync(string objectName, string filePath)
     {
-        if (!isDevelopment)
-            return $"{minioUrl}/{minioBucket}/{objectName}";
-
         try
         {
             var assembly = typeof(Seeder).Assembly;
