@@ -17,7 +17,6 @@ pipeline {
                     result: currentBuild.currentResult,
                     webhookURL: "${DISCORD_WEBHOOK_URL}"
                 )
-                echo "test discord send"
             }
 
         }
@@ -106,7 +105,6 @@ pipeline {
                 showChangeset: true,
                 webhookURL: "${DISCORD_WEBHOOK_URL}"
             )
-            echo "Pipeline finished"
         }
     }
 }
