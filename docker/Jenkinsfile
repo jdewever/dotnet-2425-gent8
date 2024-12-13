@@ -40,13 +40,13 @@ pipeline {
                 // }
             }
         }
-        // stage('Code coverage'){
-        //     steps{
-        //         dir("Rise.Client.Tests/"){
-        //             sh 'dotnet test --no-build --collect:"XPlat Code Coverage"'
-        //         }
-        //     }
-        // }
+        stage('Code coverage'){
+            steps{
+                dir("Rise.Client.Tests/"){
+                    sh 'dotnet test --no-build --collect:"XPlat Code Coverage"'
+                }
+            }
+        }
 
         stage('Build Image'){
             steps {
