@@ -32,7 +32,7 @@ pipeline {
             steps {
                 echo "Running Domain Tests"
                 dir("Rise.Domain.Tests/") {
-                    sh "dotnet test --no-build Rise.Domain.Tests"
+                    sh "dotnet test --no-build"
                 }
 
                 // echo "Running Client Tests"
