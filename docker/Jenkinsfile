@@ -87,7 +87,7 @@ pipeline {
     //             sh "docker builder prune -f"
     //         }
     //     }
-    // }
+    }
 
     post {
         always {
