@@ -1,9 +1,8 @@
-using System.Diagnostics;
 using System.Net.Http.Json;
 using Rise.Shared.Cart;
 using Rise.Shared.Transaction;
 
-namespace Rise.Client.Profile;
+namespace Rise.Client.Transactions;
 
 public class TransactionService : ITransactionService
 {

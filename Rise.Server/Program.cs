@@ -6,7 +6,6 @@ using Rise.Services.Barcodes;
 using Rise.Shared.Products;
 using Rise.Shared.Barcodes;
 
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -21,13 +20,30 @@ using Rise.Services.Booking;
 using Rise.Shared.Booking;
 using Rise.Services.User;
 using Rise.Shared.User;
+using Serilog;
+using System.Security.Claims;
 using Rise.Services.Minio;
 using Rise.Shared.Minio;
 using Microsoft.AspNetCore.Http.Features;
 using Minio;
+using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .Enrich.With(new EmojiEnricher())
+    .WriteTo.Console(
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Emoji} {Message:lj}{NewLine}{Exception}",
+        theme: AnsiConsoleTheme.Literate
+    )
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+Log.Information("Serilog initialized ✅ ");
+Log.Information("Starting application... ⚡️ ");
+
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
@@ -78,8 +94,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
-    options.EnableDetailedErrors();
-    options.EnableSensitiveDataLogging();
+    options.EnableDetailedErrors(false);
+    options.EnableSensitiveDataLogging(false);
     options.UseTriggers(options => options.AddTrigger<EntityBeforeSaveTrigger>());
 });
 
@@ -132,6 +148,7 @@ builder.Services.Configure<FormOptions>(options =>
 builder.Services.AddHybridCache();
 
 var app = builder.Build();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -158,7 +175,7 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 using (var scope = app.Services.CreateScope())
-{ // Require a DbContext from the service provider and seed the database.
+{
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 

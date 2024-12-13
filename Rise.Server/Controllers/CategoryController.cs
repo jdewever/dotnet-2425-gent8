@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Products;
 using Microsoft.AspNetCore.Authorization;
+using Minio.DataModel;
+using Serilog;
+using Rise.Domain.DomainClasses;
 
 namespace Rise.Server.Controllers;
 [ApiController]
@@ -26,6 +29,7 @@ public class CategoryController : ControllerBase
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task Add([FromBody] CategoryDTO category)
     {
+        Log.Information("Adding new category {category} ✨", category.Name);
         await _categoryService.AddCategory(category);
     }
 
@@ -33,11 +37,11 @@ public class CategoryController : ControllerBase
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task Update(int id, [FromBody] CategoryDTO category)
     {
-        // todo: throw bad request error
         if (id != category.Id)
         {
             throw new Exception("Id's do not match");
         }
+        Log.Information("Updating category with id: {id}, updated to: {category} ✨", id, category.Name);
         await _categoryService.UpdateCategory(category);
     }
 
@@ -45,6 +49,7 @@ public class CategoryController : ControllerBase
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task Delete(int id)
     {
+        Log.Information("Deleting category with id: {id} ✨", id);
         await _categoryService.DeleteCategory(id);
     }
 }

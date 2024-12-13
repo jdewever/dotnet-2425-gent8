@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Shared.Products;
 using Rise.Shared.Cart;
+using Rise.Shared.Exceptions;
 
 namespace Rise.Services.Cart;
 
@@ -22,24 +23,17 @@ public class CartService : ICartService
             var productDTO = item.Product;
             var quantityToCheckout = item.Quantity;
 
-            var product = await dbContext.Products.Where(p => p.Id == productDTO.Id).FirstOrDefaultAsync();
+            var product = await dbContext.Products.Where(p => p.Id == productDTO.Id).FirstOrDefaultAsync()
+                ?? throw new NotFoundException($"Product with ID {productDTO.Id} not found.");
 
-            if (product is not null)
-            {
-                product.QuantityInStock -= quantityToCheckout;
+            product.QuantityInStock -= quantityToCheckout;
 
-                // Check minimum
-                if (product.QuantityInStock < 0)
-                {
-                    throw new Exception($"Insufficient stock for product {product.Name}");
-                }
-                dbContext.Products.Update(product);
-            }
-            else
+            // Check minimum
+            if (product.QuantityInStock < 0)
             {
-                // Product not found
-                throw new Exception($"Product with ID {productDTO.Id} not found.");
+                throw new BadRequestException($"Insufficient stock for product {product.Name}");
             }
+            dbContext.Products.Update(product);
         }
         await dbContext.SaveChangesAsync();
     }
@@ -51,18 +45,11 @@ public class CartService : ICartService
             var productDTO = item.Product;
             var quantityToCheckIn = item.Quantity;
 
-            var product = await dbContext.Products.Where(p => p.Id == productDTO.Id).FirstOrDefaultAsync();
+            var product = await dbContext.Products.Where(p => p.Id == productDTO.Id).FirstOrDefaultAsync()
+                ?? throw new NotFoundException($"Product with ID {productDTO.Id} not found.");
 
-            if (product is not null)
-            {
-                product.QuantityInStock += quantityToCheckIn;
-                dbContext.Products.Update(product);
-            }
-            else
-            {
-                // Product not found
-                throw new Exception($"Product with ID {productDTO.Id} not found.");
-            }
+            product.QuantityInStock += quantityToCheckIn;
+            dbContext.Products.Update(product);
         }
         await dbContext.SaveChangesAsync();
     }

@@ -1,0 +1,37 @@
+@page "/manage/users"
+@attribute [Authorize(Roles = "Administrator")]
+@using Rise.Client.Components.Table;
+@using Rise.Shared.User;
+@using Rise.Client.Manage.Users.Components;
+@using Rise.Client.Manage;
+
+<PageTitle>Verborgen producten beheren</PageTitle>
+
+<ManageView T="UserDTO" ItemType="user" ShowAddModal="HandleAdd" @ref="ManageViewComponent">
+    @if (Users == null)
+    {
+        <TableSkeleton ColumnCount="4" RowCount="7" />
+    }
+    else
+    {
+        <div class="mt-8 overflow-x-auto w-full">
+            <Table Items="Users">
+                <Columns>
+                    <Column T="UserDTO" Value="FullName" Title="Naam" />
+                    <Column T="UserDTO" Value="Email" Title="Emailadres" />
+                    <Column T="UserDTO" Value="Role" Title="Rol" />
+                    <Column T="UserDTO" Value="" Title="Geblokkeerd" ValueSelector="GetUserState" />
+                </Columns>
+                <Actions>
+                    <TAction T="UserDTO" Name="(De)blokkeren" Method="(u) => HandleBlock(u)" />
+                    <TAction T="UserDTO" Name="Verwijderen" Method="(u) => HandleDelete(u)" />
+                </Actions>
+            </Table>
+        </div>
+    }
+
+    @if (selectedUser != null)
+    {
+        <CreateModal Item="selectedUser" OnClose="HideEditModal" OnConfirm="OnSave" />
+    }
+</ManageView>

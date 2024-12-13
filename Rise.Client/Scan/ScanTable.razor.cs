@@ -36,7 +36,6 @@ namespace Rise.Client.Scan
             await checkCartItems();
         }
 
-        // TODO: Put this functin in index.razor.cs
         private async Task CheckoutCart()
         {
 
