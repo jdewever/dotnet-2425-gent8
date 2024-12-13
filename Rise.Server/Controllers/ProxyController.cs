@@ -1,5 +1,7 @@
+﻿using BarcodeStandard;
 using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Minio;
+using Serilog;
 
 namespace Rise.Server.Controllers;
 
@@ -18,6 +20,7 @@ public class ProxyController : ControllerBase
     [HttpGet("image")]
     public async Task<IActionResult> GetImage([FromQuery] string? url)
     {
+        Log.Information("Getting image with url:{url}✨", url);
         StreamContent stream = await minio.GetImageAsync(url ?? "");
         string contentType = stream.Headers.ContentType?.MediaType ?? "application/octet-stream";
         return File(await stream.ReadAsStreamAsync(), contentType);
