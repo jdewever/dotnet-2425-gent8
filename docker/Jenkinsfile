@@ -100,7 +100,11 @@ pipeline {
             //     webhookURL: "${DISCORD_WEBHOOK_URL}"
             // )
             echo "Pipeline finished"
-            recordCoverage(tools: [[parser: 'COBERTURA']], id: 'cobertura', name: 'Cobertura Coverage', sourceDirectories: [[path: "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults/**/cobertura.xml"]])
+            recordCoverage(tools: [[parser: 'COBERTURA']], 
+                                    id: 'cobertura', 
+                                    name: 'Cobertura Coverage', 
+                                    sourceDirectories: [[path: "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults"]],
+                                    pattern: '**/coverage.cobertura.xml')
 
         }
     }
