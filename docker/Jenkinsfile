@@ -32,11 +32,11 @@ pipeline {
                 dir("Rise.Domain.Tests/") {
                     sh "dotnet test"
                 }
-                // TODO: uncomment test stage -> waiting on dev Client tests
-                // echo "Running Client Tests"
-                // dir("Rise.Client.Tests/") {
-                //     sh "dotnet test --no-build"
-                // }
+                //TODO: uncomment test stage -> waiting on dev Client tests
+                echo "Running Client Tests"
+                dir("Rise.Client.Tests/") {
+                    sh "dotnet test --no-build"
+                }
             }
         }
         stage('Code coverage'){
