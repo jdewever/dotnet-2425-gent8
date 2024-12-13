@@ -32,7 +32,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
-    .Enrich.With(new EmojiEnricher()) 
+    .Enrich.With(new EmojiEnricher())
     .WriteTo.Console(
         outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Emoji} {Message:lj}{NewLine}{Exception}",
         theme: AnsiConsoleTheme.Literate

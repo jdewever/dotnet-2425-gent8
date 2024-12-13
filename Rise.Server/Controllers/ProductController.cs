@@ -99,7 +99,7 @@ public class ProductController : ControllerBase
     [HttpGet("{barcode}")]
     public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
-        Log.Information("Get product using barcode: {barcode}✨",barcode);
+        Log.Information("Get product using barcode: {barcode}✨", barcode);
         return await productService.GetProductByBarcode(barcode);
     }
 
@@ -108,7 +108,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task DeleteProduct(string barcode)
     {
-        Log.Information("Deleting product with barcode: {barcode}✨",barcode);
+        Log.Information("Deleting product with barcode: {barcode}✨", barcode);
         await productService.DeleteProduct(barcode);
     }
 
@@ -117,7 +117,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task ToggleHideProduct(string barcode)
     {
-        Log.Information("Hiding product with barcode:{barcode}✨",barcode);
+        Log.Information("Hiding product with barcode:{barcode}✨", barcode);
         await productService.ToggleHideProduct(barcode);
     }
 
@@ -126,7 +126,7 @@ public class ProductController : ControllerBase
     public async Task UpdateProduct(string barcode, [FromBody] ProductCreationDTO product)
     {
         Log.Information("Updating product with barcode:{barcode} to: Name: {Name}, Description: {Description}, Barcode: {Barcode}, QuantityInStock: {QuantityInStock}, QuantityOnOrder: {QuantityOnOrder}, LowStock: {LowStock}, ClassRoomCode: {ClassRoomCode}, IsReservable: {IsReservable}, IsHidden: {IsHidden}, ImageUrl: {ImageUrl}, CategoryOneId: {CategoryOneId}, CategoryTwoId: {CategoryTwoId}, CategoryThreeId: {CategoryThreeId} ✨",
-            barcode, 
+            barcode,
             product.Name,
             product.Description,
             product.Barcode,

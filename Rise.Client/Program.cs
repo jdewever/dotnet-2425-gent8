@@ -65,7 +65,7 @@ try
         options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]!);
     }).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>();
     builder.Services.AddBlazoredModal();
-        builder.Services.AddScoped<Rise.Client.Auth.IUserService, Rise.Client.Auth.UserService>();
+    builder.Services.AddScoped<Rise.Client.Auth.IUserService, Rise.Client.Auth.UserService>();
 
     await builder.Build().RunAsync();
 }
