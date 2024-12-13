@@ -1,0 +1,91 @@
+pipeline {
+    agent { label "app" }
+
+    environment {
+        CONTAINER_NAME="rise8-webapp"
+        CONTAINER_IMAGE="rise-gent-gr08"
+        DOCKER_NETWORK="app-network"
+        DISCORD_WEBHOOK_URL= credentials('dotnet_discord_webhook')
+    }
+    stages {
+        stage('Pipeline starting'){
+            steps {
+                discordSend (
+                    title: "Starting ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    description: "Pipeline is starting!",
+                    link: env.BUILD_URL,
+                    result: currentBuild.currentResult,
+                    webhookURL: "${DISCORD_WEBHOOK_URL}"
+                )
+            }
+
+        }
+        stage('Test'){
+            steps {
+                echo "Running Domain Tests"
+                dir("Rise.Domain.Tests/") {
+                    sh "dotnet test"
+                }
+
+                // echo "Running Client Tests"
+                // dir("Rise.Client.Tests/") {
+                //     sh "dotnet test"
+                // }
+            }
+        }
+
+        stage('Build Image'){
+            steps {
+                echo "Building Docker image..."
+                dir("docker/") {
+                    sh "docker build -t ${CONTAINER_IMAGE} -f Dockerfile ../"
+                }
+            }
+        }
+
+        stage('Restart Container'){
+            steps {
+                script {
+                    echo "Check if Docker container ${CONTAINER_NAME} exists"
+                    def containerExists = sh(
+                        script: "docker ps -a -q -f name=${CONTAINER_NAME}",
+                        returnStdout: true
+                    ).trim()
+
+                    if (containerExists){
+                        sh "docker rm -f ${CONTAINER_NAME}"
+                        echo "Docker container ${CONTAINER_NAME} removed"
+                    }
+                }
+
+                echo "Creating Docker network ${DOCKER_NETWORK} if it doesn't exist yet"
+                sh "docker network inspect ${DOCKER_NETWORK} || docker network create ${DOCKER_NETWORK}"
+                
+                echo "Starting Docker container ${CONTAINER_NAME}"
+                sh "docker run -d --name ${CONTAINER_NAME} --restart always -p 80:8080 --network ${DOCKER_NETWORK} -v ~/app_files/appsettings.json:/App/appsettings.json ${CONTAINER_IMAGE}"
+            }
+        }
+        
+
+        stage('Prune Build Cache'){
+            steps {
+                echo "Prune Docker builder cache"
+                sh "docker builder prune -f"
+            }
+        }
+    }
+
+    post {
+        always {
+            discordSend (
+                title: "${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                description:"**Build:** ${env.BUILD_NUMBER}\n**Status:** ${currentBuild.currentResult}\n**Node_name:** ${env.NODE_NAME}\n\n**Website:** [360zorg-gent8.vichogent.be](https://360zorg-gent8.vichogent.be)\n**Commit:** ${env.GIT_COMMIT}\n**Branch:** ${env.GIT_BRANCH}",
+                link: env.BUILD_URL,
+                result: currentBuild.currentResult,
+                showChangeset: true,
+                webhookURL: "${DISCORD_WEBHOOK_URL}"
+            )
+
+        }
+    }
+}

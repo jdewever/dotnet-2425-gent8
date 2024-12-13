@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 using Rise.Shared.Booking;
 using Blazored.Toast.Services;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace Rise.Client.Pages.Reservation;
 
@@ -15,7 +14,7 @@ public partial class Index : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        Reservations = await BookingService.GetRecentBookings(false);
+        Reservations = await BookingService.GetRecentBookings(IsHistory);
     }
 
     private async Task ToggleHistory()

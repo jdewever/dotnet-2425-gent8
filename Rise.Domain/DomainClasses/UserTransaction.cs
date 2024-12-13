@@ -6,7 +6,6 @@ public class UserTransaction : Entity
     private string type = null!;
     private List<TransactionItem> transactionItems = null!;
     private List<Product> products = null!;
-    
 
     private static readonly HashSet<string> ValidTransactionTypes = new()
     {

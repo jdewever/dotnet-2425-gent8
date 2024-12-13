@@ -1,5 +1,7 @@
+using System.Net.Http.Headers;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Rise.Shared.Barcodes;
 using Rise.Shared.Products;
 
@@ -15,6 +17,7 @@ public partial class AddProduct : ComponentBase
     public required ProductCreationDTO NewProduct { get; set; } = new();
     public required ProductCreationDTO InitProduct { get; set; } = new();
     private IEnumerable<CategoryDTO> CategoryOptions = [];
+    private IBrowserFile? image;
     private CategoryDTO? selectedCategory;
 
     protected override async Task OnInitializedAsync()
@@ -28,6 +31,13 @@ public partial class AddProduct : ComponentBase
 
     private async Task HandleValidSubmit()
     {
+        if (image is not null)
+        {
+            var fileStream = image.OpenReadStream(20 * 1024 * 1024); // 20MB
+            string imageUrl = await ProductService.UploadImage(fileStream, image.ContentType);
+            NewProduct.ImageUrl = imageUrl;
+        }
+
         await ProductService.AddProduct(NewProduct);
         if (NewProduct.IsReservable)
         {
@@ -45,9 +55,9 @@ public partial class AddProduct : ComponentBase
         ToastService.ShowError("Vergeet niet alle velden in te vullen!");
     }
 
-    private static void HandleFileSelected()
+    private void HandleFileSelected(InputFileChangeEventArgs e)
     {
-        //todo -> adding image to product, blob?
+        image = e.File;
     }
 
     private void AddCategory()

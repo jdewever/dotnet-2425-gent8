@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Products;
 using Microsoft.AspNetCore.Authorization;
+using Rise.Shared.Minio;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Rise.Server.Controllers;
 
@@ -10,10 +12,12 @@ namespace Rise.Server.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly IProductService productService;
+    private readonly IMinioService minio;
 
-    public ProductController(IProductService productService)
+    public ProductController(IProductService productService, IMinioService minio)
     {
         this.productService = productService;
+        this.minio = minio;
     }
 
     // get all products
@@ -22,6 +26,14 @@ public class ProductController : ControllerBase
     {
         var productResponse = await productService.GetAllProducts(request);
         return productResponse;
+    }
+
+    // get all hidden products
+    [HttpGet("hidden")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
+    public async Task<List<ProductDTO>> GetHidden([FromQuery] ProductRequest.Hidden request)
+    {
+        return await productService.GetHiddenProducts(request);
     }
 
     // get all locations
@@ -41,7 +53,7 @@ public class ProductController : ControllerBase
 
     // add a product
     [HttpPost]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task AddProduct([FromBody] ProductCreationDTO product)
     {
         await productService.AddProduct(product);
@@ -56,7 +68,7 @@ public class ProductController : ControllerBase
 
     // delete a product by barcode
     [HttpDelete("{barcode}")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task DeleteProduct(string barcode)
     {
         await productService.DeleteProduct(barcode);
@@ -64,16 +76,39 @@ public class ProductController : ControllerBase
 
     // hide/unhide a product by barcode
     [HttpPost("{barcode}/hide")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task ToggleHideProduct(string barcode)
     {
         await productService.ToggleHideProduct(barcode);
     }
 
     [HttpPut("{barcode}")]
-    [Authorize(Roles = "Administrator, InventoryManager")]
+    [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task UpdateProduct(string barcode, [FromBody] ProductCreationDTO product)
     {
         await productService.UpdateProduct(barcode, product);
+    }
+
+    [HttpPost("image")]
+    [Authorize(Roles = "Administrator, InventoryManager")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded");
+
+        if (!file.ContentType.Contains("image"))
+            return BadRequest("File is not an image");
+
+        using var stream = file.OpenReadStream();
+        var objectName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        try
+        {
+            string fileUrl = await minio.UploadImageAsync(objectName, stream, file.Length, file.ContentType);
+            return Ok(fileUrl);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }

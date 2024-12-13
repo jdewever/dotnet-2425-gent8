@@ -9,8 +9,9 @@ public partial class Navigationbar : ComponentBase
     private List<NavItem> Items => new()
     {
         new NavItem { Label = "Categorieën", Href = "categories" },
-        new NavItem { Label = "Locaties", Href = "locations" },
+/*        new NavItem { Label = "Locaties", Href = "locations" },*/
         new NavItem { Label = "Gebruikers", Href = "users" },
+        new NavItem { Label = "Verborgen Producten", Href = "hiddenproducts" },
     };
 
     public void OpenPage(string path)

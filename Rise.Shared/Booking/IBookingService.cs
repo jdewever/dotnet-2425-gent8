@@ -11,4 +11,6 @@ public interface IBookingService
     Task<IEnumerable<BookingDTO>> GetRecentBookings(bool history);
 
     Task CancelBooking(int id);
+
+    Task<IEnumerable<BookingDTO>> GetAllBookings();
 }

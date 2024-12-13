@@ -10,6 +10,15 @@
     "M2MClientId": "",
     "M2MClientSecret": ""
   },
+  "Minio": {
+    "Endpoint": "",
+    "AccessKey": "",
+    "SecretKey": "",
+    "Region": "",
+    "BucketName": "",
+    "Secure": true,
+    "PublicDomain": ""
+  },
   "Logging": {
     "LogLevel": {
       "Default": "Information",

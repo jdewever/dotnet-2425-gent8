@@ -11,11 +11,12 @@ namespace Rise.Domain.DomainClasses
         private string barcode = default!;
         private bool isReservable = default!;
         private bool isHidden = default!;
+        private string imageUrl = string.Empty;
         private List<Category> categories = default!;
 
         public Product() { }
 
-        public Product(string name, string description, int quantityInStock, int quantityOnOrder, int lowStock, string classRoomCode, string barcode, bool isReservable, bool isHidden)
+        public Product(string name, string description, int quantityInStock, int quantityOnOrder, int lowStock, string classRoomCode, string barcode, bool isReservable, bool isHidden, string imageUrl)
         {
             Name = name;
             this.description = description;
@@ -26,6 +27,7 @@ namespace Rise.Domain.DomainClasses
             this.barcode = barcode;
             this.isReservable = isReservable;
             this.isHidden = isHidden;
+            this.imageUrl = imageUrl;
         }
 
         public string Name
@@ -86,6 +88,12 @@ namespace Rise.Domain.DomainClasses
         {
             get => categories;
             set => categories = Guard.Against.Null(value, nameof(Categories));
+        }
+
+        public string ImageUrl
+        {
+            get => imageUrl;
+            set => imageUrl = Guard.Against.NullOrWhiteSpace(value);
         }
     }
 

@@ -1,5 +1,6 @@
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Rise.Shared.Products;
 
 namespace Rise.Client.Products.Management;
@@ -14,6 +15,8 @@ public partial class Index
     public required ProductCreationDTO SelectedProduct { get; set; }
     public required ProductDTO InitProduct { get; set; }
     private IEnumerable<CategoryDTO> CategoryOptions = [];
+    private IBrowserFile? image;
+    public string ImageUrl = string.Empty;
     private CategoryDTO? selectedCategory;
 
     protected override async Task OnInitializedAsync()
@@ -21,13 +24,39 @@ public partial class Index
         InitProduct = await ProductService.GetProductByBarcode(Barcode ?? string.Empty);
         SelectedProduct = new(InitProduct);
         CategoryOptions = await CategoryService.GetAllCategories();
+        ImageUrl = SelectedProduct.ImageUrl;
     }
 
     private async Task HandleValidSubmit()
     {
+        // remove /api/proxy/image/ from the image url
+        SelectedProduct.ImageUrl = SelectedProduct.ImageUrl.Replace("/api/proxy/image/", "");
+        // decode the image url
+        SelectedProduct.ImageUrl = System.Net.WebUtility.UrlDecode(SelectedProduct.ImageUrl);
+
+        if (image is not null)
+        {
+            var fileStream = image.OpenReadStream(20 * 1024 * 1024); // 20MB
+            string imageUrl = await ProductService.UploadImage(fileStream, image.ContentType);
+            SelectedProduct.ImageUrl = imageUrl;
+        }
+
         await ProductService.UpdateProduct(SelectedProduct.Barcode, SelectedProduct);
         StateHasChanged();
         ToastService.ShowSuccess("Product succesvol gewijzigd!");
+        if (SelectedProduct.IsHidden)
+        {
+            NavigationManager.NavigateTo("/manage/hiddenproducts");
+        }
+        else if (SelectedProduct.IsReservable)
+        {
+            NavigationManager.NavigateTo("/reserve");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/products");
+        }
+
     }
 
     private void HandleInvalidSubmit()
@@ -35,9 +64,14 @@ public partial class Index
         ToastService.ShowError("Vergeet niet alle velden in te vullen!");
     }
 
-    private static void HandleFileSelected()
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
-        //todo -> adding image to product, blob?
+        image = e.File;
+
+        using var stream = new MemoryStream();
+        await image.OpenReadStream().CopyToAsync(stream);
+        var imageBytes = stream.ToArray();
+        ImageUrl = $"data:{image.ContentType};base64,{Convert.ToBase64String(imageBytes)}";
     }
 
     private async Task HandleDelete()

@@ -11,17 +11,17 @@ namespace Rise.Client.Products;
 /// </summary>
 public class IndexShould : TestContext
 {
-	public IndexShould(ITestOutputHelper outputHelper)
-	{
-		Services.AddXunitLogger(outputHelper);
-		Services.AddScoped<IProductService, FakeProductService>();
-		Services.AddScoped<ICategoryService, FakeCategoryService>();
-	}
+    public IndexShould(ITestOutputHelper outputHelper)
+    {
+        Services.AddXunitLogger(outputHelper);
+        Services.AddScoped<IProductService, FakeProductService>();
+        Services.AddScoped<ICategoryService, FakeCategoryService>();
+    }
 
-	[Fact(Skip = "Temporarily skipping this test")]
-	public void ShowsProducts()
-	{
-		var cut = RenderComponent<Index>();
-		cut.FindAll("div").Where(div => div.ClassList.Contains("product")).Count().ShouldBe(5);
-	}
+    [Fact(Skip = "Temporarily skipping this test")]
+    public void ShowsProducts()
+    {
+        var cut = RenderComponent<Index>();
+        cut.FindAll("div").Where(div => div.ClassList.Contains("product")).Count().ShouldBe(5);
+    }
 }

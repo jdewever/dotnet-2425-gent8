@@ -1,6 +1,7 @@
 ﻿using Rise.Shared.Products;
 using System.Net.Http.Json;
 using Rise.Client.Extensions;
+using System.Net.Http.Headers;
 
 namespace Rise.Client.Products;
 
@@ -71,5 +72,21 @@ public class ProductService : IProductService
     public async Task UpdateProduct(string barcode, ProductCreationDTO product)
     {
         await httpClient.PutAsJsonAsync($"product/{barcode}", product);
+    }
+
+    public async Task<List<ProductDTO>> GetHiddenProducts(ProductRequest.Hidden request)
+    {
+        return await httpClient.GetFromJsonAsync<List<ProductDTO>>($"product/hidden?" + request.AsQueryString()) ?? [];
+    }
+
+    public async Task<string> UploadImage(Stream fileStream, string contentType)
+    {
+        var multipartContent = new MultipartFormDataContent();
+        var fileContent = new StreamContent(fileStream);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        multipartContent.Add(fileContent, "file", "file");
+        var response = await httpClient.PostAsync("product/image", multipartContent);
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsStringAsync();
     }
 }

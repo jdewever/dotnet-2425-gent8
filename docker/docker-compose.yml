@@ -1,34 +1,10 @@
 services:
-  sqlserver:
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=abcd_EFGH
-    networks:
-      - app-network
-    volumes:
-      - rise_data:/var/opt/mssql/data
-      - rise_secrets:/var/opt/mssql/secrets
-    user: "0" # root user
-    # from: https://github.com/Microsoft/mssql-docker/issues/133
-    # used to not start dotnet earlier
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S sqlserver -U sa -P $$MSSQL_SA_PASSWORD -Q 'select 1'"]
-      interval: 10s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-
   webapp:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
     image: rise-gent-gr08
-    depends_on:
-      sqlserver:
-        condition: service_healthy
+    container_name: rise8-webapp
+    restart: always
     ports:
-      - "8999:8080"
+      - "80:8080"
     networks:
       - app-network
     volumes:
@@ -40,4 +16,4 @@ networks:
 
 volumes:
   rise_data:
-  rise_secrets:
+  # rise_secrets:

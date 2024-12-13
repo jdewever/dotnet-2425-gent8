@@ -2,19 +2,20 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
-using Rise.Services.Barcodes;
-using Rise.Shared.Transaction;
 using Ardalis.GuardClauses;
+using Rise.Shared.Minio;
 
 namespace Rise.Services.Products;
 
 public class ProductService : IProductService
 {
     private readonly ApplicationDbContext dbContext;
+    private readonly IMinioService minioService;
 
-    public ProductService(ApplicationDbContext dbContext)
+    public ProductService(ApplicationDbContext dbContext, IMinioService minioService)
     {
         this.dbContext = dbContext;
+        this.minioService = minioService;
     }
 
     public async Task<IEnumerable<string>> GetAllLocations()
@@ -46,6 +47,7 @@ public class ProductService : IProductService
                         ClassRoomCode = p.ClassRoomCode,
                         Categories = CategoryEntityToDto(p.Categories),
                         IsReservable = p.IsReservable,
+                        ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(p.ImageUrl),
                         IsHidden = p.IsHidden,
                     };
         }
@@ -63,6 +65,7 @@ public class ProductService : IProductService
                 ClassRoomCode = p.ClassRoomCode,
                 Categories = CategoryEntityToDto(p.Categories),
                 IsReservable = p.IsReservable,
+                ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(p.ImageUrl),
                 IsHidden = p.IsHidden,
             });
         }
@@ -131,24 +134,6 @@ public class ProductService : IProductService
         };
     }
 
-    // start using this helper
-    private static ProductDTO CreateProductDTO(Product product)
-    {
-        return new ProductDTO
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Barcode = product.Barcode,
-            QuantityInStock = product.QuantityInStock,
-            QuantityOnOrder = product.QuantityOnOrder,
-            LowStock = product.LowStock,
-            ClassRoomCode = product.ClassRoomCode,
-            Categories = CategoryEntityToDto(product.Categories),
-            IsReservable = product.IsReservable,
-            IsHidden = product.IsHidden,
-        };
-    }
     private static List<CategoryDTO> CategoryEntityToDto(List<Category> categories)
     {
         var categoriesDto = new List<CategoryDTO>();
@@ -182,6 +167,7 @@ public class ProductService : IProductService
                 ClassRoomCode = p.ClassRoomCode,
                 Categories = CategoryEntityToDto(p.Categories),
                 IsReservable = p.IsReservable,
+                ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(p.ImageUrl),
                 IsHidden = p.IsHidden,
             });
 
@@ -191,7 +177,6 @@ public class ProductService : IProductService
             throw new InvalidOperationException($"Product with barcode '{barcode}' not found.");
         }
         return product;
-
     }
 
     public async Task<DashboardDTO> GetDashboardInfo()
@@ -210,6 +195,7 @@ public class ProductService : IProductService
                 ClassRoomCode = p.ClassRoomCode,
                 Categories = CategoryEntityToDto(p.Categories),
                 IsReservable = p.IsReservable,
+                ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(p.ImageUrl),
                 IsHidden = p.IsHidden,
             });
 
@@ -231,7 +217,7 @@ public class ProductService : IProductService
         }
         else
         {
-            throw new Exception($"Product with barcode {barcode} not found.");
+            throw new NotFoundException($"Product with barcode {barcode} not found.", barcode);
         }
     }
 
@@ -240,6 +226,10 @@ public class ProductService : IProductService
         var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync();
         if (product is not null)
         {
+            if (product.ImageUrl != null && product.ImageUrl != "")
+            {
+                await minioService.DeleteImageAsync(product.ImageUrl);
+            }
             dbContext.Products.Remove(product);
             await dbContext.SaveChangesAsync();
         }
@@ -253,7 +243,13 @@ public class ProductService : IProductService
     {
         /* TODO: Is dit nog nodig? de barcode service geeft al een unieke barcode terug,
                  maar als 2 mensen tegelijk een product toevoegen kan het zijn dat ze dezelfde barcode krijgen.
-                 Daarnaast bestaat de BadRequestException nog niet, Jens hier mee bezig?
+                 Daarnaast bestaat de BadRequestException nog niet, Jens hier mee bezig?*/
+
+        // todo: validate categories & product
+
+        // checks if barcode is not already in use and generates a new one if it is.
+        // Maybe we should return an error instead?
+        /*
         BarcodeService barcodeService = new BarcodeService(dbContext);
         if (!barcodeService.IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
         {
@@ -272,6 +268,7 @@ public class ProductService : IProductService
             LowStock = product.LowStock,
             IsReservable = product.IsReservable,
             IsHidden = product.IsHidden,
+            ImageUrl = product.ImageUrl,
             Categories = GetCategoriesFromIds(product.GetCategoryIds())
         };
 
@@ -299,6 +296,16 @@ public class ProductService : IProductService
             .Where(p => p.Barcode == barcode)
             .FirstOrDefaultAsync() ?? throw new NotFoundException($"Product with barcode '{barcode}' not found.", product.Name);
 
+        // delete old image if new image is uploaded
+        if (productToUpdate.ImageUrl != product.ImageUrl)
+        {
+            // get the old image url without the proxy
+            if (productToUpdate.ImageUrl != null && productToUpdate.ImageUrl != "")
+            {
+                await minioService.DeleteImageAsync(productToUpdate.ImageUrl);
+            }
+        }
+
         productToUpdate.Name = product.Name;
         productToUpdate.ClassRoomCode = product.ClassRoomCode;
         productToUpdate.Description = product.Description;
@@ -308,6 +315,7 @@ public class ProductService : IProductService
         productToUpdate.IsReservable = product.IsReservable;
         productToUpdate.IsHidden = product.IsHidden;
         productToUpdate.Categories = GetCategoriesFromIds(product.GetCategoryIds());
+        productToUpdate.ImageUrl = product.ImageUrl;
 
         await dbContext.SaveChangesAsync();
     }
@@ -328,5 +336,35 @@ public class ProductService : IProductService
             }
         }
         return categories;
+    }
+
+    public async Task<List<ProductDTO>> GetHiddenProducts(ProductRequest.Hidden request)
+    {
+        IQueryable<ProductDTO> query = dbContext.Products
+            .Where(p => p.IsHidden == request.HiddenProducts)
+            .Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Barcode = p.Barcode,
+                QuantityInStock = p.QuantityInStock,
+                QuantityOnOrder = p.QuantityOnOrder,
+                LowStock = p.LowStock,
+                ClassRoomCode = p.ClassRoomCode,
+                Categories = CategoryEntityToDto(p.Categories),
+                IsReservable = p.IsReservable,
+                ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(p.ImageUrl),
+                IsHidden = p.IsHidden,
+            })
+            .OrderBy(p => p.Barcode);
+
+        var products = await query.ToListAsync();
+        return products;
+    }
+
+    public Task<string> UploadImage(Stream fileStream, string contentType)
+    {
+        throw new NotImplementedException();
     }
 }

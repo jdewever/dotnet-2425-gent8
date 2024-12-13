@@ -26,7 +26,7 @@ public class CategoryShould
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void NotAllowInvalidCategoryName(string invalidName)
+    public void NotAllowInvalidCategoryName(string? invalidName)
     {
         Action act = () => new Category(invalidName);
 
@@ -46,8 +46,8 @@ public class CategoryShould
     [Fact]
     public void AllowUpdatingProductList()
     {
-        var product1 = new Product("Laptop", "description", 1, 2, 1, "classRoomCode", "123456789012", false, true);
-        var product2 = new Product("Phone", "description", 1, 2, 1, "classRoomCode", "123456789012", false, true);
+        var product1 = new Product("Laptop", "description", 1, 2, 1, "classRoomCode", "123456789012", false, true, "/image.jpg");
+        var product2 = new Product("Phone", "description", 1, 2, 1, "classRoomCode", "123456789012", false, true, "/image.jpg");
         var products = new List<Product> { product1, product2 };
         var category = new Category("Electronics");
 

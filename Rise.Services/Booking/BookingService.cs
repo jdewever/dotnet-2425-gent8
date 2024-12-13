@@ -3,6 +3,7 @@ using Rise.Persistence;
 using Rise.Services.Auth;
 using Rise.Shared.Booking;
 using Rise.Shared.Products;
+using Rise.Shared.User;
 
 namespace Rise.Services.Booking
 {
@@ -10,11 +11,13 @@ namespace Rise.Services.Booking
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IAuthContextProvider _authContextProvider;
+        private IUserService _userService;
 
-        public BookingService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider)
+        public BookingService(ApplicationDbContext dbContext, IAuthContextProvider authContextProvider, IUserService userService)
         {
             _dbContext = dbContext;
             _authContextProvider = authContextProvider;
+            _userService = userService;
         }
 
         public async Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
@@ -38,6 +41,7 @@ namespace Rise.Services.Booking
                         }).ToList(),
                         LowStock = b.Product.LowStock,
                         IsReservable = b.Product.IsReservable,
+                        ImageUrl = "/api/proxy/image?url=" + Uri.EscapeDataString(b.Product.ImageUrl),
                         IsHidden = b.Product.IsHidden,
                         ClassRoomCode = b.Product.ClassRoomCode,
                         Barcode = b.Product.Barcode,
@@ -67,6 +71,11 @@ namespace Rise.Services.Booking
         {
             var userid = _authContextProvider.User?.Identity?.Name ??
                          throw new InvalidOperationException("User name is null");
+            var roles = GetRoles();
+            if (roles.Contains("Administrator") || roles.Contains("Inventory Manager"))
+            {
+                return await GetAllBookings();
+            }
             var bookings = _dbContext.Booking.Where(b => b.UserId == userid).OrderByDescending(b => b.StartDate)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
             var now = DateTime.UtcNow;
@@ -89,6 +98,38 @@ namespace Rise.Services.Booking
             var booking = _dbContext.Booking.Find(id) ?? throw new InvalidOperationException("Booking not found");
             _dbContext.Booking.Remove(booking);
             return _dbContext.SaveChangesAsync();
+        }
+
+
+        public async Task<IEnumerable<BookingDTO>> GetAllBookings()
+        {
+            var query = _dbContext.Booking.OrderByDescending(b => b.StartDate)
+                .OrderBy(b => b.UserId)
+                .Include(b => b.Product).Include(b => b.Product.Categories);
+            var users = await _userService.GetUsersCached();
+            var bookings = await query
+                .Where(b => b.IsDeleted == false)
+                .Select(b => new BookingDTO
+                {
+                    Id = b.Id,
+                    UserId = b.UserId,
+                    StartDate = b.StartDate,
+                    EndDate = b.EndDate,
+                    Product = ProductEntityConverter.EntityToDto(b.Product)
+                })
+                .ToListAsync();
+            foreach (var booking in bookings)
+            {
+                booking.UserId = users.FirstOrDefault(u => u.UserID == booking.UserId)?.FullName ?? "Unknown";
+            }
+            return bookings;
+        }
+
+        private List<string> GetRoles()
+        {
+            var rolesClaim = _authContextProvider.User?.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+            var roles = rolesClaim?.Split(',') ?? [];
+            return [.. roles];
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Rise.Shared.Products;
 
@@ -23,6 +24,8 @@ public class ProductDTO
     public required bool IsReservable { get; set; }
 
     public bool IsHidden { get; set; }
+
+    public required string ImageUrl { get; set; }
 
     public required List<CategoryDTO>? Categories { get; set; }
 }
@@ -58,9 +61,9 @@ public class ProductCreationDTO
     public int CategoryTwoId { get; set; } = -1;
     public int CategoryThreeId { get; set; } = -1;
 
-    public ProductCreationDTO()
-    {
-    }
+    public string ImageUrl { get; set; } = string.Empty;
+
+    public ProductCreationDTO() { }
 
     public ProductCreationDTO(ProductDTO product)
     {
@@ -73,6 +76,7 @@ public class ProductCreationDTO
         ClassRoomCode = product.ClassRoomCode;
         IsReservable = product.IsReservable;
         IsHidden = product.IsHidden;
+        ImageUrl = product.ImageUrl;
         if (product.Categories != null)
         {
             SetCategoryIds(product.Categories);
@@ -104,5 +108,3 @@ public class ProductCreationDTO
         CategoryThreeId = categories.ElementAtOrDefault(2)?.Id ?? -1;
     }
 }
-
-

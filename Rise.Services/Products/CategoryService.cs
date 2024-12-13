@@ -48,7 +48,9 @@ public class CategoryService : ICategoryService
         {
             existingCategory.Name = category.Name;
             await dbContext.SaveChangesAsync();
-        } else {
+        }
+        else
+        {
             throw new Exception($"Category with id {category.Id} not found");
         }
     }
@@ -70,7 +72,9 @@ public class CategoryService : ICategoryService
             // marks the Category as deleted with IsDeleted = true, due to the soft delete pattern
             dbContext.Categories.Remove(category);
             await dbContext.SaveChangesAsync();
-        } else {
+        }
+        else
+        {
             throw new Exception($"Category with id {id} not found");
         }
     }

@@ -3,6 +3,9 @@
 
 <Table Items="Transactions">
     <Columns>
+        <AuthorizeView Roles="Administrator, Inventory Manager">
+            <Column T="TransactionDTO" Value="UserId" Title="Naam" />
+        </AuthorizeView>
         <Column T="TransactionDTO" Value="" Title="Producten" ValueSelector="GetProductNames" />
         <Column T="TransactionDTO" Value="" Title="Hoeveelheden" ValueSelector="GetProductAmounts" />
         <Column T="TransactionDTO" Value="Date" Title="Datum" />

@@ -23,7 +23,7 @@ public class UserTransactionShould
     [Theory]
     [InlineData("")]
     [InlineData(null)]
-    public void NotBeCreatedWithInvalidUserId(string userId)
+    public void NotBeCreatedWithInvalidUserId(string? userId)
     {
         Action act = () => new UserTransaction(
             userId: userId,
