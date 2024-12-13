@@ -26,7 +26,7 @@ public class CategoryShould
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void NotAllowInvalidCategoryName(string invalidName)
+    public void NotAllowInvalidCategoryName(string? invalidName)
     {
         Action act = () => new Category(invalidName);
 

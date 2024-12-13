@@ -5,7 +5,7 @@ using Rise.Shared.Products;
 
 namespace Rise.Client.Products;
 
-public class FakeCategoryService: ICategoryService
+public class FakeCategoryService : ICategoryService
 {
     public Task AddCategory(CategoryDTO category)
     {
@@ -25,7 +25,7 @@ public class FakeCategoryService: ICategoryService
     public Task<IEnumerable<CategoryDTO>> GetAllCategories()
     {
         var categories = Enumerable.Range(1, 5)
-            .Select(i => new CategoryDTO { Id = i, Name = $"Category {i}"});
+            .Select(i => new CategoryDTO { Id = i, Name = $"Category {i}" });
         return Task.FromResult(categories);
     }
 }

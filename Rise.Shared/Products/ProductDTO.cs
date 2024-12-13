@@ -63,7 +63,7 @@ public class ProductCreationDTO
 
     public string ImageUrl { get; set; } = string.Empty;
 
-    public ProductCreationDTO() {}
+    public ProductCreationDTO() { }
 
     public ProductCreationDTO(ProductDTO product)
     {

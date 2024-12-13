@@ -92,13 +92,15 @@ public partial class TableNavbar : ComponentBase
             Location,
         };
         var url = "";
-        if(OnlyReservable)
+        if (OnlyReservable)
         {
             url = "reserve?";
-        }else {
+        }
+        else
+        {
             url = "products?";
         }
-        
+
         url += request.AsQueryString();
 
         if (SelectedCategoriesIds != null)

@@ -8,7 +8,7 @@ namespace Rise.Persistence.Migrations
     public partial class AddLowStockToProducts : Migration
     {
         /// <inheritdoc />
-       protected override void Up(MigrationBuilder migrationBuilder)
+        protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "LowStock",

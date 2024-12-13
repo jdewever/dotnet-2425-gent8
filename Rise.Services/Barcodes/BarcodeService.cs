@@ -61,12 +61,13 @@ public class BarcodeService : IBarcodeService
         var b = new Barcode(barcode, BarcodeStandard.Type.Ean13);
         b.ImageFormat = SKEncodedImageFormat.Png;
         b.IncludeLabel = true;
-        
+
         // Use Arial if available, otherwise use DejaVu or default (can be installed on Linux in Docker)
         var typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Normal)
                        ?? SKTypeface.FromFamilyName("DejaVu Sans", SKFontStyle.Normal)
                        ?? SKTypeface.Default;
-        b.LabelFont = new SKFont{
+        b.LabelFont = new SKFont
+        {
             Typeface = typeface,
             Size = 20,
         };
