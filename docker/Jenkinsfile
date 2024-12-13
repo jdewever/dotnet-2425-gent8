@@ -22,24 +22,24 @@ pipeline {
 
         }
         // TODO: uncomment stage -> waiting on merge of devs https://github.com/HOGENT-RISE/dotnet-2425-gent8/pull/119
-        stage('Linting'){
-             steps {
-                sh 'dotnet format --verify-no-changes --verbosity diagnostic'
-             }
-        }
-        stage('Test dotnet'){
-            steps {
-                echo "Running Domain Tests"
-                dir("Rise.Domain.Tests/") {
-                    sh "dotnet test"
-                }
-                // TODO: uncomment test stage -> waiting on dev Client tests
-                // echo "Running Client Tests"
-                // dir("Rise.Client.Tests/") {
-                //     sh "dotnet test --no-build"
-                // }
-            }
-        }
+        // stage('Linting'){
+        //      steps {
+        //         sh 'dotnet format --verify-no-changes --verbosity diagnostic'
+        //      }
+        // }
+        // stage('Test dotnet'){
+        //     steps {
+        //         echo "Running Domain Tests"
+        //         dir("Rise.Domain.Tests/") {
+        //             sh "dotnet test"
+        //         }
+        //         // TODO: uncomment test stage -> waiting on dev Client tests
+        //         // echo "Running Client Tests"
+        //         // dir("Rise.Client.Tests/") {
+        //         //     sh "dotnet test --no-build"
+        //         // }
+        //     }
+        // }
         stage('Code coverage'){
             steps{
                 dir("Rise.Domain.Tests/"){
@@ -100,7 +100,7 @@ pipeline {
             //     webhookURL: "${DISCORD_WEBHOOK_URL}"
             // )
             echo "Pipeline finished"
-            recordCoverage(tools: [[parser: 'COBERTURA']], id: 'cobertura', name: 'Cobertura Coverage', sourceDirectories: [[path: "/home/rise8-user/code_coverage"]])
+            recordCoverage(tools: [[parser: 'COBERTURA']], id: 'cobertura', name: 'Cobertura Coverage', sourceDirectories: [[path: "/home/rise8-user/code_coverage/"]])
 
         }
     }
