@@ -40,8 +40,8 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
-Log.Information("✅ Serilog initialized");
-Log.Information("⚡️ Starting application...");
+Log.Information("Serilog initialized ✅ ");
+Log.Information("Starting application... ⚡️ ");
 
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 builder.Services.AddControllers();
