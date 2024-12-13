@@ -43,7 +43,7 @@ pipeline {
         stage('Code coverage'){
             steps{
                 dir("Rise.Domain.Tests/"){
-                    sh 'dotnet test --collect:"XPlat Code Coverage" --verbosity detailed'//--results-directory "/home/rise8-user/code_coverage"'
+                    sh 'dotnet test --collect:"XPlat Code Coverage" --verbosity minimal'//--results-directory "/home/rise8-user/code_coverage"'
                 }
             }
         }
