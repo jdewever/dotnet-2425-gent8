@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
+using Rise.Shared.Exceptions;
 using Rise.Shared.Products;
 
 namespace Rise.Services.Products;
@@ -28,10 +29,16 @@ public class CategoryService : ICategoryService
 
     public async Task AddCategory(CategoryDTO category)
     {
+        if (await dbContext.Categories.AnyAsync(c => c.Name == category.Name))
+        {
+            throw new BadRequestException($"Category with name {category.Name} already exists");
+        }
+
         var newCategory = new Category
         {
             Name = category.Name,
         };
+
         dbContext.Categories.Add(newCategory);
         await dbContext.SaveChangesAsync();
     }
@@ -41,17 +48,10 @@ public class CategoryService : ICategoryService
         var existingCategory = await dbContext.Categories
             .Where(c => !c.IsDeleted)
             .Include(c => c.Products)
-            .FirstOrDefaultAsync(c => c.Id == category.Id);
+            .FirstOrDefaultAsync(c => c.Id == category.Id) ?? throw new NotFoundException($"Category with id {category.Id} not found");
 
-        if (existingCategory is not null)
-        {
-            existingCategory.Name = category.Name;
-            await dbContext.SaveChangesAsync();
-        }
-        else
-        {
-            throw new Exception($"Category with id {category.Id} not found");
-        }
+        existingCategory.Name = category.Name;
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteCategory(int id)
@@ -59,22 +59,15 @@ public class CategoryService : ICategoryService
         var category = await dbContext.Categories
             .Where(c => !c.IsDeleted)
             .Include(c => c.Products)
-            .FirstOrDefaultAsync(c => c.Id == id);
+            .FirstOrDefaultAsync(c => c.Id == id) ?? throw new NotFoundException($"Category with id {id} not found");
 
-        if (category is not null)
+        foreach (var product in category.Products)
         {
-            foreach (var product in category.Products)
-            {
-                product.Categories.Remove(category);
-            }
+            product.Categories.Remove(category);
+        }
 
-            // marks the Category as deleted with IsDeleted = true, due to the soft delete pattern
-            dbContext.Categories.Remove(category);
-            await dbContext.SaveChangesAsync();
-        }
-        else
-        {
-            throw new Exception($"Category with id {id} not found");
-        }
+        // marks the Category as deleted with IsDeleted = true, due to the soft delete pattern
+        dbContext.Categories.Remove(category);
+        await dbContext.SaveChangesAsync();
     }
 }

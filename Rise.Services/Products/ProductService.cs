@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Shared.Products;
-using Ardalis.GuardClauses;
 using Rise.Shared.Minio;
+using Rise.Shared.Exceptions;
 
 namespace Rise.Services.Products;
 
@@ -170,11 +170,7 @@ public class ProductService : IProductService
                 IsHidden = p.IsHidden,
             });
 
-        var product = await query.FirstOrDefaultAsync();
-        if (product == null)
-        {
-            throw new InvalidOperationException($"Product with barcode '{barcode}' not found.");
-        }
+        var product = await query.FirstOrDefaultAsync() ?? throw new NotFoundException($"Product with barcode '{barcode}' not found.");
         return product;
     }
 
@@ -208,51 +204,32 @@ public class ProductService : IProductService
 
     public async Task ToggleHideProduct(string barcode)
     {
-        var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync();
-        if (product is not null)
-        {
-            product.IsHidden = !product.IsHidden;
-            await dbContext.SaveChangesAsync();
-        }
-        else
-        {
-            throw new NotFoundException($"Product with barcode {barcode} not found.", barcode);
-        }
+        var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync()
+            ?? throw new NotFoundException($"Product with barcode {barcode} not found.");
+
+        product.IsHidden = !product.IsHidden;
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteProduct(string barcode)
     {
-        var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync();
-        if (product is not null)
+        var product = await dbContext.Products.Where(p => p.Barcode == barcode && !p.IsDeleted).FirstOrDefaultAsync()
+            ?? throw new NotFoundException($"Product with barcode {barcode} not found.");
+
+        if (product.ImageUrl != null && product.ImageUrl != "")
         {
-            if (product.ImageUrl != null && product.ImageUrl != "")
-            {
-                await minioService.DeleteImageAsync(product.ImageUrl);
-            }
-            dbContext.Products.Remove(product);
-            await dbContext.SaveChangesAsync();
+            await minioService.DeleteImageAsync(product.ImageUrl);
         }
-        else
-        {
-            throw new Exception($"Product with barcode {barcode} not found.");
-        }
+        dbContext.Products.Remove(product);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task AddProduct(ProductCreationDTO product)
     {
-        /* Is dit nog nodig? de barcode service geeft al een unieke barcode terug,
-                 maar als 2 mensen tegelijk een product toevoegen kan het zijn dat ze dezelfde barcode krijgen.
-                 Daarnaast bestaat de BadRequestException nog niet, Jens hier mee bezig?*/
-
-        // checks if barcode is not already in use and generates a new one if it is.
-        // Maybe we should return an error instead?
-        /*
-        BarcodeService barcodeService = new BarcodeService(dbContext);
-        if (!barcodeService.IsValidBarcode(product.Barcode) || await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
+        if (await dbContext.Products.AnyAsync(p => p.Barcode == product.Barcode))
         {
-            throw new BadRequestException("Barcode is not valid or already in use.", product.Name);
+            throw new BadRequestException("A product with the same barcode already exists.");
         }
-        */
 
         var newProduct = new Product
         {
@@ -291,7 +268,7 @@ public class ProductService : IProductService
         var productToUpdate = await dbContext.Products
             .Include(p => p.Categories)
             .Where(p => p.Barcode == barcode)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException($"Product with barcode '{barcode}' not found.", product.Name);
+            .FirstOrDefaultAsync() ?? throw new NotFoundException($"Product with barcode '{barcode}' not found.");
 
         // delete old image if new image is uploaded
         if (productToUpdate.ImageUrl != product.ImageUrl)
@@ -329,7 +306,7 @@ public class ProductService : IProductService
             }
             else
             {
-                throw new NotFoundException($"Category with id {categoryIds[i]} not found.", categoryIds[i].ToString());
+                throw new NotFoundException($"Category with id {categoryIds[i]} not found.");
             }
         }
         return categories;
