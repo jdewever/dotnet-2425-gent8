@@ -20,13 +20,19 @@ public class UserService : IUserService
         return user!;
     }
 
-    public async Task<UserDTO> GetUser(string userId)
+    public async Task<bool> DeleteUser(string userId)
+    {
+        var response = await httpClient.DeleteAsync($"user/{userId}");
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<UserDTO> GetUser(string userId, bool forceRefresh = false)
     {
         var user = await httpClient.GetFromJsonAsync<UserDTO>($"user/detail");
         return user!;
     }
 
-    public async Task<IEnumerable<UserDTO>> GetUsers()
+    public async Task<IEnumerable<UserDTO>> GetUsers(bool forceRefresh = false)
     {
         var response = await httpClient.GetFromJsonAsync<IEnumerable<UserDTO>>("user");
         return response ?? Array.Empty<UserDTO>();

@@ -106,7 +106,7 @@ namespace Rise.Services.Booking
             var query = _dbContext.Booking.OrderByDescending(b => b.StartDate)
                 .OrderBy(b => b.UserId)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
-            var users = await _userService.GetUsersCached();
+            var users = await _userService.GetUsers();
             var bookings = await query
                 .Where(b => b.IsDeleted == false)
                 .Select(b => new BookingDTO

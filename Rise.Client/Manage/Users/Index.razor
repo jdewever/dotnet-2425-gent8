@@ -7,7 +7,7 @@
 
 <PageTitle>Verborgen producten beheren</PageTitle>
 
-<ManageView T="UserDTO" ItemType="user" ShowAddModal="NavigateToAddProduct" @ref="ManageViewComponent">
+<ManageView T="UserDTO" ItemType="user" ShowAddModal="HandleAdd" @ref="ManageViewComponent">
     @if (Users == null)
     {
         <TableSkeleton ColumnCount="4" RowCount="7" />
@@ -23,8 +23,8 @@
                     <Column T="UserDTO" Value="" Title="Geblokkeerd" ValueSelector="GetUserState" />
                 </Columns>
                 <Actions>
-                    <TAction T="UserDTO" Name="Blokkeren" Method="(u) => HandleBlock(u)" />
-                    @* <TAction T="UserDTO" Name="Tonen" Method="HandleIsHidden" /> *@
+                    <TAction T="UserDTO" Name="(De)blokkeren" Method="(u) => HandleBlock(u)" />
+                    <TAction T="UserDTO" Name="Verwijderen" Method="(u) => HandleDelete(u)" />
                 </Actions>
             </Table>
         </div>

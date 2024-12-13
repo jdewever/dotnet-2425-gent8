@@ -40,13 +40,22 @@ public class UserController : ControllerBase
             throw new ArgumentNullException("User not found");
 
         Log.Information("Getting user using id:{userid}✨", userid);
-        return await userService.GetUserCache(userid);
+        return await userService.GetUser(userid);
+    }
+
+    [HttpDelete("{userId}")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<bool> DeleteUser(string userId)
+    {
+        Log.Information("Deleting user using id:{userId}✨", userId);
+        return await userService.DeleteUser(userId);
     }
 
     [HttpPost("{userId}/block")]
     [Authorize(Roles = "Administrator")]
     public async Task<UserDTO> BlockUser(string userId)
     {
+        Log.Information("(Un)blocking user using id:{userId}✨", userId);
         return await userService.BlockUser(userId);
     }
 }

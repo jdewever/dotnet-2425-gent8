@@ -1,11 +1,13 @@
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
+using Rise.Client.Auth;
 using Rise.Shared.User;
 
 namespace Rise.Client.Manage.Users;
 public partial class Index : ComponentBase
 {
     [Parameter] public ManageView<UserDTO>? ManageViewComponent { get; set; }
+    [Inject] private ILocalUserService LocalUserService { get; set; } = null!;
     [Inject] private IUserService UserService { get; set; } = null!;
     [Inject] private IToastService ToastService { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
@@ -16,21 +18,39 @@ public partial class Index : ComponentBase
     }
     private async Task HandleBlock(UserDTO user)
     {
-        await UserService.BlockUser(user.UserID);
+        var updatedUser = await UserService.BlockUser(user.UserID);
+        Users = Users?.Select(u => u.UserID == updatedUser.UserID ? updatedUser : u).ToList();
         StateHasChanged();
         ToastService.ShowSuccess($"Gebruiker {user.FullName} is {(user.IsBlocked ? "gedeblokkeerd" : "geblokkeerd")}.");
     }
 
-    private void NavigateToAddProduct()
+    private async Task HandleDelete(UserDTO user)
     {
-        NavigationManager.NavigateTo("/products/add");
+        // don't delete the current user
+        var currentUser = await LocalUserService.GetCurrentUser();
+        if (user.UserID == currentUser.UserID)
+        {
+            ToastService.ShowError("Je kunt jezelf niet verwijderen.");
+            return;
+        }
+
+        var result = await UserService.DeleteUser(user.UserID);
+        if (result)
+        {
+            Users = Users?.Where(u => u.UserID != user.UserID).ToList();
+            StateHasChanged();
+            ToastService.ShowSuccess($"Gebruiker {user.FullName} is verwijderd.");
+        }
+        else
+        {
+            ToastService.ShowError($"Gebruiker {user.FullName} kon niet worden verwijderd.");
+        }
     }
 
-    // private void HandleEdit(ProductDTO product)
-    // {
-    //     NavigationManager.NavigateTo($"/products/management/?barcode={product.Barcode}");
-    // }
-
+    private void HandleAdd()
+    {
+        NavigationManager.NavigateTo("/manage/users/add");
+    }
     private static MarkupString GetUserState(UserDTO user)
     {
         return new($"<span class='nline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {(user.IsBlocked ? "text-red-700 ring-red-600/10 bg-red-50" : "text-green-700 ring-green-600/20 bg-green-50" )}'>{(user.IsBlocked ? "Geblokkeerd" : "Actief" )}</span>");
