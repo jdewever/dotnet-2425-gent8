@@ -21,11 +21,12 @@ pipeline {
             }
 
         }
-        stage('Code analysis en tests'){
-             steps {
-                sh 'dotnet format --verify-no-changes --verbosity diagnostic'
-             }
-        }
+        // TODO: uncomment stage -> waiting on merge of devs https://github.com/HOGENT-RISE/dotnet-2425-gent8/pull/119
+        // stage('Code analysis en tests'){
+        //      steps {
+        //         sh 'dotnet format --verify-no-changes --verbosity diagnostic'
+        //      }
+        // }
         stage('Test dotnet'){
             steps {
                 echo "Running Domain Tests"
