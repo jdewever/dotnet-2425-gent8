@@ -32,7 +32,6 @@ public class CategoryService : ICategoryService
         {
             Name = category.Name,
         };
-        // todo: add validation to check name uniqueness
         dbContext.Categories.Add(newCategory);
         await dbContext.SaveChangesAsync();
     }

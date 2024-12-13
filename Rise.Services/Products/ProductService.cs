@@ -152,7 +152,6 @@ public class ProductService : IProductService
 
     public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
-        // todo: check admin / inv mgr to show in case of hidden products
         IQueryable<ProductDTO> query = dbContext.Products
             .Where(p => p.Barcode == barcode && !p.IsDeleted)
             .Select(p => new ProductDTO
@@ -241,11 +240,9 @@ public class ProductService : IProductService
 
     public async Task AddProduct(ProductCreationDTO product)
     {
-        /* TODO: Is dit nog nodig? de barcode service geeft al een unieke barcode terug,
+        /* Is dit nog nodig? de barcode service geeft al een unieke barcode terug,
                  maar als 2 mensen tegelijk een product toevoegen kan het zijn dat ze dezelfde barcode krijgen.
                  Daarnaast bestaat de BadRequestException nog niet, Jens hier mee bezig?*/
-
-        // todo: validate categories & product
 
         // checks if barcode is not already in use and generates a new one if it is.
         // Maybe we should return an error instead?

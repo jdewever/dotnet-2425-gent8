@@ -16,7 +16,6 @@ public partial class Index : ComponentBase
 
     [Inject] private ILocalStorageService localStorage { get; set; } = null!;
 
-    [Inject] private IProductService ProductService { get; set; } = null!;
     [Inject] private IJSRuntime JS { get; set; } = null!;
 
 
@@ -64,7 +63,6 @@ public partial class Index : ComponentBase
         var storedProducts = await localStorage.GetItemAsync<List<CartItem>>("products");
         if (storedProducts == null)
         {
-            // TODO: Add toast notification
             Console.WriteLine("No items in cart");
             return;
         }
