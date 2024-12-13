@@ -35,7 +35,7 @@ pipeline {
                 //TODO: uncomment test stage -> waiting on dev Client tests
                 echo "Running Client Tests"
                 dir("Rise.Client.Tests/") {
-                    sh "dotnet test --no-build"
+                    sh "dotnet test"
                 }
             }
         }
