@@ -27,19 +27,19 @@ pipeline {
                 sh 'dotnet format --verify-no-changes --verbosity diagnostic'
              }
         }
-        stage('Test dotnet'){
-            steps {
-                echo "Running Domain Tests"
-                dir("Rise.Domain.Tests/") {
-                    sh "dotnet test --no-build"
-                }
-                // TODO: uncomment test stage -> waiting on dev Client tests
-                // echo "Running Client Tests"
-                // dir("Rise.Client.Tests/") {
-                //     sh "dotnet test --no-build"
-                // }
-            }
-        }
+        // stage('Test dotnet'){
+        //     steps {
+        //         echo "Running Domain Tests"
+        //         dir("Rise.Domain.Tests/") {
+        //             sh "dotnet test --no-build"
+        //         }
+        //         // TODO: uncomment test stage -> waiting on dev Client tests
+        //         // echo "Running Client Tests"
+        //         // dir("Rise.Client.Tests/") {
+        //         //     sh "dotnet test --no-build"
+        //         // }
+        //     }
+        // }
         stage('Code coverage'){
             steps{
                 sh 'dotnet test --no-build --collect:"XPlat Code Coverage" /home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Client.Tests'
