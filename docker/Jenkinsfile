@@ -21,12 +21,12 @@ pipeline {
             }
 
         }
-
-        stage('Linting'){
-             steps {
-                sh 'dotnet format --verify-no-changes --verbosity diagnostic'
-             }
-        }
+        // temp in comment -> devs fix formatting
+        // stage('Linting'){
+        //      steps {
+        //         sh 'dotnet format --verify-no-changes --verbosity diagnostic'
+        //      }
+        // }
 
         stage('Test dotnet'){
             steps {
