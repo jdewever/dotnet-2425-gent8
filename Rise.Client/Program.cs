@@ -44,12 +44,11 @@ try
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-    builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
-builder.Services.AddHttpClient<IUserService, UserService>("360zorg",
+    builder.Services.AddHttpClient<IUserService, UserService>("360zorg",
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
-builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+    builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
     builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
@@ -72,7 +71,7 @@ builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", clien
         options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]!);
     }).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>();
     builder.Services.AddBlazoredModal();
-    builder.Services.AddScoped<Rise.Client.Auth.IUserService, Rise.Client.Auth.UserService>();
+    builder.Services.AddScoped<Rise.Client.Auth.ILocalUserService, Rise.Client.Auth.LocalUserService>();
 
     await builder.Build().RunAsync();
 }

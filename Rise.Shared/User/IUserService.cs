@@ -6,4 +6,5 @@ public interface IUserService
     Task<UserDTO> GetUser(string userId);
     Task<UserDTO> GetUserCache(string userId);
     Task<IEnumerable<UserDTO>> GetUsersCached();
+    Task<UserDTO> BlockUser(string userId);
 }

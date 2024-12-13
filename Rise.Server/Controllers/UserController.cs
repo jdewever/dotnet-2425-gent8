@@ -42,4 +42,11 @@ public class UserController : ControllerBase
         Log.Information("Getting user using id:{userid}✨", userid);
         return await userService.GetUserCache(userid);
     }
+
+    [HttpPost("{userId}/block")]
+    [Authorize(Roles = "Administrator")]
+    public async Task<UserDTO> BlockUser(string userId)
+    {
+        return await userService.BlockUser(userId);
+    }
 }

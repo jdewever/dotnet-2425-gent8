@@ -73,4 +73,14 @@ public class UserService : IUserService
             return "Inventory Manager";
         return "User";
     }
+
+    public async Task<UserDTO> BlockUser(string userId)
+    {
+        var user = await GetUser(userId);
+        await managementApiClient.Users.UpdateAsync(userId, new UserUpdateRequest
+        {
+            Blocked = !user.IsBlocked
+        });
+        return await GetUser(userId);
+    }
 }
