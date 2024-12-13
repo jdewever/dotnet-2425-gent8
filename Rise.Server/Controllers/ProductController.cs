@@ -1,8 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Rise.Shared.Products;
 using Microsoft.AspNetCore.Authorization;
 using Rise.Shared.Minio;
 using Microsoft.AspNetCore.Components.Forms;
+using Serilog;
+using Minio.DataModel;
+using BarcodeStandard;
 
 namespace Rise.Server.Controllers;
 
@@ -24,6 +27,19 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<ProductResponse> Get([FromQuery] ProductRequest.Index request)
     {
+        Log.Information("Getting products with: CategoryIds: {CategoryIds}, Location: {Location}, MaxInStock: {MaxInStock}, MinInStock: {MinInStock}, MaxOnOrder: {MaxOnOrder}, MinOnOrder: {MinOnOrder}, Searchterm: {Searchterm}, PageNumber: {PageNumber}, PageSize: {PageSize}, OnlyReservable: {OnlyReservable}, IncludeHidden: {IncludeHidden} ✨",
+        request.CategoryIds != null ? string.Join(",", request.CategoryIds) : "None",
+        request.Location ?? "None",
+        request.MaxInStock,
+        request.MinInStock,
+        request.MaxOnOrder,
+        request.MinOnOrder,
+        request.Searchterm ?? "None",
+        request.PageNumber,
+        request.PageSize,
+        request.OnlyReservable ?? false,
+        request.IncludeHidden ?? false
+        );
         var productResponse = await productService.GetAllProducts(request);
         return productResponse;
     }
@@ -33,6 +49,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task<List<ProductDTO>> GetHidden([FromQuery] ProductRequest.Hidden request)
     {
+        Log.Information("Getting hidden products✨");
         return await productService.GetHiddenProducts(request);
     }
 
@@ -40,6 +57,7 @@ public class ProductController : ControllerBase
     [HttpGet("location")]
     public async Task<IEnumerable<string>> GetLocations()
     {
+        Log.Information("Getting all locations✨");
         return await productService.GetAllLocations();
     }
 
@@ -48,6 +66,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator")]
     public async Task<DashboardDTO> GetDashboardInfo()
     {
+        Log.Information("Getting dashboard info✨");
         return await productService.GetDashboardInfo();
     }
 
@@ -56,13 +75,31 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task AddProduct([FromBody] ProductCreationDTO product)
     {
+        Log.Information("Adding new product: Name: {Name}, Description: {Description}, Barcode: {Barcode}, QuantityInStock: {QuantityInStock}, QuantityOnOrder: {QuantityOnOrder}, LowStock: {LowStock}, ClassRoomCode: {ClassRoomCode}, IsReservable: {IsReservable}, IsHidden: {IsHidden}, ImageUrl: {ImageUrl}, CategoryOneId: {CategoryOneId}, CategoryTwoId: {CategoryTwoId}, CategoryThreeId: {CategoryThreeId} ✨",
+            product.Name,
+            product.Description,
+            product.Barcode,
+            product.QuantityInStock,
+            product.QuantityOnOrder,
+            product.LowStock,
+            product.ClassRoomCode,
+            product.IsReservable,
+            product.IsHidden,
+            product.ImageUrl,
+            product.CategoryOneId,
+            product.CategoryTwoId,
+            product.CategoryThreeId
+        );
+
         await productService.AddProduct(product);
     }
+
 
     // get product by barcode
     [HttpGet("{barcode}")]
     public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
+        Log.Information("Get product using barcode: {barcode}✨", barcode);
         return await productService.GetProductByBarcode(barcode);
     }
 
@@ -71,6 +108,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task DeleteProduct(string barcode)
     {
+        Log.Information("Deleting product with barcode: {barcode}✨", barcode);
         await productService.DeleteProduct(barcode);
     }
 
@@ -79,6 +117,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task ToggleHideProduct(string barcode)
     {
+        Log.Information("Hiding product with barcode:{barcode}✨", barcode);
         await productService.ToggleHideProduct(barcode);
     }
 
@@ -86,6 +125,21 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Administrator, Inventory Manager")]
     public async Task UpdateProduct(string barcode, [FromBody] ProductCreationDTO product)
     {
+        Log.Information("Updating product with barcode:{barcode} to: Name: {Name}, Description: {Description}, Barcode: {Barcode}, QuantityInStock: {QuantityInStock}, QuantityOnOrder: {QuantityOnOrder}, LowStock: {LowStock}, ClassRoomCode: {ClassRoomCode}, IsReservable: {IsReservable}, IsHidden: {IsHidden}, ImageUrl: {ImageUrl}, CategoryOneId: {CategoryOneId}, CategoryTwoId: {CategoryTwoId}, CategoryThreeId: {CategoryThreeId} ✨",
+            barcode,
+            product.Name,
+            product.Description,
+            product.Barcode,
+            product.QuantityInStock,
+            product.QuantityOnOrder,
+            product.LowStock,
+            product.ClassRoomCode,
+            product.IsReservable,
+            product.IsHidden,
+            product.ImageUrl,
+            product.CategoryOneId,
+            product.CategoryTwoId,
+            product.CategoryThreeId);
         await productService.UpdateProduct(barcode, product);
     }
 
@@ -103,6 +157,7 @@ public class ProductController : ControllerBase
         var objectName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         try
         {
+            Log.Information("Uploading imagefile: {file}✨", file);
             string fileUrl = await minio.UploadImageAsync(objectName, stream, file.Length, file.ContentType);
             return Ok(fileUrl);
         }
