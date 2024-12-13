@@ -21,12 +21,12 @@ pipeline {
             }
 
         }
-        // stage('Code analysis en tests'){
-        //     steps {
-        //         sh 'dotnet format /home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.sln --verify-no-changes  --verbosity diagnostic'
+        stage('Code analysis en tests'){
+             steps {
+                //sh 'dotnet format /home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.sln --verify-no-changes  --verbosity diagnostic'
                 sh 'dotnet format --verify-no-changes --verbosity diagnostic'
-        //     }
-        // }
+             }
+        }
         stage('Test dotnet'){
             steps {
                 echo "Running Domain Tests"
