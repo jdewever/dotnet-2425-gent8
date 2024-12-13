@@ -43,7 +43,7 @@ pipeline {
         stage('Code coverage'){
             steps{
                 dir("Rise.Domain.Tests/"){
-                    sh 'dotnet test --collect:"XPlat Code Coverage" --results-directory "/home/rise8-user/code_coverage/coverage.cobertura.xml"'
+                    sh 'dotnet test --collect:"XPlat Code Coverage" --results-directory "/home/rise8-user/code_coverage'
                 }
             }
         }
@@ -103,7 +103,7 @@ pipeline {
             recordCoverage(tools: [[parser: 'COBERTURA']], 
                                     id: 'cobertura', 
                                     name: 'Cobertura Coverage',
-                                    sourceDirectories: [[path: "/home/rise8-user/code_coverage/coverage.cobertura.xml"]])
+                                    sourceDirectories: [[path: "/home/rise8-user/code_coverage"]])
                                     //pattern: '**/coverage.cobertura.xml')
 
         }
