@@ -13,12 +13,14 @@ using Blazored.LocalStorage;
 using Blazored.Toast;
 using Rise.Client.Scan;
 using Rise.Client.Auth;
-using Rise.Client.Profile;
 using Rise.Client.Reservation;
 using Rise.Shared.Booking;
 using Rise.Shared.Transaction;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using Rise.Shared.User;
+using Rise.Client.Manage;
+using Rise.Client.Transactions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -43,6 +45,11 @@ try
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
     builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+builder.Services.AddHttpClient<IUserService, UserService>("360zorg",
+        client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+builder.Services.AddHttpClient<IBookingService, BookingService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
        .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
     builder.Services.AddHttpClient<IBarcodeService, BarcodeService>("360zorg", client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))

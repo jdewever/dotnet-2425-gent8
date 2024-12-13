@@ -26,14 +26,14 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Administrator")]
-    public async Task<IEnumerable<UserDto>> GetUsers()
+    public async Task<IEnumerable<UserDTO>> GetUsers()
     {
         Log.Information("Getting all users✨");
         return await userService.GetUsers();
     }
 
     [HttpGet("details")]
-    public async Task<UserDto> GetUser()
+    public async Task<UserDTO> GetUser()
     {
         var userid = _authContextProvider.User?.Identity?.Name;
         if (userid is null)

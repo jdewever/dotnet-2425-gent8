@@ -17,10 +17,10 @@ public class UserService : IUserService
         _cache = cache;
     }
 
-    public async Task<IEnumerable<UserDto>> GetUsers()
+    public async Task<IEnumerable<UserDTO>> GetUsers()
     {
         var rawUsers = await managementApiClient.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
-        return await Task.WhenAll(rawUsers.Select(async user => new UserDto
+        return await Task.WhenAll(rawUsers.Select(async user => new UserDTO
         {
             UserID = user.UserId,
             Email = user.Email,
@@ -31,7 +31,7 @@ public class UserService : IUserService
         }));
     }
 
-    public async Task<IEnumerable<UserDto>> GetUsersCached()
+    public async Task<IEnumerable<UserDTO>> GetUsersCached()
     {
         return await _cache.GetOrCreateAsync(
             $"GET-USERINFO-ALL", // Unique key for the cache
@@ -40,10 +40,10 @@ public class UserService : IUserService
         );
     }
 
-    public async Task<UserDto> GetUser(string userId)
+    public async Task<UserDTO> GetUser(string userId)
     {
         var user = await managementApiClient.Users.GetAsync(userId);
-        return new UserDto
+        return new UserDTO
         {
             UserID = user.UserId,
             Email = user.Email,
@@ -54,7 +54,7 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<UserDto> GetUserCache(string userId)
+    public async Task<UserDTO> GetUserCache(string userId)
     {
         return await _cache.GetOrCreateAsync(
             $"GET-USERINFO-{userId}", // Unique key for the cache

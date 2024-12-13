@@ -3,19 +3,19 @@ using Rise.Shared.User;
 
 namespace Rise.Client.Auth;
 
-public class UserService : IUserService
+public class LocalUserService : ILocalUserService
 {
     private readonly HttpClient _httpClient;
-    private UserDto? _user;
+    private UserDTO? _user;
 
-    public UserService(HttpClient httpClient)
+    public LocalUserService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public async Task<UserDto> GetCurrentUser()
+    public async Task<UserDTO> GetCurrentUser()
     {
-        return _user ??= await _httpClient.GetFromJsonAsync<UserDto>("user/details") ??
+        return _user ??= await _httpClient.GetFromJsonAsync<UserDTO>("user/details") ??
                          throw new InvalidOperationException();
     }
 

@@ -1,6 +1,6 @@
 namespace Rise.Shared.User
 {
-    public class UserDto
+    public class UserDTO
     {
         public required string UserID { get; set; }
         public required string Email { get; set; }
