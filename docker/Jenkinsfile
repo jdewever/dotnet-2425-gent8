@@ -22,11 +22,11 @@ pipeline {
 
         }
         // TODO: uncomment stage -> waiting on merge of devs https://github.com/HOGENT-RISE/dotnet-2425-gent8/pull/119
-        // stage('Code analysis en tests'){
-        //      steps {
-        //         sh 'dotnet format --verify-no-changes --verbosity diagnostic'
-        //      }
-        // }
+        stage('Linting'){
+             steps {
+                sh 'dotnet format --verify-no-changes --verbosity diagnostic'
+             }
+        }
         stage('Test dotnet'){
             steps {
                 echo "Running Domain Tests"
@@ -40,11 +40,11 @@ pipeline {
                 // }
             }
         }
-        // stage('Code coverage'){
-        //     steps{
-        //         sh 'dotnet test --no-build --collect:"XPlat Code Coverage" /home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Client.Tests'
-        //     }
-        // }
+        stage('Code coverage'){
+            steps{
+                sh 'dotnet test --no-build --collect:"XPlat Code Coverage" /home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Client.Tests'
+            }
+        }
 
         stage('Build Image'){
             steps {
