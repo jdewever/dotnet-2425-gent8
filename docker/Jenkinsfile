@@ -43,7 +43,7 @@ pipeline {
             steps{
                 dir("Rise.Domain.Tests/"){
                     sh 'dotnet test --collect:"XPlat Code Coverage"'
-                    recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'TestResults/*/coverage.cobertura.xml']], sourceCodeRetention: "NEVER")
+                    recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'TestResults/*/coverage.cobertura.xml']], sourceCodeRetention: "LAST_BUILD")
                 }
             }
         }
