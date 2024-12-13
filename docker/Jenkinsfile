@@ -10,13 +10,13 @@ pipeline {
     stages {
         stage('Pipeline starting'){
             steps {
-                // discordSend (
-                //     title: "Starting ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                //     description: "Pipeline is starting!",
-                //     link: env.BUILD_URL,
-                //     result: currentBuild.currentResult,
-                //     webhookURL: "${DISCORD_WEBHOOK_URL}"
-                // )
+                discordSend (
+                    title: "Starting ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    description: "Pipeline is starting!",
+                    link: env.BUILD_URL,
+                    result: currentBuild.currentResult,
+                    webhookURL: "${DISCORD_WEBHOOK_URL}"
+                )
                 echo "test discord send"
             }
 
@@ -98,14 +98,14 @@ pipeline {
 
     post {
         always {
-            // discordSend (
-            //     title: "${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            //     description:"**Build:** ${env.BUILD_NUMBER}\n**Status:** ${currentBuild.currentResult}\n**Node_name:** ${env.NODE_NAME}\n\n**Website:** [360zorg-gent8.vichogent.be](https://360zorg-gent8.vichogent.be)\n**Commit:** ${env.GIT_COMMIT}\n**Branch:** ${env.GIT_BRANCH}",
-            //     link: env.BUILD_URL,
-            //     result: currentBuild.currentResult,
-            //     showChangeset: true,
-            //     webhookURL: "${DISCORD_WEBHOOK_URL}"
-            // )
+            discordSend (
+                title: "${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                description:"**Build:** ${env.BUILD_NUMBER}\n**Status:** ${currentBuild.currentResult}\n**Node_name:** ${env.NODE_NAME}\n\n**Website:** [360zorg-gent8.vichogent.be](https://360zorg-gent8.vichogent.be)\n**Commit:** ${env.GIT_COMMIT}\n**Branch:** ${env.GIT_BRANCH}",
+                link: env.BUILD_URL,
+                result: currentBuild.currentResult,
+                showChangeset: true,
+                webhookURL: "${DISCORD_WEBHOOK_URL}"
+            )
             echo "Pipeline finished"
         }
     }
