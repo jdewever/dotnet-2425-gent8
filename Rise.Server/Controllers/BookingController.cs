@@ -31,7 +31,7 @@ public class BookingController : ControllerBase
     [HttpPost]
     public async Task AddBooking(BookingDTO booking)
     {
-        Log.Information("Adding booking:{booking} ✨", booking);
+        Log.Information("Adding booking:{booking} ✨", booking.Product);
         await bookingService.AddBookingAsync(booking);
     }
 
