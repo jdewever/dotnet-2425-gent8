@@ -2,9 +2,9 @@ using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
 using Rise.Shared.Products;
 
-namespace Rise.Client.Manage;
+namespace Rise.Client.Manage.Categories;
 
-public partial class Categories : ComponentBase
+public partial class Index : ComponentBase
 {
     private IEnumerable<CategoryDTO>? categories;
     private CategoryDTO? selectedCategory;
