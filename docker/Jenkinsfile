@@ -20,16 +20,37 @@ pipeline {
             }
 
         }
-        stage('Test'){
+        
+        stage('Linting'){
+             steps {
+                sh 'dotnet format --verify-no-changes --verbosity diagnostic'
+             }
+        }
+
+        stage('Test dotnet'){
             steps {
                 echo "Running Domain Tests"
                 dir("Rise.Domain.Tests/") {
                     sh "dotnet test"
                 }
-
+                //TODO: uncomment test stage -> waiting on dev Client tests
                 // echo "Running Client Tests"
                 // dir("Rise.Client.Tests/") {
                 //     sh "dotnet test"
+                // }
+            }
+        }
+
+        stage('Code coverage'){
+            steps{
+                dir("Rise.Domain.Tests/"){
+                    sh 'dotnet test --collect:"XPlat Code Coverage"'
+                    recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'TestResults/*/coverage.cobertura.xml']], sourceCodeRetention: "LAST_BUILD")
+                }
+                //TODO/ uncomment code coverage step for Client tests -> waiting on dev Client tests
+                // dir("Rise.Client.Tests/"){
+                //     sh 'dotnet test --collect:"XPlat Code Coverage"'
+                //     recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'TestResults/*/coverage.cobertura.xml']], sourceCodeRetention: "LAST_BUILD")
                 // }
             }
         }
@@ -43,7 +64,7 @@ pipeline {
             }
         }
 
-        stage('Restart Container'){
+        stage('Create Container'){
             steps {
                 script {
                     echo "Check if Docker container ${CONTAINER_NAME} exists"
@@ -66,7 +87,6 @@ pipeline {
             }
         }
         
-
         stage('Prune Build Cache'){
             steps {
                 echo "Prune Docker builder cache"
@@ -85,7 +105,6 @@ pipeline {
                 showChangeset: true,
                 webhookURL: "${DISCORD_WEBHOOK_URL}"
             )
-
         }
     }
 }
