@@ -21,11 +21,13 @@ pipeline {
             }
 
         }
+
         stage('Linting'){
              steps {
                 sh 'dotnet format --verify-no-changes --verbosity diagnostic'
              }
         }
+
         stage('Test dotnet'){
             steps {
                 echo "Running Domain Tests"
@@ -39,54 +41,59 @@ pipeline {
                 // }
             }
         }
+
         stage('Code coverage'){
             steps{
                 dir("Rise.Domain.Tests/"){
                     sh 'dotnet test --collect:"XPlat Code Coverage"'
                     recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'TestResults/*/coverage.cobertura.xml']], sourceCodeRetention: "LAST_BUILD")
                 }
+                //TODO/ uncomment code coverage step for Client tests -> waiting on dev Client tests
+                // dir("Rise.Client.Tests/"){
+                //     sh 'dotnet test --collect:"XPlat Code Coverage"'
+                //     recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'TestResults/*/coverage.cobertura.xml']], sourceCodeRetention: "LAST_BUILD")
+                // }
             }
         }
 
-        // stage('Build Image'){
-        //     steps {
-        //         echo "Building Docker image..."
-        //         dir("docker/") {
-        //             sh "docker build -t ${CONTAINER_IMAGE} -f Dockerfile ../"
-        //         }
-        //     }
-        // }
+        stage('Build Image'){
+            steps {
+                echo "Building Docker image..."
+                dir("docker/") {
+                    sh "docker build -t ${CONTAINER_IMAGE} -f Dockerfile ../"
+                }
+            }
+        }
 
-        // stage('Restart Container'){
-        //     steps {
-        //         script {
-        //             echo "Check if Docker container ${CONTAINER_NAME} exists"
-        //             def containerExists = sh(
-        //                 script: "docker ps -a -q -f name=${CONTAINER_NAME}",
-        //                 returnStdout: true
-        //             ).trim()
+        stage('Create Container'){
+            steps {
+                script {
+                    echo "Check if Docker container ${CONTAINER_NAME} exists"
+                    def containerExists = sh(
+                        script: "docker ps -a -q -f name=${CONTAINER_NAME}",
+                        returnStdout: true
+                    ).trim()
 
-        //             if (containerExists){
-        //                 sh "docker rm -f ${CONTAINER_NAME}"
-        //                 echo "Docker container ${CONTAINER_NAME} removed"
-        //             }
-        //         }
+                    if (containerExists){
+                        sh "docker rm -f ${CONTAINER_NAME}"
+                        echo "Docker container ${CONTAINER_NAME} removed"
+                    }
+                }
 
-        //         echo "Creating Docker network ${DOCKER_NETWORK} if it doesn't exist yet"
-        //         sh "docker network inspect ${DOCKER_NETWORK} || docker network create ${DOCKER_NETWORK}"
+                echo "Creating Docker network ${DOCKER_NETWORK} if it doesn't exist yet"
+                sh "docker network inspect ${DOCKER_NETWORK} || docker network create ${DOCKER_NETWORK}"
                 
-        //         echo "Starting Docker container ${CONTAINER_NAME}"
-        //         sh "docker run -d --name ${CONTAINER_NAME} --restart always -p 80:8080 --network ${DOCKER_NETWORK} -v ~/app_files/appsettings.json:/App/appsettings.json ${CONTAINER_IMAGE}"
-        //     }
-        // }
+                echo "Starting Docker container ${CONTAINER_NAME}"
+                sh "docker run -d --name ${CONTAINER_NAME} --restart always -p 80:8080 --network ${DOCKER_NETWORK} -v ~/app_files/appsettings.json:/App/appsettings.json ${CONTAINER_IMAGE}"
+            }
+        }
         
-
-        // stage('Prune Build Cache'){
-        //     steps {
-        //         echo "Prune Docker builder cache"
-        //         sh "docker builder prune -f"
-        //     }
-        // }
+        stage('Prune Build Cache'){
+            steps {
+                echo "Prune Docker builder cache"
+                sh "docker builder prune -f"
+            }
+        }
     }
 
     post {
