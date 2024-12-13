@@ -57,7 +57,6 @@ namespace Rise.Services.Booking
         {
             var userid = _authContextProvider.User?.Identity?.Name ??
                          throw new InvalidOperationException("User name is null");
-            //TODO: Add validation
             var product = await _dbContext.Products.FindAsync(booking.Product.Id) ?? throw new InvalidOperationException("Product not found");
 
             var newBooking =
@@ -106,7 +105,7 @@ namespace Rise.Services.Booking
             var query = _dbContext.Booking.OrderByDescending(b => b.StartDate)
                 .OrderBy(b => b.UserId)
                 .Include(b => b.Product).Include(b => b.Product.Categories);
-            var users = await _userService.GetUsersCached();
+            var users = await _userService.GetUsers();
             var bookings = await query
                 .Where(b => b.IsDeleted == false)
                 .Select(b => new BookingDTO

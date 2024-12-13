@@ -2,6 +2,7 @@ using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using Auth0.ManagementApi.Paging;
 using Microsoft.Extensions.Caching.Hybrid;
+using Rise.Services.Auth;
 using Rise.Shared.User;
 
 namespace Rise.Services.User;
@@ -10,17 +11,19 @@ public class UserService : IUserService
 {
     private readonly IManagementApiClient managementApiClient;
     private readonly HybridCache _cache;
+    private readonly IAuthContextProvider _authContextProvider;
 
-    public UserService(IManagementApiClient managementApiClient, HybridCache cache)
+    public UserService(IManagementApiClient managementApiClient, HybridCache cache, IAuthContextProvider authContextProvider)
     {
         this.managementApiClient = managementApiClient;
         _cache = cache;
+        _authContextProvider = authContextProvider;
     }
 
-    public async Task<IEnumerable<UserDto>> GetUsers()
+    private async Task<IEnumerable<UserDTO>> GetUsersFromAuth0()
     {
         var rawUsers = await managementApiClient.Users.GetAllAsync(new GetUsersRequest(), new PaginationInfo());
-        return await Task.WhenAll(rawUsers.Select(async user => new UserDto
+        return await Task.WhenAll(rawUsers.Select(async user => new UserDTO
         {
             UserID = user.UserId,
             Email = user.Email,
@@ -31,19 +34,22 @@ public class UserService : IUserService
         }));
     }
 
-    public async Task<IEnumerable<UserDto>> GetUsersCached()
+    public async Task<IEnumerable<UserDTO>> GetUsers(bool forceRefresh = false)
     {
+        if (forceRefresh)
+            await _cache.RemoveAsync($"GET-USERINFO-ALL");
+
         return await _cache.GetOrCreateAsync(
             $"GET-USERINFO-ALL", // Unique key for the cache
-            async cancel => await GetUsers(),
+            async cancel => await GetUsersFromAuth0(),
             cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token
         );
     }
 
-    public async Task<UserDto> GetUser(string userId)
+    private async Task<UserDTO> GetUserFromAuth0(string userId)
     {
         var user = await managementApiClient.Users.GetAsync(userId);
-        return new UserDto
+        return new UserDTO
         {
             UserID = user.UserId,
             Email = user.Email,
@@ -54,11 +60,14 @@ public class UserService : IUserService
         };
     }
 
-    public async Task<UserDto> GetUserCache(string userId)
+    public async Task<UserDTO> GetUser(string userId, bool forceRefresh = false)
     {
+        if (forceRefresh)
+            await _cache.RemoveAsync($"GET-USERINFO-{userId}");
+
         return await _cache.GetOrCreateAsync(
             $"GET-USERINFO-{userId}", // Unique key for the cache
-            async cancel => await GetUser(userId),
+            async cancel => await GetUserFromAuth0(userId),
             cancellationToken: new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token
         );
     }
@@ -72,5 +81,47 @@ public class UserService : IUserService
         if (roles.Any(x => x.Name == "Inventory Manager"))
             return "Inventory Manager";
         return "User";
+    }
+
+    public async Task<UserDTO> BlockUser(string userId)
+    {
+        var user = await GetUser(userId);
+        await managementApiClient.Users.UpdateAsync(userId, new UserUpdateRequest
+        {
+            Blocked = !user.IsBlocked
+        });
+        await _cache.RemoveAsync($"GET-USERINFO-ALL");
+        await _cache.RemoveAsync($"GET-USERINFO-{userId}");
+        return await GetUser(userId, true);
+    }
+
+    public async Task<bool> DeleteUser(string userId)
+    {
+        if (userId == _authContextProvider.User?.Identity?.Name)
+            return false;
+
+        await managementApiClient.Users.DeleteAsync(userId);
+        await _cache.RemoveAsync($"GET-USERINFO-ALL");
+        await _cache.RemoveAsync($"GET-USERINFO-{userId}");
+        return true;
+    }
+
+    public async Task<UserDTO> AddUser(UserCreationDTO user)
+    {
+        var newUser = await managementApiClient.Users.CreateAsync(new UserCreateRequest
+        {
+            Connection = "Username-Password-Authentication",
+            Email = user.Email,
+            Password = user.Password,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            FullName = $"{user.FirstName} {user.LastName}",
+            AppMetadata = new
+            {
+                user.Role
+            }
+        });
+        await GetUsers(true);
+        return await GetUser(newUser.UserId, true);
     }
 }

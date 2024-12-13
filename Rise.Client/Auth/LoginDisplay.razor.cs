@@ -6,9 +6,9 @@ namespace Rise.Client.Auth;
 
 public partial class LoginDisplay : ComponentBase
 {
-    [Inject] public required IUserService UserService { get; set; }
+    [Inject] public required ILocalUserService UserService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    public UserDto? User { get; set; }
+    public UserDTO? User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

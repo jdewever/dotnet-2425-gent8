@@ -13,12 +13,14 @@ using Blazored.LocalStorage;
 using Blazored.Toast;
 using Rise.Client.Scan;
 using Rise.Client.Auth;
-using Rise.Client.Profile;
 using Rise.Client.Reservation;
 using Rise.Shared.Booking;
 using Rise.Shared.Transaction;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using Rise.Shared.User;
+using Rise.Client.Manage;
+using Rise.Client.Transactions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -39,6 +41,10 @@ try
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
     builder.Services.AddHttpClient<ICategoryService, CategoryService>("360zorg",
+        client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
+    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
+
+    builder.Services.AddHttpClient<IUserService, UserService>("360zorg",
         client => client.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/"))
     .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
@@ -65,7 +71,7 @@ try
         options.ProviderOptions.AdditionalProviderParameters.Add("audience", builder.Configuration["Auth0:Audience"]!);
     }).AddAccountClaimsPrincipalFactory<ArrayClaimsPrincipalFactory<RemoteUserAccount>>();
     builder.Services.AddBlazoredModal();
-    builder.Services.AddScoped<Rise.Client.Auth.IUserService, Rise.Client.Auth.UserService>();
+    builder.Services.AddScoped<Rise.Client.Auth.ILocalUserService, Rise.Client.Auth.LocalUserService>();
 
     await builder.Build().RunAsync();
 }
