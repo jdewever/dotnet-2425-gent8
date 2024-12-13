@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Code coverage'){
             steps{
-                dir("Rise.Client.Tests/"){
+                dir("Rise.Domain.Tests/"){
                     sh 'dotnet test --collect:"XPlat Code Coverage"'
                 }
             }
