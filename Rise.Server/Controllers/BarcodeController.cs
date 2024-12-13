@@ -33,7 +33,7 @@ public class BarcodeController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> GetBarcodeImage(string barcode)
     {
-        Log.Information("Getting barcodeImage ✨");
+        Log.Information("Getting barcodeImage using barcdode:{barcode} ✨", barcode);
         var imageBase64 = await barcodeService.GetImage(barcode);
         var imageBytes = Convert.FromBase64String(imageBase64);
         return File(imageBytes, "image/png");
