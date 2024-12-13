@@ -41,7 +41,7 @@
                             <ValidationMessage For="@(() => Item.Role)" class="text-xs text-red-500 mt-0 p-0" />
 
                             <label class="block mb-2 text-sm font-medium text-gray-900" for="password">Wachtwoord</label>
-                            <InputText @bind-Value="Item.Password" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Wachtwoord" />
+                            <InputText type="password" @bind-Value="Item.Password" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Wachtwoord" />
                             <ValidationMessage For="@(() => Item.Password)" class="text-xs text-red-500 mt-0 p-0" />
                         </div>
                     </div>
@@ -54,8 +54,4 @@
             </EditForm>
         </div>
     </div>
-</div>    using Rise.Shared.User;
-
-#line default
-#line hidden
-#nullable disable
+</div>

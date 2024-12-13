@@ -121,7 +121,7 @@ public class UserService : IUserService
                 user.Role
             }
         });
-        await _cache.RemoveAsync($"GET-USERINFO-ALL");
+        await GetUsers(true);
         return await GetUser(newUser.UserId, true);
     }
 }
