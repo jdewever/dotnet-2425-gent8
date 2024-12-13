@@ -403,3 +403,4 @@ Rise.Server/appsettings.json
 .idea/
 
 #docker/appsettings.json
+.env
