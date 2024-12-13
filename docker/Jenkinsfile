@@ -44,6 +44,10 @@ pipeline {
             steps{
                 dir("Rise.Domain.Tests/"){
                     sh 'dotnet test --collect:"XPlat Code Coverage" --results-directory "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults"'
+                    recordCoverage(
+                        tools: [[parser: 'COBERTURA', pattern: '*/coverage.cobertura.xml']]
+                        //sourceDirectories: [[path: "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults"]]
+                    )
                 }
             }
         }
@@ -100,14 +104,6 @@ pipeline {
             //     webhookURL: "${DISCORD_WEBHOOK_URL}"
             // )
             echo "Pipeline finished"
-            recordCoverage(
-                tools: [[parser: 'COBERTURA', pattern: '*/coverage.cobertura.xml']],
-                sourceDirectories: [[path: "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults"]]
-            )
-                                    
-                                    //sourceDirectories: [[path: "/home/rise8-user/code_coverage"]])
-                                    //pattern: '**/coverage.cobertura.xml')
-
         }
     }
 }
