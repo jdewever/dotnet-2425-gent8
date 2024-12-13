@@ -8,7 +8,7 @@ namespace Rise.Domain.DomainClasses
         public DateTime EndDate { get; set; }
 
         public Booking() { }
-        
+
         public Booking(Product product, string userId, DateTime startDate, DateTime endDate)
         {
             Product = product;
@@ -16,5 +16,5 @@ namespace Rise.Domain.DomainClasses
             StartDate = startDate;
             EndDate = endDate;
         }
-    }   
+    }
 }

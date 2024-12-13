@@ -19,6 +19,11 @@ namespace Rise.Client.Pages.Reservation
             throw new System.NotImplementedException();
         }
 
+        public Task<IEnumerable<BookingDTO>> GetAllBookings()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
         {
             throw new System.NotImplementedException();
@@ -33,11 +38,11 @@ namespace Rise.Client.Pages.Reservation
                 Categories =
              [
                  new CategoryDTO
-                {
-                    Id = 1,
-                    Name = "category",
-                    Products = null
-                }
+                 {
+                     Id = 1,
+                     Name = "category",
+                     Products = null
+                 }
              ],
                 Description = "description",
                 Name = "productTestName",
@@ -47,6 +52,7 @@ namespace Rise.Client.Pages.Reservation
                 QuantityInStock = 100,
                 QuantityOnOrder = 10,
                 IsHidden = false,
+                ImageUrl = "imageUrl",
             };
             var FakeBookings = new List<BookingDTO>()
             {

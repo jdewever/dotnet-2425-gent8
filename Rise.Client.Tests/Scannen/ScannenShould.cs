@@ -23,7 +23,7 @@ public class ScannenShould : TestContext
     private Func<string, int>? getProductCountByBarcode;
     private EventCallback<(ProductDTO, int)> addProduct;
     private EventCallback<CartItem> removeProduct;
-    
+
     private IRenderedComponent<ScanProduct>? scanProductComponent;
     private IRenderedComponent<ScanTable>? scanTableComponent;
 
@@ -44,13 +44,13 @@ public class ScannenShould : TestContext
         cartItems = new List<CartItem>();
         barcodeService = Services.GetRequiredService<ScanService>();
         getProductCountByBarcode = barcode => cartItems.Where(p => p.Product.Barcode == barcode).Sum(p => p.Quantity);
-        
+
         addProduct = EventCallback.Factory.Create<(ProductDTO, int)>(this, async productInfo =>
         {
             cartItems.Add(new CartItem { Product = productInfo.Item1, Quantity = productInfo.Item2 });
             await Task.CompletedTask;
         });
-        
+
         removeProduct = EventCallback.Factory.Create<CartItem>(this, async item =>
         {
             var cartItem = cartItems.Find(p => p.Product.Barcode == item.Product.Barcode);
@@ -75,7 +75,7 @@ public class ScannenShould : TestContext
             .Add(p => p.RemoveProduct, removeProduct)
         );
     }
-    
+
 
     [Fact]
     public void ShowsBarcode()
@@ -112,7 +112,7 @@ public class ScannenShould : TestContext
         label.TextContent.ShouldBe("1");
     }
 
-    [Fact]    
+    [Fact]
     public async Task ShowProductOnBarcodeInvalid()
     {
         // Arrange
@@ -148,12 +148,12 @@ public class ScannenShould : TestContext
             barcodeService!.Barcode = "Barcode 1";
             scanProductComponent!.Render();
         });
-        
+
         var increaseButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("+1"));
         increaseButton.ShouldNotBeNull();
         increaseButton.Click();
 
-        
+
         var addButton = scanProductComponent!.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Voeg toe"));
         addButton.ShouldNotBeNull();
         addButton.Click();
@@ -161,7 +161,7 @@ public class ScannenShould : TestContext
         scanTableComponent!.Render();
 
         // Assert
-        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1")); 
+        var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
         productName.ShouldNotBeNull();
         var quantity = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("1"));
         quantity.ShouldNotBeNull();
@@ -261,14 +261,15 @@ public class ScannenShould : TestContext
         addButton.HasAttribute("disabled").ShouldBeFalse();
 
         scanTableComponent!.Render();
-        
+
         // Assert
         var productName = scanTableComponent!.FindAll("td").FirstOrDefault(td => td.TextContent.Contains("Product 1"));
         productName.ShouldBeNull();
     }
 
     [Fact]
-    public async Task UpdateStockOnDifferentProductAdd(){
+    public async Task UpdateStockOnDifferentProductAdd()
+    {
         // Arrange
         cartItems!.Clear();
 
@@ -316,7 +317,8 @@ public class ScannenShould : TestContext
     }
 
     [Fact]
-    public async Task AddProductToCartAndRemoveIt(){
+    public async Task AddProductToCartAndRemoveIt()
+    {
         // Arrange
         cartItems!.Clear();
 
@@ -354,7 +356,8 @@ public class ScannenShould : TestContext
     }
 
     [Fact]
-    public async Task AddProductMoreThenStock(){
+    public async Task AddProductMoreThenStock()
+    {
         // Arrange
         cartItems!.Clear();
 
@@ -388,7 +391,8 @@ public class ScannenShould : TestContext
     }
 
     [Fact]
-    public async Task AddProductMoreThenStockAndChangeToCorrectValue(){
+    public async Task AddProductMoreThenStockAndChangeToCorrectValue()
+    {
         // Arrange
         cartItems!.Clear();
 

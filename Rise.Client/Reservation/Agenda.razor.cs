@@ -103,22 +103,23 @@ namespace Rise.Client.Reservation
 
         private async Task Reserve()
         {
-        
+
             if (product != null)
             {
-                if(startHour == null || endHour == null)
+                if (startHour == null || endHour == null)
                 {
                     noHourSelected = true;
                     return;
-                }else
+                }
+                else
                 {
                     noHourSelected = false;
                 }
                 DateTime startDate = new DateTime(startDay.Year, startDay.Month, startDay.Day, startHour ?? 0, 0, 0);
                 DateTime endDate = new DateTime(endDay.Year, endDay.Month, endDay.Day, endHour ?? 0, 0, 0);
-                
+
                 DateTime current = startDay;
-                
+
                 while (current <= endDay)
                 {
                     int startHourToCheck = current == startDay ? startHour ?? 0 : 0;
@@ -155,21 +156,18 @@ namespace Rise.Client.Reservation
                     EndDate = endDate,
                     UserId = "Test1"
                 };
-                
+
                 await BookingService.AddBookingAsync(booking);
                 ToastService?.ShowSuccess("Reservatie succesvol aangemaakt");
                 NavigationManager?.NavigateTo("/reserve");
                 await OnInitializedAsync();
-                
-                
-                
             }
         }
         private bool HasBookings(DateTime date)
         {
             return bookings?.Any(b => b.StartDate.Date <= date.Date && b.EndDate.Date >= date.Date) ?? false;
         }
-        
+
         private int getDaysInMonth()
         {
             return DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
@@ -253,7 +251,7 @@ namespace Rise.Client.Reservation
             {
                 return bookedHours.Contains(hour) ? "bg-gray-100 rounded cursor-not-allowed" : "cursor-pointer";
             }
-            return DateTime.Compare(startDay.Date,endDay.Date) != 0 ? "bg-gray-100 rounded cursor-not-allowed" : "cursor-pointer";
+            return DateTime.Compare(startDay.Date, endDay.Date) != 0 ? "bg-gray-100 rounded cursor-not-allowed" : "cursor-pointer";
         }
 
         [JSInvokable]
@@ -293,17 +291,19 @@ namespace Rise.Client.Reservation
                 }
                 else
                 {
-                    if(hour < startHour)
+                    if (hour < startHour)
                     {
-                        if(endHour == null)
+                        if (endHour == null)
                         {
                             endHour = startHour;
                             startHour = hour;
-                        }else
+                        }
+                        else
                         {
                             startHour = hour;
                         }
-                    }else if(hour > startHour)
+                    }
+                    else if (hour > startHour)
                     {
                         endHour = hour;
                     }
@@ -367,13 +367,13 @@ namespace Rise.Client.Reservation
 
         private void SelectDayMobile(DateTime date)
         {
-           // Show modal with booked hours
+            // Show modal with booked hours
             currentDate = date;
             showBookingModal = true;
             StateHasChanged();
-            
+
         }
-        
+
         [JSInvokable]
         public void StartDaySelection(DateTime day)
         {
@@ -408,10 +408,11 @@ namespace Rise.Client.Reservation
                 {
                     return;
                 }
-                if(day < startDay)
+                if (day < startDay)
                 {
                     startDay = day;
-                }else if(day > startDay)
+                }
+                else if (day > startDay)
                 {
                     endDay = day;
                 }
@@ -457,6 +458,6 @@ namespace Rise.Client.Reservation
         {
             return bookedHoursByDate.TryGetValue(currentDate.Date, out var hours) ? hours : new List<int>();
         }
-        
+
     }
 }

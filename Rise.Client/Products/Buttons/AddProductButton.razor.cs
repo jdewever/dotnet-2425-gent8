@@ -9,5 +9,5 @@ public partial class AddProductButton
     {
         Navigation.NavigateTo("/products/add");
     }
-    
+
 }
