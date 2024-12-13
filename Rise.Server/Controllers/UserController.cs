@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rise.Services.Auth;
 using Rise.Shared.User;
+using Serilog;
+using System;
 
 namespace Rise.Server.Controllers;
 
@@ -26,6 +28,7 @@ public class UserController : ControllerBase
     [Authorize(Roles = "Administrator")]
     public async Task<IEnumerable<UserDto>> GetUsers()
     {
+        Log.Information("Getting all users✨");
         return await userService.GetUsers();
     }
 
@@ -36,6 +39,7 @@ public class UserController : ControllerBase
         if (userid is null)
             throw new ArgumentNullException("User not found");
 
+        Log.Information("Getting user using id:{userid}✨", userid);
         return await userService.GetUserCache(userid);
     }
 }
