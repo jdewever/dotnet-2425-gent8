@@ -12,6 +12,8 @@ public partial class Index : ComponentBase
     [Inject] private IToastService ToastService { get; set; } = null!;
     [Inject] private NavigationManager NavigationManager { get; set; } = null!;
     private IEnumerable<UserDTO>? Users;
+    private UserCreationDTO? selectedUser;
+
     protected override async Task OnInitializedAsync()
     {
         Users = await UserService.GetUsers();
@@ -49,10 +51,27 @@ public partial class Index : ComponentBase
 
     private void HandleAdd()
     {
-        NavigationManager.NavigateTo("/manage/users/add");
+        selectedUser = new UserCreationDTO { FirstName = "", LastName = "", Email = "", Password = "", Role = "" };
     }
     private static MarkupString GetUserState(UserDTO user)
     {
         return new($"<span class='nline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {(user.IsBlocked ? "text-red-700 ring-red-600/10 bg-red-50" : "text-green-700 ring-green-600/20 bg-green-50" )}'>{(user.IsBlocked ? "Geblokkeerd" : "Actief" )}</span>");
+    }
+
+    private async Task OnSave()
+    {
+        if (selectedUser is null)
+            return;
+
+        await UserService.AddUser(selectedUser);
+        ToastService.ShowSuccess($"Gebruiker {selectedUser.FirstName} toegevoegd!");
+
+        Users = await UserService.GetUsers();
+        HideEditModal();
+    }
+
+    private void HideEditModal()
+    {
+        selectedUser = null;
     }
 }

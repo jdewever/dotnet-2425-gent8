@@ -2,7 +2,7 @@
 @attribute [Authorize(Roles = "Administrator")]
 @using Rise.Client.Components.Table;
 @using Rise.Shared.User;
-@using Rise.Client.Manage.Components;
+@using Rise.Client.Manage.Users.Components;
 @using Rise.Client.Manage;
 
 <PageTitle>Verborgen producten beheren</PageTitle>
@@ -28,5 +28,10 @@
                 </Actions>
             </Table>
         </div>
+    }
+
+    @if (selectedUser != null)
+    {
+        <CreateModal Item="selectedUser" OnClose="HideEditModal" OnConfirm="OnSave" />
     }
 </ManageView>

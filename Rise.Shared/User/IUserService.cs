@@ -6,4 +6,5 @@ public interface IUserService
     Task<IEnumerable<UserDTO>> GetUsers(bool forceRefresh = false);
     Task<UserDTO> BlockUser(string userId);
     Task<bool> DeleteUser(string userId);
+    Task<UserDTO> AddUser(UserCreationDTO user);
 }

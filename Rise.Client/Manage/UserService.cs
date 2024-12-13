@@ -12,6 +12,14 @@ public class UserService : IUserService
         this.httpClient = httpClient;
     }
 
+    public async Task<UserDTO> AddUser(UserCreationDTO user)
+    {
+        var response = await httpClient.PostAsJsonAsync("user", user);
+        response.EnsureSuccessStatusCode();
+        var u = await response.Content.ReadFromJsonAsync<UserDTO>();
+        return u ?? throw new Exception("Failed to create user");
+    }
+
     public async Task<UserDTO> BlockUser(string userId)
     {
         var response = await httpClient.PostAsync($"user/{userId}/block", null);

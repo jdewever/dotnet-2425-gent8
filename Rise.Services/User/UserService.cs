@@ -105,4 +105,23 @@ public class UserService : IUserService
         await _cache.RemoveAsync($"GET-USERINFO-{userId}");
         return true;
     }
+
+    public async Task<UserDTO> AddUser(UserCreationDTO user)
+    {
+        var newUser = await managementApiClient.Users.CreateAsync(new UserCreateRequest
+        {
+            Connection = "Username-Password-Authentication",
+            Email = user.Email,
+            Password = user.Password,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            FullName = $"{user.FirstName} {user.LastName}",
+            AppMetadata = new
+            {
+                user.Role
+            }
+        });
+        await _cache.RemoveAsync($"GET-USERINFO-ALL");
+        return await GetUser(newUser.UserId, true);
+    }
 }

@@ -58,4 +58,12 @@ public class UserController : ControllerBase
         Log.Information("(Un)blocking user using id:{userId}✨", userId);
         return await userService.BlockUser(userId);
     }
+
+    [HttpPost]
+    [Authorize(Roles = "Administrator")]
+    public async Task<UserDTO> AddUser(UserCreationDTO user)
+    {
+        Log.Information("Adding user✨");
+        return await userService.AddUser(user);
+    }
 }
