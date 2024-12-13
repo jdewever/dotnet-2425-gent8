@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using Minio;
 using Minio.DataModel.Args;
+using Rise.Shared.Exceptions;
 using Rise.Shared.Minio;
 
 namespace Rise.Services.Minio;
@@ -27,18 +28,18 @@ public class MinioService : IMinioService
     {
         if (fileStream == null)
         {
-            throw new ArgumentNullException("The uploaded file is null, please try again.");
+            throw new BadRequestException("The uploaded file is null, please try again.");
         }
 
         if (!contentType.StartsWith("image/"))
         {
-            throw new ArgumentException("The uploaded file is not an image");
+            throw new BadRequestException("The uploaded file is not an image");
         }
 
         bool found = await client.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucket));
         if (!found)
         {
-            await client.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucket));
+            throw new Exception("Images cannot be uploaded because of a server error");
         }
 
         try

@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Domain.DomainClasses;
 using Rise.Persistence;
 using Rise.Services.Auth;
-using Rise.Services.User;
 using Rise.Shared.Cart;
+using Rise.Shared.Exceptions;
 using Rise.Shared.Products;
 using Rise.Shared.Transaction;
 using Rise.Shared.User;
@@ -28,13 +28,13 @@ public class TransactionService : ITransactionService
     public async Task AddTransactionScanOut(List<CartItem> cartItems)
     {
         var userid = authContextProvider.User?.Identity?.Name ??
-                     throw new InvalidOperationException("User name is null");
+                     throw new BadRequestException("User name is null");
         var transaction = new UserTransaction(userid, "ScanOut");
         var transactionItems = new List<TransactionItem>();
         foreach (var cartItem in cartItems)
         {
             var product = await dbContext.Products.Where(p => p.Id == cartItem.Product.Id).FirstOrDefaultAsync() ??
-                          throw new InvalidOperationException();
+                          throw new NotFoundException($"Product with id {cartItem.Product.Id} not found");
             transactionItems.Add(new TransactionItem(transaction, product, cartItem.Quantity));
         }
 
@@ -46,13 +46,13 @@ public class TransactionService : ITransactionService
     public async Task AddTransactionScanIn(List<CartItem> cartItems)
     {
         var userid = authContextProvider.User?.Identity?.Name ??
-                     throw new InvalidOperationException("User name is null");
+                     throw new BadRequestException("User name is null");
         var transaction = new UserTransaction(userid, "ScanIn");
         var transactionItems = new List<TransactionItem>();
         foreach (var cartItem in cartItems)
         {
             var product = await dbContext.Products.Where(p => p.Id == cartItem.Product.Id).FirstOrDefaultAsync() ??
-                          throw new InvalidOperationException();
+                          throw new NotFoundException($"Product with id {cartItem.Product.Id} not found");
             transactionItems.Add(new TransactionItem(transaction, product, cartItem.Quantity));
         }
 
@@ -64,7 +64,7 @@ public class TransactionService : ITransactionService
     public async Task<List<TransactionDTO>> GetRecentTransactions()
     {
         var userid = authContextProvider.User?.Identity?.Name ??
-                     throw new InvalidOperationException("User name is null");
+                     throw new BadRequestException("User name is null");
         var roles = GetRoles();
         var query = dbContext.Transaction.Where(t => t.UserId == userid)
             .Include(t => t.TransactionItems)
@@ -74,6 +74,7 @@ public class TransactionService : ITransactionService
         {
             return await GetAllTransactions();
         }
+
         return await query.Select(transaction => new TransactionDTO
         {
             Id = transaction.Id,

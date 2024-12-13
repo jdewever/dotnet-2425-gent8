@@ -2,6 +2,7 @@ using Auth0.ManagementApi;
 using Auth0.ManagementApi.Models;
 using Auth0.ManagementApi.Paging;
 using Microsoft.Extensions.Caching.Hybrid;
+using Rise.Shared.Exceptions;
 using Rise.Shared.User;
 
 namespace Rise.Services.User;
@@ -42,7 +43,7 @@ public class UserService : IUserService
 
     public async Task<UserDto> GetUser(string userId)
     {
-        var user = await managementApiClient.Users.GetAsync(userId);
+        var user = await managementApiClient.Users.GetAsync(userId) ?? throw new NotFoundException($"User with id {userId} not found");
         return new UserDto
         {
             UserID = user.UserId,

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Rise.Persistence;
 using Rise.Services.Auth;
 using Rise.Shared.Booking;
+using Rise.Shared.Exceptions;
 using Rise.Shared.Products;
 using Rise.Shared.User;
 
@@ -22,6 +23,9 @@ namespace Rise.Services.Booking
 
         public async Task<List<BookingDTO>> GetBookingsByProductIdAsync(int productId)
         {
+            // error if product not found
+            _ = await _dbContext.Products.FindAsync(productId) ?? throw new NotFoundException("Product not found");
+
             return await _dbContext.Booking
                 .Where(b => b.Product.Id == productId && b.IsDeleted == false)
                 .Select(b => new BookingDTO
@@ -56,7 +60,7 @@ namespace Rise.Services.Booking
         public async Task AddBookingAsync(BookingDTO booking)
         {
             var userid = _authContextProvider.User?.Identity?.Name ??
-                         throw new InvalidOperationException("User name is null");
+                        throw new BadRequestException("User name is null");
             //TODO: Add validation
             var product = await _dbContext.Products.FindAsync(booking.Product.Id) ?? throw new InvalidOperationException("Product not found");
 
@@ -70,7 +74,7 @@ namespace Rise.Services.Booking
         public async Task<IEnumerable<BookingDTO>> GetRecentBookings(bool History)
         {
             var userid = _authContextProvider.User?.Identity?.Name ??
-                         throw new InvalidOperationException("User name is null");
+                         throw new BadRequestException("User name is null");
             var roles = GetRoles();
             if (roles.Contains("Administrator") || roles.Contains("Inventory Manager"))
             {
@@ -95,7 +99,7 @@ namespace Rise.Services.Booking
 
         public Task CancelBooking(int id)
         {
-            var booking = _dbContext.Booking.Find(id) ?? throw new InvalidOperationException("Booking not found");
+            var booking = _dbContext.Booking.Find(id) ?? throw new NotFoundException("Booking not found");
             _dbContext.Booking.Remove(booking);
             return _dbContext.SaveChangesAsync();
         }
