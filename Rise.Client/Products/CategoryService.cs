@@ -19,7 +19,6 @@ public class CategoryService : ICategoryService
 
     public async Task AddCategory(CategoryDTO category)
     {
-        // todo: add validation
         await _httpClient.PostAsJsonAsync("category", category);
     }
 

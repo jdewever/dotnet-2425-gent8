@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Rise.Client.Manage;
 
 public partial class Navigationbar : ComponentBase
 {
     [Inject] private NavigationManager Navigation { get; set; } = default!;
+    [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
-    private List<NavItem> Items => new()
+    private List<NavItem> Items { get; } = new()
     {
         new NavItem { Label = "Categorieën", Href = "categories" },
-/*        new NavItem { Label = "Locaties", Href = "locations" },*/
-        new NavItem { Label = "Gebruikers", Href = "users" },
         new NavItem { Label = "Verborgen Producten", Href = "hiddenproducts" },
     };
 
@@ -28,5 +28,19 @@ public partial class Navigationbar : ComponentBase
     {
         public required string Label { get; set; } = default!;
         public required string Href { get; set; } = default!;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            if (user.IsInRole("Administrator"))
+            {
+                Items.Add(new NavItem { Label = "Gebruikers", Href = "users" });
+            }
+        }
     }
 }

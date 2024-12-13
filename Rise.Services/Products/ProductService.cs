@@ -152,7 +152,6 @@ public class ProductService : IProductService
 
     public async Task<ProductDTO> GetProductByBarcode(string barcode)
     {
-        // todo: check admin / inv mgr to show in case of hidden products
         IQueryable<ProductDTO> query = dbContext.Products
             .Where(p => p.Barcode == barcode && !p.IsDeleted)
             .Select(p => new ProductDTO

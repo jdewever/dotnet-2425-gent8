@@ -1,26 +1,27 @@
-using System;
 using System.Threading.Tasks;
 using Rise.Client.Auth;
 using Rise.Shared.User;
 
 namespace Rise.Client.Profile;
 
-public class FakeUserService : IUserService
+public class FakeUserService : ILocalUserService
 {
-    private UserDto? _user;
+    private UserDTO? _user;
 
     public FakeUserService()
     {
     }
 
-    public Task<UserDto> GetCurrentUser()
+    public Task<UserDTO> GetCurrentUser()
     {
-        _user = new UserDto
+        _user = new UserDTO
         {
+            UserID = "test",
             Email = "test@test.com",
             Picture = "test.png",
             FullName = "Test User",
             IsBlocked = false,
+            Role = "Administrator"
         };
         return Task.FromResult(_user);
     }

@@ -2,9 +2,9 @@ namespace Rise.Shared.User;
 
 public interface IUserService
 {
-    Task<IEnumerable<UserDto>> GetUsers();
-
-    Task<UserDto> GetUser(string userId);
-    Task<UserDto> GetUserCache(string userId);
-    Task<IEnumerable<UserDto>> GetUsersCached();
+    Task<UserDTO> GetUser(string userId, bool forceRefresh = false);
+    Task<IEnumerable<UserDTO>> GetUsers(bool forceRefresh = false);
+    Task<UserDTO> BlockUser(string userId);
+    Task<bool> DeleteUser(string userId);
+    Task<UserDTO> AddUser(UserCreationDTO user);
 }
