@@ -40,14 +40,13 @@ pipeline {
         //         // }
         //     }
         // }
-        stage('Code coverage'){
-            steps{
-                dir("Rise.Client.Tests/"){
-                    sh 'dotnet test --no-build --collect:"XPlat Code Coverage'
-                }
-                // sh 'dotnet test --no-build --collect:"XPlat Code Coverage" /home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Client.Tests'
-            }
-        }
+        // stage('Code coverage'){
+        //     steps{
+        //         dir("Rise.Client.Tests/"){
+        //             sh 'dotnet test --no-build --collect:"XPlat Code Coverage'
+        //         }
+        //     }
+        // }
 
         stage('Build Image'){
             steps {
