@@ -18,19 +18,12 @@ using Rise.Client.Reservation;
 using Rise.Shared.Booking;
 using Rise.Shared.Transaction;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Logging.ClearProviders();
-
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information()
-    .WriteTo.Console()
-    .CreateLogger();
-
 try
 {
-    Log.Information("Starting application...");
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 

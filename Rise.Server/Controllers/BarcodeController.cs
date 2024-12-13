@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Rise.Shared.Barcodes;
+using Serilog;
 
 namespace Rise.Server.Controllers;
 
@@ -23,6 +24,7 @@ public class BarcodeController : ControllerBase
     [Authorize(Roles = "Administrator, InventoryManager")]
     public async Task<BarcodeResponse> GetNewBarcode()
     {
+        Log.Information("Getting new barcode ✨");
         return await barcodeService.GetNewBarcode();
     }
 
@@ -31,6 +33,7 @@ public class BarcodeController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> GetBarcodeImage(string barcode)
     {
+        Log.Information("Getting barcodeImage ✨");
         var imageBase64 = await barcodeService.GetImage(barcode);
         var imageBytes = Convert.FromBase64String(imageBase64);
         return File(imageBytes, "image/png");
