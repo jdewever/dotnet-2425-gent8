@@ -102,9 +102,9 @@ pipeline {
             echo "Pipeline finished"
             recordCoverage(tools: [[parser: 'COBERTURA']], 
                                     id: 'cobertura', 
-                                    name: 'Cobertura Coverage', 
-                                    sourceDirectories: [[path: "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults"]],
-                                    pattern: '**/coverage.cobertura.xml')
+                                    name: 'Cobertura Coverage') 
+                                    //sourceDirectories: [[path: "/home/rise8-user/data/agent/workspace/dotnet-app-pipeline/Rise.Domain.Tests/TestResults"]],
+                                    //pattern: '**/coverage.cobertura.xml')
 
         }
     }
