@@ -34,7 +34,6 @@ namespace Rise.Client.Reservation
         {
             await _httpClient.DeleteAsync($"booking/{id}");
         }
-        
 
         public async Task<IEnumerable<BookingDTO>> GetAllBookings()
         {

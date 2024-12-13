@@ -28,11 +28,11 @@ namespace Rise.Client.Pages.Transaction
                 Categories =
              [
                  new CategoryDTO
-                {
-                    Id = 1,
-                    Name = "category",
-                    Products = null
-                }
+                 {
+                     Id = 1,
+                     Name = "category",
+                     Products = null
+                 }
              ],
                 Description = "description",
                 Name = "productTestName",
@@ -42,6 +42,7 @@ namespace Rise.Client.Pages.Transaction
                 QuantityInStock = 100,
                 QuantityOnOrder = 10,
                 IsHidden = false,
+                ImageUrl = "https://via.placeholder.com/150",
             };
             var product2 = new ProductDTO()
             {
@@ -50,11 +51,11 @@ namespace Rise.Client.Pages.Transaction
                 Categories =
              [
                  new CategoryDTO
-                {
-                    Id = 2,
-                    Name = "category2",
-                    Products = null
-                }
+                 {
+                     Id = 2,
+                     Name = "category2",
+                     Products = null
+                 }
              ],
                 Description = "description2",
                 Name = "productTestName2",
@@ -64,6 +65,7 @@ namespace Rise.Client.Pages.Transaction
                 QuantityInStock = 1000,
                 QuantityOnOrder = 100,
                 IsHidden = false,
+                ImageUrl = "https://via.placeholder.com/150",
             };
             var FakeTransactions = new List<TransactionDTO>
             {

@@ -98,7 +98,9 @@ public partial class FilterModal : ComponentBase
         if (OnlyReservable)
         {
             NavigationManager.NavigateTo($"/reserve/{queryString}");
-        }else {
+        }
+        else
+        {
             NavigationManager.NavigateTo($"/products{queryString}");
         }
 

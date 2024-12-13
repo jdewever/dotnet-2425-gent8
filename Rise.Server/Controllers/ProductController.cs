@@ -101,10 +101,13 @@ public class ProductController : ControllerBase
 
         using var stream = file.OpenReadStream();
         var objectName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-        try {
+        try
+        {
             string fileUrl = await minio.UploadImageAsync(objectName, stream, file.Length, file.ContentType);
             return Ok(fileUrl);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             return BadRequest(e.Message);
         }
     }

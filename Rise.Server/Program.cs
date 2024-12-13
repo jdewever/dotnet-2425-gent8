@@ -164,11 +164,11 @@ using (var scope = app.Services.CreateScope())
 
     // this code allows to drop the database if the date is before a certain date, can be useful to reseed production
     // if (DateTime.Now < new DateTime(2024, 12, 12, 17, 35, 0))
-        // dbContext.Database.EnsureDeleted();
+    // dbContext.Database.EnsureDeleted();
 
     dbContext.Database.Migrate();
 
-    IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build(); 
+    IMinioClient minioClient = new MinioClient().WithEndpoint(endpoint).WithRegion(region).WithCredentials(accessKey, secretKey).WithSSL(useSSL).Build();
     Seeder seeder = new(dbContext, minioClient, domain, bucket);
     await seeder.Seed();
 }

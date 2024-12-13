@@ -1,17 +1,15 @@
 ﻿using Rise.Shared.Products;
 using Rise.Client.Scan;
-using Xunit;
 using Shouldly;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
-using System.Linq;
-using Rise.Client.Cart;
 using Rise.Shared.Cart;
 using Rise.Client.Scannen;
 
 namespace Rise.Client.Products;
 
+#pragma warning disable BL0005 // Component parameter should not be set outside of its component.
 public class MobileScannerShould : TestContext
 {
     private ScanService? barcodeService;
@@ -47,6 +45,7 @@ public class MobileScannerShould : TestContext
     public async Task StartScannerAutomaticallyInMobileView()
     {
         // Arrange
+
         scanProductComponent!.Instance.IsMobileView = true;
         scanProductComponent!.Instance.ShowScanner = true;
 
@@ -109,3 +108,4 @@ public class MobileScannerShould : TestContext
         scannerComponent.Instance.ShowToggleTorch.ShouldBeTrue();
     }
 }
+#pragma warning restore BL0005 // Component parameter should not be set outside of its component.

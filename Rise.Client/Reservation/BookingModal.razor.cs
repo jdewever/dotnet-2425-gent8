@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Components;
 namespace Rise.Client.Reservation;
 public partial class BookingModal : ComponentBase
 {
-  [Parameter] public EventCallback HideModal { get; set; }
+    [Parameter] public EventCallback HideModal { get; set; }
 
-  [Parameter] public required List<int> BookedHours { get; set; }
-  private List<HourRange> GetHourRanges(List<int> hours)
+    [Parameter] public required List<int> BookedHours { get; set; }
+    private List<HourRange> GetHourRanges(List<int> hours)
     {
         var ranges = new List<HourRange>();
         if (hours == null)
