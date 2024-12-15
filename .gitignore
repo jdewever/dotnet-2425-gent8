@@ -404,3 +404,5 @@ Rise.Server/appsettings.json
 
 #docker/appsettings.json
 .env
+
+**/logs
