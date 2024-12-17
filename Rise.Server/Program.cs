@@ -45,10 +45,10 @@ else
 {
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
-        .Enrich.WithClientIp()
-        .Enrich.WithCorrelationId()
+        .Enrich.With(new CorrectClientIpLogger())
+        .Enrich.WithRequestHeader("User-Agent")
         .WriteTo.File(
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} Correlation ID: {CorrelationId} {Message:lj}{NewLine}{Exception}",
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} User Agent: {UserAgent} {Message:lj}{NewLine}{Exception}",
             path: "logs/log-.log",
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 7
