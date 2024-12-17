@@ -48,7 +48,7 @@ else
         .Enrich.WithClientIp()
         .Enrich.WithCorrelationId()
         .WriteTo.File(
-            outputTemplate: "{ClientIp} [{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIP} Correlation ID: {CorrelationId} {Message:lj}{NewLine}{Exception}",
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} Correlation ID: {CorrelationId} {Message:lj}{NewLine}{Exception}",
             path: "logs/log-.log",
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 7
