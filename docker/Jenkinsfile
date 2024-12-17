@@ -44,10 +44,11 @@ pipeline {
                 //     sh "dotnet test"
                 // }
 
-                echo "Running server Tests"
-                dir("Rise.Server.Tests/") {
-                    sh "dotnet test"
-                }
+                // Playwright is not officially supported on RHEL linux
+                // echo "Running server Tests"
+                // dir("Rise.Server.Tests/") {
+                //     sh "dotnet test"
+                // }
             }
         }
 
