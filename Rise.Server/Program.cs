@@ -47,7 +47,7 @@ else
         .MinimumLevel.Information()
         .Enrich.With(new EmojiEnricher())
         .WriteTo.File(
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+            outputTemplate: "{RemoteIpAddress} [{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
             path: "logs/log-.log",
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 7
