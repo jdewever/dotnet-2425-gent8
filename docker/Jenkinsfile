@@ -1,6 +1,11 @@
 pipeline {
     agent { label "app" }
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '3')) // Discards old builds/artifacts to save storage
+        timestamps()                                                             // Adds timestamps to the console output
+    }
+
     environment {
         CONTAINER_NAME="rise8-webapp"
         CONTAINER_IMAGE="rise-gent-gr08"
@@ -38,6 +43,11 @@ pipeline {
                 // dir("Rise.Client.Tests/") {
                 //     sh "dotnet test"
                 // }
+
+                echo "Running server Tests"
+                dir("Rise.Server.Tests/") {
+                    sh "dotnet test"
+                }
             }
         }
 
@@ -97,6 +107,13 @@ pipeline {
 
     post {
         always {
+
+            echo 'Cleaning workspace...'
+            // Deletes all files and directories in the Jenkins workspace    
+            cleanWs()
+
+            echo 'Sending Discord notification...'
+
             discordSend (
                 title: "${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 description:"**Build:** ${env.BUILD_NUMBER}\n**Status:** ${currentBuild.currentResult}\n**Node_name:** ${env.NODE_NAME}\n\n**Website:** [360zorg-gent8.vichogent.be](https://360zorg-gent8.vichogent.be)\n**Commit:** ${env.GIT_COMMIT}\n**Branch:** ${env.GIT_BRANCH}",
