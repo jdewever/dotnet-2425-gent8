@@ -45,9 +45,10 @@ else
 {
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
-        .Enrich.With(new EmojiEnricher())
+        .Enrich.WithClientIp()
+        .Enrich.WithCorrelationId()
         .WriteTo.File(
-            outputTemplate: "{RemoteIpAddress} [{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+            outputTemplate: "{ClientIp} [{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIP} Correlation ID: {CorrelationId} {Message:lj}{NewLine}{Exception}",
             path: "logs/log-.log",
             rollingInterval: RollingInterval.Day,
             retainedFileCountLimit: 7
