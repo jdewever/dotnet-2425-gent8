@@ -46,7 +46,7 @@ else
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .Enrich.With(new CorrectClientIpLogger())
-        .Enrich.WithClientIp() 
+        .Enrich.WithClientIp()
         .Enrich.WithRequestHeader("User-Agent")
         .WriteTo.File(
             outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} User Agent: {UserAgent} {Message:lj}{NewLine}{Exception}",
