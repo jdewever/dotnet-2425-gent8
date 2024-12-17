@@ -12,6 +12,7 @@ pipeline {
         DOCKER_NETWORK="app-network"
         DISCORD_WEBHOOK_URL= credentials('dotnet_discord_webhook')
     }
+    
     stages {
         stage('Pipeline starting'){
             steps {
