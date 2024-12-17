@@ -9,6 +9,7 @@ services:
       - app-network
     volumes:
       - ./appsettings.json:/App/appsettings.json
+      - app-logs:/App/logs
 
 networks:
   app-network:
@@ -16,4 +17,4 @@ networks:
 
 volumes:
   rise_data:
-  # rise_secrets:
+  app-logs:
