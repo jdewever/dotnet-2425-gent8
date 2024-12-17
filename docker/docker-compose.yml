@@ -9,7 +9,7 @@ services:
       - app-network
     volumes:
       - ./appsettings.json:/App/appsettings.json
-      - /tmp/app-logs/:/App/logs/
+      - /home/rise8-user/data/app-logs/:/App/logs/
 
 networks:
   app-network:
