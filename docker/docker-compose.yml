@@ -9,7 +9,7 @@ services:
       - app-network
     volumes:
       - ./appsettings.json:/App/appsettings.json
-      - /var/app-logs/:/App/logs/
+      - /tmp/app-logs/:/App/logs/
 
 networks:
   app-network:
