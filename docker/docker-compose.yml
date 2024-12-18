@@ -9,7 +9,7 @@ services:
       - app-network
     volumes:
       - ./appsettings.json:/App/appsettings.json
-      - ./log-20241217.log:/App/logs/log-20241217.log
+      - app-logs:/App/logs
 
 networks:
   app-network:
@@ -18,3 +18,4 @@ networks:
 volumes:
   rise_data:
   app-logs:
+    driver: local
