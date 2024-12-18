@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/
 
 # Create the logs directory and the initial log file
-RUN mkdir -p /App/logs && touch /App/logs/log-20241217.log
+RUN mkdir -p /App/logs && touch /App/logs/log-20241218.log
 
 ENV PATH="$PATH:/root/.dotnet/tools"
 
