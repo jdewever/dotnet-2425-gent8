@@ -12,10 +12,11 @@ public class CorrectClientIpLogger : ILogEventEnricher
             {
                 ipValue = "localhost";
             }
-            if (ipValue.StartsWith("::ffff:"))
+            if (ipValue.StartsWith("\"::ffff:"))
             {
                 ipValue = ipValue.Substring(7);
             }
+            ipValue = ipValue.Trim('"');
             logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty("ClientIp", ipValue));
         }
     }
