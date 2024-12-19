@@ -45,12 +45,12 @@ else
 {
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
-        .Enrich.With(new CorrectClientIpLogger())
         .Enrich.WithClientIp()
+        .Enrich.With(new CorrectClientIpLogger())
         .WriteTo.File(
             outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} {Message:lj}{NewLine}{Exception}",
             path: "logs/http-log.log",
-            rollingInterval: RollingInterval.Day,
+            rollingInterval: RollingInterval.Day
         )
         .CreateLogger();
 }

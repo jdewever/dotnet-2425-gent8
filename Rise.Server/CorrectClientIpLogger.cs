@@ -8,11 +8,15 @@ public class CorrectClientIpLogger : ILogEventEnricher
         if (logEvent.Properties.TryGetValue("ClientIp", out var clientIp))
         {
             var ipValue = clientIp.ToString();
-            if (ipValue.StartsWith("\"::ffff:"))
+            if (ipValue == "\"::1\"")
             {
-                ipValue = ipValue.Substring(8, ipValue.Length - 9);
-                logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty("ClientIp", ipValue));
+                ipValue = "localhost";
             }
+            if (ipValue.StartsWith("::ffff:"))
+            {
+                ipValue = ipValue.Substring(7);
+            }
+            logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty("ClientIp", ipValue));
         }
     }
 }
