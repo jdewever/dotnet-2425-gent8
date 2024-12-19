@@ -95,7 +95,7 @@ pipeline {
                 sh "docker network inspect ${DOCKER_NETWORK} || docker network create ${DOCKER_NETWORK}"
                 
                 echo "Starting Docker container ${CONTAINER_NAME}"
-                sh "docker run -d --name ${CONTAINER_NAME} --restart always -p 80:8080 --network ${DOCKER_NETWORK} -v ~/app_files/appsettings.json:/App/appsettings.json ${CONTAINER_IMAGE}"
+                sh "docker run -d --name ${CONTAINER_NAME} --restart always -p 80:8080 --network ${DOCKER_NETWORK} -v ~/app_files/appsettings.json:/App/appsettings.json -v app-logs:/App/logs ${CONTAINER_IMAGE}"
             }
         }
         

@@ -80,4 +80,13 @@ Please see `docker/appsettings.json.template`.
 - The `AllowedHosts` value has to be updated.
 - The MS SQL connection string has to be updated in case Docker is not used.
 
+## Environment variables for testing
 
+```
+ADMIN_EMAIL=Admin@hogent.be
+ADMIN_PASSWORD=Adminhogent!
+INVENTORY_MANAGER_EMAIL=inventorymanager@hogent.be
+INVENTORY_MANAGER_PASSWORD=Inventorymanager!
+USER_EMAIL=test@student.hogent.be
+USER_PASSWORD=Teststudent!
+```

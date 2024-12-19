@@ -30,14 +30,30 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .Enrich.With(new EmojiEnricher())
-    .WriteTo.Console(
-        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Emoji} {Message:lj}{NewLine}{Exception}",
-        theme: AnsiConsoleTheme.Literate
-    )
-    .CreateLogger();
+if (builder.Environment.IsDevelopment())
+{
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .Enrich.With(new EmojiEnricher())
+        .WriteTo.Console(
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Emoji} {Message:lj}{NewLine}{Exception}",
+            theme: AnsiConsoleTheme.Literate
+        )
+        .CreateLogger();
+}
+else
+{
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Information()
+        .Enrich.WithClientIp()
+        .Enrich.With(new CorrectClientIpLogger())
+        .WriteTo.File(
+            outputTemplate: "IP: {ClientIp} {Message:lj}{NewLine}{Exception}",
+            path: "logs/http-log.log",
+            rollingInterval: RollingInterval.Infinite
+        )
+        .CreateLogger();
+}
 
 builder.Host.UseSerilog();
 Log.Information("Serilog initialized ✅ ");
