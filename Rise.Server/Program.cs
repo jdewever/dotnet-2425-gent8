@@ -50,7 +50,7 @@ else
         .WriteTo.File(
             outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} {Message:lj}{NewLine}{Exception}",
             path: "logs/http-log.log",
-            rollingInterval: RollingInterval.Day
+            rollingInterval: RollingInterval.Infinite
         )
         .CreateLogger();
 }
