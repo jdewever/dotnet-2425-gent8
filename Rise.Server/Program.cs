@@ -47,12 +47,10 @@ else
         .MinimumLevel.Information()
         .Enrich.With(new CorrectClientIpLogger())
         .Enrich.WithClientIp()
-        .Enrich.WithRequestHeader("User-Agent")
         .WriteTo.File(
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} User Agent: {UserAgent} {Message:lj}{NewLine}{Exception}",
-            path: "logs/log-.log",
+            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} {Message:lj}{NewLine}{Exception}",
+            path: "logs/http-log.log",
             rollingInterval: RollingInterval.Day,
-            retainedFileCountLimit: 7
         )
         .CreateLogger();
 }
