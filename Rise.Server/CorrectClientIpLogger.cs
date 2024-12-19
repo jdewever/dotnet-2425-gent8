@@ -14,7 +14,7 @@ public class CorrectClientIpLogger : ILogEventEnricher
             }
             if (ipValue.StartsWith("\"::ffff:"))
             {
-                ipValue = ipValue.Substring(7);
+                ipValue = ipValue.Substring(8);
             }
             ipValue = ipValue.Trim('"');
             logEvent.AddOrUpdateProperty(propertyFactory.CreateProperty("ClientIp", ipValue));
