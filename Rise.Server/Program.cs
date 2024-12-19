@@ -48,7 +48,7 @@ else
         .Enrich.WithClientIp()
         .Enrich.With(new CorrectClientIpLogger())
         .WriteTo.File(
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] IP: {ClientIp} {Message:lj}{NewLine}{Exception}",
+            outputTemplate: "IP: {ClientIp} {Message:lj}{NewLine}{Exception}",
             path: "logs/http-log.log",
             rollingInterval: RollingInterval.Infinite
         )
